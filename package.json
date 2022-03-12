@@ -16,7 +16,8 @@
     "build:esm": "tsc",
     "build:cjs": "tsc --module CommonJS --outDir dist/cjs",
     "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook"
+    "build-storybook": "build-storybook",
+    "publish": "yarn publish"
   },
   "author": "Yudiel Curbelo",
   "license": "MIT",
