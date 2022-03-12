@@ -5,16 +5,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout 🛎️
-        uses: actions/checkout@v2.3.1
+        uses: actions/checkout@v3
 
       - name: Install and Build 🔧
         run: |
-          npm install
-          npm run build
-          npm run build-storybook
+          yarn
+          yarn run build
+          yarn run storybook
 
       - name: Deploy 🚀
-        uses: JamesIves/github-pages-deploy-action@4.0.0
+        uses: JamesIves/github-pages-deploy-action@v4.2.5
         with:
           branch: storybook-static
           folder: storybook-static
