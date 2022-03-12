@@ -35,7 +35,7 @@ const Template: Story<IQrScannerProps> = (args) => {
 export const ScanCode = Template.bind({});
 
 ScanCode.args = {
-    scanDelay: 1,
+    scanDelay: 100,
     constraints: {facingMode: 'environment'},
 };
 

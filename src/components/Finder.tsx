@@ -17,7 +17,7 @@ interface FinderProps {
 }
 
 export const Finder: FC<FinderProps> = (props) => {
-    const { scanCount } = props;
+    const { scanCount, hideCount } = props;
 
     const [color, setColor] = useState('rgba(255, 0, 0, 0.5)');
 
@@ -35,12 +35,19 @@ export const Finder: FC<FinderProps> = (props) => {
         };
     }, [scanCount]);
 
+    const Count = () => {
+        if (hideCount) return null;
+
+        return (
+            <div style={styles.count}>
+                {scanCount}
+            </div>
+        );
+    };
+
     return (
         <>
-            {}
-            <span style={styles.count}>
-                {scanCount}
-            </span>
+           <Count />
             <svg
                 width='50px'
                 viewBox='0 0 100 100'

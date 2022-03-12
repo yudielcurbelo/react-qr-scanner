@@ -50,7 +50,7 @@ const QrScanner: FC<IQrScannerProps> = (props) => {
         onError,
         onDecode,
         viewFinder: ViewFinder,
-        hideCount = false
+        hideCount = true
     } = props;
 
     const defaultConstraints: MediaTrackConstraints = {
