@@ -7,9 +7,9 @@ Checkout the [Demo](https://yudielcurbelo.github.io/react-qr-scanner/).
 
 ### Install
 
-    yarn add react-qr-scanner
+    yarn add @yudiel/react-qr-scanner
 
-    npm install react-qr-scanner
+    npm install @yudiel/react-qr-scanner
 
 ### Usage
 
