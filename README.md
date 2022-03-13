@@ -14,7 +14,7 @@ Checkout the [Demo](https://yudielcurbelo.github.io/react-qr-scanner/).
 ### Usage
 
 ```jsx
-import QrScanner from 'react-qr-scanner';
+import QrScanner from '@yudiel/react-qr-scanner';
 
 const App = () => {
   return (
