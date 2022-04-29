@@ -1,4 +1,4 @@
-import React, { FC, useState, useEffect } from 'react';
+import React, {FC, useState, useEffect} from 'react';
 
 const styles: any = {
     count: {
@@ -14,10 +14,11 @@ const styles: any = {
 interface FinderProps {
     scanCount: number;
     hideCount: boolean;
+    border?: number;
 }
 
 export const Finder: FC<FinderProps> = (props) => {
-    const { scanCount, hideCount } = props;
+    const {scanCount, hideCount, border = 80} = props;
 
     const [color, setColor] = useState('rgba(255, 0, 0, 0.5)');
 
@@ -47,16 +48,15 @@ export const Finder: FC<FinderProps> = (props) => {
 
     return (
         <>
-           <Count />
+            <Count/>
             <svg
-                width='50px'
                 viewBox='0 0 100 100'
                 style={{
                     top: 0,
                     left: 0,
                     zIndex: 1,
                     boxSizing: 'border-box',
-                    border: '80px solid rgba(0, 0, 0, 0.1)',
+                    border:`${border}px solid rgba(0, 0, 0, 0.1)`,
                     position: 'absolute',
                     width: '100%',
                     height: '100%'

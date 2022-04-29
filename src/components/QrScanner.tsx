@@ -37,6 +37,7 @@ export interface IQrScannerProps {
     onDecode?: (result: string) => void;
     viewFinder?: (props: any) => ReactElement | null;
     hideCount?: boolean;
+    viewFinderBorder?:number;
 }
 
 const QrScanner: FC<IQrScannerProps> = (props) => {
@@ -50,7 +51,8 @@ const QrScanner: FC<IQrScannerProps> = (props) => {
         onError,
         onDecode,
         viewFinder: ViewFinder,
-        hideCount = true
+        hideCount = true,
+        viewFinderBorder
     } = props;
 
     const defaultConstraints: MediaTrackConstraints = {
@@ -81,7 +83,7 @@ const QrScanner: FC<IQrScannerProps> = (props) => {
 
     return (
         <div style={{ ...styles.container, ...containerStyle }}>
-            {!ViewFinder ? <Finder scanCount={scanCount} hideCount={hideCount} /> : <ViewFinder />}
+            {!ViewFinder ? <Finder scanCount={scanCount} hideCount={hideCount} border={viewFinderBorder} /> : <ViewFinder />}
             <video muted id={videoId}
                    style={{
                        ...styles.video, ...videoStyle,

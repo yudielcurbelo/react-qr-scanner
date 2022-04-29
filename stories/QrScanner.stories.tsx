@@ -8,7 +8,7 @@ import { IQrScannerProps } from '../src';
 
 const styles = {
     container: {
-        width: '400px',
+        width: 400,
         margin: 'auto'
     }
 };
