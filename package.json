@@ -8,6 +8,7 @@
   "description": "A library to scan qr codes in react.",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
+  "types": "dist/index.d.ts",
   "files": [
     "dist"
   ],

@@ -36,7 +36,8 @@ export default [
         output: [
             {
                 file: 'dist/index.d.ts',
-                format: 'esm'
+                format: 'esm',
+                chunkFileNames: '[name].js'
             }
         ],
         plugins: [dts()]
