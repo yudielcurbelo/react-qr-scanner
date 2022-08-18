@@ -3,8 +3,7 @@ import React from 'react';
 import { Story } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
 
-import QrScanner from '../src/components/QrScanner';
-import { IQrScannerProps } from '../src';
+import {QrScanner, IQrScannerProps} from '../src';
 
 const styles = {
     container: {

@@ -40,7 +40,7 @@ export interface IQrScannerProps {
     viewFinderBorder?:number;
 }
 
-const QrScanner: FC<IQrScannerProps> = (props) => {
+export const QrScanner: FC<IQrScannerProps> = (props) => {
     const {
         containerStyle,
         videoStyle,
@@ -93,5 +93,3 @@ const QrScanner: FC<IQrScannerProps> = (props) => {
         </div>
     );
 };
-
-export default QrScanner;
