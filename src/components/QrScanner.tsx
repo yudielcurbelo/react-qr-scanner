@@ -1,4 +1,5 @@
-import React, { FC, ReactElement, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
+import type { CSSProperties, ReactElement, FC } from 'react';
 
 import { BrowserQRCodeReader } from '@zxing/browser';
 import { Result } from '@zxing/library';
@@ -8,7 +9,7 @@ import { useQrScanner } from '../hooks/useQrScanner';
 
 import { OnResultFunction, OnErrorFunction } from '../types';
 
-const styles: any = {
+const styles: Record<string, CSSProperties> = {
     container: {
         width: '100%',
         paddingTop: '100%',
@@ -27,8 +28,8 @@ const styles: any = {
 };
 
 export interface IQrScannerProps {
-    containerStyle?: any;
-    videoStyle?: any;
+    containerStyle?: CSSProperties;
+    videoStyle?: CSSProperties;
     scanDelay?: number;
     videoId?: string;
     constraints?: MediaTrackConstraints;
@@ -37,7 +38,7 @@ export interface IQrScannerProps {
     onDecode?: (result: string) => void;
     viewFinder?: (props: any) => ReactElement | null;
     hideCount?: boolean;
-    viewFinderBorder?:number;
+    viewFinderBorder?: number;
 }
 
 export const QrScanner: FC<IQrScannerProps> = (props) => {
@@ -84,11 +85,14 @@ export const QrScanner: FC<IQrScannerProps> = (props) => {
     return (
         <div style={{ ...styles.container, ...containerStyle }}>
             {!ViewFinder ? <Finder scanCount={scanCount} hideCount={hideCount} border={viewFinderBorder} /> : <ViewFinder />}
-            <video muted id={videoId}
-                   style={{
-                       ...styles.video, ...videoStyle,
-                       transform: constraints?.facingMode === 'user' && 'scaleX(-1)'
-                   }}
+            <video
+                muted
+                id={videoId}
+                style={{
+                    ...styles.video,
+                    ...videoStyle,
+                    transform: constraints?.facingMode === 'user' ? 'scaleX(-1)' : 'none'
+                }}
             />
         </div>
     );
