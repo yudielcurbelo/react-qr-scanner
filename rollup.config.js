@@ -22,13 +22,11 @@ export default [
                 sourcemap: true
             }
         ],
-        plugins: [
-            peerDepsExternal(),
-            resolve(),
-            commonjs(),
-            typescript({ tsconfig: './tsconfig.json' }),
-            terser()
-        ],
+        onwarn: (warning, warn) => {
+            if (warning.code === 'THIS_IS_UNDEFINED') return;
+            warn(warning); // this requires Rollup 0.46
+        },
+        plugins: [peerDepsExternal(), resolve(), commonjs(), typescript({ tsconfig: './tsconfig.json' }), terser()],
         external: ['react', 'react-dom', 'styled-components']
     },
     {
