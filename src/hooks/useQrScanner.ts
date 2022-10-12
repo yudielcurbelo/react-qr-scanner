@@ -1,11 +1,6 @@
 import { useEffect, useRef, useCallback, useState, useMemo } from 'react';
 
-import {
-    BrowserMultiFormatReader,
-    DecodeContinuouslyCallback,
-    DecodeHintType,
-    NotFoundException
-} from '@zxing/library';
+import { BrowserMultiFormatReader, DecodeContinuouslyCallback, DecodeHintType, NotFoundException } from '@zxing/library';
 
 import { OnResultFunction, OnErrorFunction } from '../types';
 import deepEqual from '../utilities/deepEqual';
@@ -13,7 +8,7 @@ import deepEqual from '../utilities/deepEqual';
 export interface IUseQrScannerProps {
     onResult: OnResultFunction;
     onError: OnErrorFunction;
-    scanDelay: number;
+    scanDelay?: number;
     constraints?: MediaTrackConstraints;
     deviceId?: string;
     hints?: Map<DecodeHintType, any>;
@@ -34,8 +29,7 @@ export const useQrScanner = (props: IUseQrScannerProps) => {
 
     const [constraints, setConstraints] = useState(props.constraints);
 
-    const reader = useMemo(() => new BrowserMultiFormatReader(hints, scanDelay)
-        , []);
+    const reader = useMemo(() => new BrowserMultiFormatReader(hints, scanDelay), []);
 
     const onDecode = useCallback<DecodeContinuouslyCallback>((result, error) => {
         if (result) onResultRef.current(result);

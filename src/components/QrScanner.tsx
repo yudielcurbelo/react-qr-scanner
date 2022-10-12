@@ -5,6 +5,7 @@ import { Result } from '@zxing/library';
 
 import { Finder } from './Finder';
 import { IUseQrScannerProps, useQrScanner } from '../hooks/useQrScanner';
+import { OnResultFunction } from '../types';
 
 const styles: Record<string, CSSProperties> = {
     container: {
@@ -24,9 +25,10 @@ const styles: Record<string, CSSProperties> = {
     }
 };
 
-export interface IQrScannerProps extends IUseQrScannerProps {
+export interface IQrScannerProps extends Omit<IUseQrScannerProps, 'onResult'> {
     containerStyle?: CSSProperties;
     videoStyle?: CSSProperties;
+    onResult?: OnResultFunction;
     onDecode?: (result: string) => void;
     viewFinder?: (props: any) => ReactElement | null;
     hideCount?: boolean;
@@ -34,17 +36,7 @@ export interface IQrScannerProps extends IUseQrScannerProps {
 }
 
 export const QrScanner = (props: IQrScannerProps) => {
-    const {
-        containerStyle,
-        videoStyle,
-        constraints,
-        onResult,
-        onDecode,
-        viewFinder: ViewFinder,
-        hideCount = true,
-        viewFinderBorder,
-        ...rest
-    } = props;
+    const { containerStyle, videoStyle, constraints, onResult, onDecode, viewFinder: ViewFinder, hideCount = true, viewFinderBorder, ...rest } = props;
 
     const [scanCount, setScanCount] = useState(0);
 
@@ -59,15 +51,15 @@ export const QrScanner = (props: IQrScannerProps) => {
 
     return (
         <div style={{ ...styles.container, ...containerStyle }}>
-            {!ViewFinder ? <Finder scanCount={scanCount} hideCount={hideCount} border={viewFinderBorder} /> :
-                <ViewFinder />}
-            <video ref={ref}
-                   muted
-                   style={{
-                       ...styles.video,
-                       ...videoStyle,
-                       transform: constraints?.facingMode === 'user' ? 'scaleX(-1)' : 'none'
-                   }}
+            {!ViewFinder ? <Finder scanCount={scanCount} hideCount={hideCount} border={viewFinderBorder} /> : <ViewFinder />}
+            <video
+                ref={ref}
+                muted
+                style={{
+                    ...styles.video,
+                    ...videoStyle,
+                    transform: constraints?.facingMode === 'user' ? 'scaleX(-1)' : 'none'
+                }}
             />
         </div>
     );
