@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import type { FC, CSSProperties } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
+import type { CSSProperties } from 'react';
 
 const styles: Record<string, CSSProperties> = {
     count: {
@@ -18,7 +18,7 @@ interface FinderProps {
     border?: number;
 }
 
-export const Finder: FC<FinderProps> = (props) => {
+export const Finder = (props: FinderProps) => {
     const { scanCount, hideCount, border = 80 } = props;
 
     const [color, setColor] = useState('rgba(255, 0, 0, 0.5)');
@@ -40,18 +40,14 @@ export const Finder: FC<FinderProps> = (props) => {
     const Count = () => {
         if (hideCount) return null;
 
-        return (
-            <div style={styles.count}>
-                {scanCount}
-            </div>
-        );
+        return <div style={styles.count}>{scanCount}</div>;
     };
 
     return (
-        <>
+        <Fragment>
             <Count />
             <svg
-                viewBox='0 0 100 100'
+                viewBox="0 0 100 100"
                 style={{
                     top: 0,
                     left: 0,
@@ -63,31 +59,11 @@ export const Finder: FC<FinderProps> = (props) => {
                     height: '100%'
                 }}
             >
-                <path
-                    fill='none'
-                    d='M23,0 L0,0 L0,23'
-                    stroke={color}
-                    strokeWidth='5'
-                />
-                <path
-                    fill='none'
-                    d='M0,77 L0,100 L23,100'
-                    stroke={color}
-                    strokeWidth='5'
-                />
-                <path
-                    fill='none'
-                    d='M77,100 L100,100 L100,77'
-                    stroke={color}
-                    strokeWidth='5'
-                />
-                <path
-                    fill='none'
-                    d='M100,23 L100,0 77,0'
-                    stroke={color}
-                    strokeWidth='5'
-                />
+                <path fill="none" d="M23,0 L0,0 L0,23" stroke={color} strokeWidth="5" />
+                <path fill="none" d="M0,77 L0,100 L23,100" stroke={color} strokeWidth="5" />
+                <path fill="none" d="M77,100 L100,100 L100,77" stroke={color} strokeWidth="5" />
+                <path fill="none" d="M100,23 L100,0 77,0" stroke={color} strokeWidth="5" />
             </svg>
-        </>
+        </Fragment>
     );
 };

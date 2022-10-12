@@ -2,8 +2,8 @@ import { useEffect, useRef, useCallback, useState, useMemo } from 'react';
 
 import { BrowserMultiFormatReader, DecodeContinuouslyCallback, DecodeHintType, NotFoundException } from '@zxing/library';
 
-import { OnResultFunction, OnErrorFunction } from '../types';
 import deepEqual from '../utilities/deepEqual';
+import { OnResultFunction, OnErrorFunction } from '../types';
 
 export interface IUseQrScannerProps {
     onResult: OnResultFunction;
