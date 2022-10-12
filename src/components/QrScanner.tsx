@@ -1,13 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import type { CSSProperties, ReactElement, FC } from 'react';
+import React, { useState } from 'react';
+import type { CSSProperties, ReactElement } from 'react';
 
-import { BrowserQRCodeReader } from '@zxing/browser';
 import { Result } from '@zxing/library';
 
 import { Finder } from './Finder';
-import { useQrScanner } from '../hooks/useQrScanner';
-
-import { OnResultFunction, OnErrorFunction } from '../types';
+import { IUseQrScannerProps, useQrScanner } from '../hooks/useQrScanner';
 
 const styles: Record<string, CSSProperties> = {
     container: {
@@ -27,72 +24,50 @@ const styles: Record<string, CSSProperties> = {
     }
 };
 
-export interface IQrScannerProps {
+export interface IQrScannerProps extends IUseQrScannerProps {
     containerStyle?: CSSProperties;
     videoStyle?: CSSProperties;
-    scanDelay?: number;
-    videoId?: string;
-    constraints?: MediaTrackConstraints;
-    onResult?: OnResultFunction;
-    onError?: OnErrorFunction;
     onDecode?: (result: string) => void;
     viewFinder?: (props: any) => ReactElement | null;
     hideCount?: boolean;
     viewFinderBorder?: number;
 }
 
-export const QrScanner: FC<IQrScannerProps> = (props) => {
+export const QrScanner = (props: IQrScannerProps) => {
     const {
         containerStyle,
         videoStyle,
-        scanDelay = 500,
-        videoId = 'videoId',
-        constraints: constraintsProps,
+        constraints,
         onResult,
-        onError,
         onDecode,
         viewFinder: ViewFinder,
         hideCount = true,
-        viewFinderBorder
+        viewFinderBorder,
+        ...rest
     } = props;
 
-    const defaultConstraints: MediaTrackConstraints = {
-        facingMode: 'environment',
-        width: { min: 640, ideal: 720, max: 1920 },
-        height: { min: 640, ideal: 720, max: 1080 }
-    };
-
     const [scanCount, setScanCount] = useState(0);
-    const [constraints, setConstraints] = useState<MediaTrackConstraints>({ ...defaultConstraints, ...constraintsProps });
 
-    useEffect(() => {
-        setConstraints({ ...defaultConstraints, ...constraintsProps });
-    }, [constraintsProps]);
-
-    const handleOnResult = (result: Result, codeReader: BrowserQRCodeReader) => {
-        if (onResult) onResult(result, codeReader);
+    const handleOnResult = (result: Result) => {
+        if (onResult) onResult(result);
         if (onDecode) onDecode(result.getText());
 
         setScanCount((count) => count + 1);
     };
 
-    const handleOnError: OnErrorFunction = (error: Error, codeReader: BrowserQRCodeReader) => {
-        if (onError) onError(error, codeReader);
-    };
-
-    useQrScanner({ constraints, scanDelay, onResult: handleOnResult, onError: handleOnError, videoId });
+    const { ref } = useQrScanner({ onResult: handleOnResult, ...rest });
 
     return (
         <div style={{ ...styles.container, ...containerStyle }}>
-            {!ViewFinder ? <Finder scanCount={scanCount} hideCount={hideCount} border={viewFinderBorder} /> : <ViewFinder />}
-            <video
-                muted
-                id={videoId}
-                style={{
-                    ...styles.video,
-                    ...videoStyle,
-                    transform: constraints?.facingMode === 'user' ? 'scaleX(-1)' : 'none'
-                }}
+            {!ViewFinder ? <Finder scanCount={scanCount} hideCount={hideCount} border={viewFinderBorder} /> :
+                <ViewFinder />}
+            <video ref={ref}
+                   muted
+                   style={{
+                       ...styles.video,
+                       ...videoStyle,
+                       transform: constraints?.facingMode === 'user' ? 'scaleX(-1)' : 'none'
+                   }}
             />
         </div>
     );

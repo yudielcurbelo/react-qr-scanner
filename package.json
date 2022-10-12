@@ -1,11 +1,13 @@
 {
   "name": "@yudiel/react-qr-scanner",
+  "version": "1.0.6",
+  "description": "A library to scan qr codes in react.",
+  "author": "Yudiel Curbelo",
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/yudielcurbelo/react-qr-scanner.git"
   },
-  "version": "1.0.6",
-  "description": "A library to scan qr codes in react.",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
   "types": "dist/index.d.ts",
@@ -20,8 +22,6 @@
     "build-storybook": "build-storybook",
     "publish": "yarn publish"
   },
-  "author": "Yudiel Curbelo",
-  "license": "MIT",
   "devDependencies": {
     "@babel/core": "^7.17.9",
     "@rollup/plugin-commonjs": "^22.0.0",
@@ -50,7 +50,6 @@
     "react-dom": "^18.2.0"
   },
   "dependencies": {
-    "@zxing/browser": "^0.1.1",
     "@zxing/library": "^0.19.1"
   },
   "bugs": {

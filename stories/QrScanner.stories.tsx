@@ -3,7 +3,7 @@ import React from 'react';
 import { Story } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
 
-import {QrScanner, IQrScannerProps} from '../src';
+import { QrScanner, IQrScannerProps } from '../src';
 
 const styles = {
     container: {
@@ -35,10 +35,9 @@ export const ScanCode = Template.bind({});
 
 ScanCode.args = {
     scanDelay: 100,
-    constraints: {facingMode: 'environment'},
+    constraints: { facingMode: 'environment' }
 };
 
 export default {
-    title: 'QR Scanner',
-    component: QrScanner
+    title: 'QR Scanner'
 };

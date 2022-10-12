@@ -1,12 +1,14 @@
-import { BrowserQRCodeReader } from '@zxing/browser';
 import { Result } from '@zxing/library';
 
-export type OnResultFunction = (
-    result: Result,
-    codeReader: BrowserQRCodeReader
-) => void;
+export type OnResultFunction = (result: Result) => void;
 
-export type OnErrorFunction = (
-    error: Error,
-    codeReader: BrowserQRCodeReader
-) => void;
+export type OnErrorFunction = (error: Error) => void;
+
+export type Primitive =
+    | null
+    | undefined
+    | string
+    | number
+    | boolean
+    | symbol
+    | bigint;
