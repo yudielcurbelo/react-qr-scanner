@@ -20,7 +20,7 @@
     "build:cjs": "tsc --module CommonJS --outDir dist/cjs",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
-    "publish": "yarn publish"
+    "publish": "publish"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^24.0.0",
@@ -53,6 +53,5 @@
   "bugs": {
     "url": "https://github.com/yudielcurbelo/react-qr-scanner/issues"
   },
-  "homepage": "https://github.com/yudielcurbelo/react-qr-scanner#readme",
-  "packageManager": "yarn@3.3.1"
+  "homepage": "https://github.com/yudielcurbelo/react-qr-scanner#readme"
 }
