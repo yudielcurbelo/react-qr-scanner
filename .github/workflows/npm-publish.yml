@@ -2,7 +2,7 @@ name: npm publish
 
 on:
   release:
-    types: [published]
+    types: [ published ]
 
 jobs:
   release:
@@ -17,10 +17,10 @@ jobs:
           registry-url: https://registry.npmjs.org/
           scope: '@yudiel'
       - name: Install
-        run: yarn
+        run: pnpm
       - name: Build
-        run: yarn run build
+        run: pnpm run build
       - name: Publish
-        run: yarn publish --access public
+        run: pnpm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
