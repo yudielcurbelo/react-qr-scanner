@@ -1,19 +1,18 @@
 name: storybook
-on: [push]
+
+on: [ push ]
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout 🛎️
+      - name: Checkout
         uses: actions/checkout@v3
-
       - name: Install and Build 🔧
         run: |
           yarn
-          yarn run build
           yarn run build-storybook
-
-      - name: Deploy 🚀
+      - name: Deploy
         uses: JamesIves/github-pages-deploy-action@v4.2.5
         with:
           branch: storybook-static

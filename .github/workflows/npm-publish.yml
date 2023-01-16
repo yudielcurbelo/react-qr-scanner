@@ -8,19 +8,19 @@ jobs:
   release:
     runs-on: ubuntu-latest
     steps:
-      - name: checkout
+      - name: Checkout
         uses: actions/checkout@v3
-      - name: node
+      - name: Node Setup
         uses: actions/setup-node@v2
         with:
           node-version: 16.x
           registry-url: https://registry.npmjs.org/
           scope: '@yudiel'
-      - name: install
+      - name: Install
         run: yarn
-      - name: build
+      - name: Build
         run: yarn run build
-      - name: publish
+      - name: Publish
         run: yarn publish --access public
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
