@@ -25,6 +25,16 @@ const App = () => {
   );
 }
 ```
+
+### Supported Formats
+
+| 1D product  | 1D industrial | 2D           |
+|-------------|---------------|--------------|
+| UPC-A       | Code 39       | QR Code      |
+| EAN-8       | Code 128      | Data Matrix  |
+| EAN-13      | RSS-14        | Aztec        |
+|             |               | PDF 417      |
+
 ### Limitations
 - Due to browser implementations the camera can only be accessed over https or localhost.
 - Server side rendering won't work so only require the component when rendering in a browser environment.
