@@ -22,9 +22,9 @@
     "build": "rollup -c",
     "build:esm": "tsc",
     "build:cjs": "tsc --module CommonJS --outDir dist/cjs",
-    "storybook": "SET NODE_OPTIONS=--openssl-legacy-provider && start-storybook -p 6006",
+    "storybook": "NODE_OPTIONS=--openssl-legacy-provider && start-storybook -p 6006",
     "build-storybook": "build-storybook",
-    "publish": "pnpm publish"
+    "publish": "yarn publish"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^24.0.0",
@@ -44,8 +44,8 @@
     "rollup-plugin-dts": "^5.1.1",
     "rollup-plugin-peer-deps-external": "^2.2.4",
     "rollup-plugin-terser": "^7.0.2",
-    "typescript": "^4.9.4",
-    "tslib": "^2.4.1"
+    "tslib": "^2.4.1",
+    "typescript": "^4.9.4"
   },
   "peerDependencies": {
     "react": "^18.0.0",
@@ -53,5 +53,6 @@
   },
   "dependencies": {
     "@zxing/library": "^0.19.1"
-  }
+  },
+  "packageManager": "yarn@3.3.1"
 }

@@ -8,14 +8,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: 7
       - name: Install and Build
         run: |
-          pnpm install
-          pnpm run build-storybook
+          yarn install
+          yarn run build-storybook
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@v4.2.5
         with:

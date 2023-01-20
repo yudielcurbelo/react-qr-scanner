@@ -1,4 +1,4 @@
-name: npm publish
+name: publish package
 
 on:
   release:
@@ -10,10 +10,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: 7
       - name: Node Setup
         uses: actions/setup-node@v2
         with:
@@ -21,10 +17,8 @@ jobs:
           registry-url: https://registry.npmjs.org/
           scope: '@yudiel'
       - name: Install Dependencies
-        run: pnpm install
-      - name: Build
-        run: pnpm run build
+        run: yarn
       - name: Publish
-        run: pnpm run publish --no-git-checks --access public
+        run: yarn run publish --no-git-checks --access public
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
