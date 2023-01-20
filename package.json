@@ -22,7 +22,7 @@
     "build": "rollup -c",
     "build:esm": "tsc",
     "build:cjs": "tsc --module CommonJS --outDir dist/cjs",
-    "storybook": "start-storybook -p 6006",
+    "storybook": "SET NODE_OPTIONS=--openssl-legacy-provider && start-storybook -p 6006",
     "build-storybook": "build-storybook",
     "publish": "pnpm publish"
   },
