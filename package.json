@@ -24,7 +24,7 @@
     "build:cjs": "tsc --module CommonJS --outDir dist/cjs",
     "storybook": "NODE_OPTIONS=--openssl-legacy-provider && start-storybook -p 6006",
     "build-storybook": "build-storybook",
-    "publish": "yarn publish"
+    "publish": "npm publish"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^24.0.0",
