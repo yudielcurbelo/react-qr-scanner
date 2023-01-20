@@ -8,20 +8,14 @@ import { OnResultFunction, OnErrorFunction } from '../types';
 export interface IUseQrScannerProps {
     onResult: OnResultFunction;
     onError: OnErrorFunction;
-    scanDelay?: number;
-    constraints?: MediaTrackConstraints;
+    scanDelay: number;
+    constraints: MediaTrackConstraints;
     deviceId?: string;
     hints?: Map<DecodeHintType, any>;
 }
 
-const defaultConstraints: MediaTrackConstraints = {
-    facingMode: 'environment',
-    width: { min: 640, ideal: 720, max: 1920 },
-    height: { min: 640, ideal: 720, max: 1080 }
-};
-
 export const useQrScanner = (props: IUseQrScannerProps) => {
-    const { onResult, onError, scanDelay = 1000, hints, deviceId } = props;
+    const { onResult, onError, scanDelay, hints, deviceId } = props;
 
     const onResultRef = useRef(onResult);
     const onErrorRef = useRef(onError);
@@ -44,7 +38,7 @@ export const useQrScanner = (props: IUseQrScannerProps) => {
         } else {
             let newConstraints: MediaStreamConstraints = {
                 audio: false,
-                video: constraints ?? defaultConstraints
+                video: constraints
             };
 
             await reader.decodeFromConstraints(newConstraints, videoRef.current, onDecode);

@@ -6,6 +6,7 @@ import { Result } from '@zxing/library';
 import { Finder } from './Finder';
 import { IUseQrScannerProps, useQrScanner } from '../hooks/useQrScanner';
 import { OnResultFunction } from '../types';
+import { defaultConstraints } from '../misc/defaultConstraints';
 
 const styles: Record<string, CSSProperties> = {
     container: {
@@ -32,33 +33,63 @@ export interface IQrScannerProps extends Omit<IUseQrScannerProps, 'onResult'> {
     onDecode?: (result: string) => void;
     viewFinder?: (props: any) => ReactElement | null;
     hideCount?: boolean;
+    tracker?: boolean;
     viewFinderBorder?: number;
 }
 
 export const QrScanner = (props: IQrScannerProps) => {
-    const { containerStyle, videoStyle, constraints, onResult, onDecode, viewFinder: ViewFinder, hideCount = true, viewFinderBorder, ...rest } = props;
+    const {
+        containerStyle,
+        videoStyle,
+        constraints = defaultConstraints,
+        onResult,
+        onDecode,
+        viewFinder: ViewFinder,
+        hideCount = true,
+        tracker = false,
+        viewFinderBorder,
+        deviceId,
+        scanDelay = 100,
+        ...rest
+    } = props;
 
     const [scanCount, setScanCount] = useState(0);
+    const [result, setResult] = useState<Result>();
 
     const handleOnResult = (result: Result) => {
+        setResult(result);
+
         if (onResult) onResult(result);
         if (onDecode) onDecode(result.getText());
 
         setScanCount((count) => count + 1);
     };
 
-    const { ref } = useQrScanner({ onResult: handleOnResult, ...rest });
+    const { ref } = useQrScanner({ onResult: handleOnResult, constraints, deviceId, scanDelay, ...rest });
 
     return (
         <div style={{ ...styles.container, ...containerStyle }}>
-            {!ViewFinder ? <Finder scanCount={scanCount} hideCount={hideCount} border={viewFinderBorder} /> : <ViewFinder />}
+            {!ViewFinder ? (
+                <Finder
+                    video={ref.current}
+                    result={result}
+                    scanCount={scanCount}
+                    hideCount={hideCount}
+                    tracker={tracker}
+                    border={viewFinderBorder}
+                    constraints={constraints}
+                    deviceId={deviceId}
+                    scanDelay={scanDelay}
+                />
+            ) : (
+                <ViewFinder />
+            )}
             <video
                 ref={ref}
                 muted
                 style={{
                     ...styles.video,
-                    ...videoStyle,
-                    transform: constraints?.facingMode === 'user' ? 'scaleX(-1)' : 'none'
+                    ...videoStyle
                 }}
             />
         </div>

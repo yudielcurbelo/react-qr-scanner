@@ -3,19 +3,30 @@ import { useEffect, useState } from 'react';
 import on from '../utilities/on';
 import off from '../utilities/off';
 
-const useMediaDevicesHook = () => {
-    const [state, setState] = useState<InputDeviceInfo[]>([]);
+import { defaultConstraints } from '../misc/defaultConstraints';
+
+const useMediaDevicesHook = (constraints?: MediaTrackConstraints) => {
+    const [state, setState] = useState<MediaTrackSettings[]>([]);
 
     useEffect(() => {
         let mounted = true;
 
+        let newConstraints: MediaStreamConstraints = {
+            audio: false,
+            video: constraints ?? defaultConstraints
+        };
+
         const onChange = () => {
             navigator.mediaDevices
-                .enumerateDevices()
-                .then((devices) => {
-                    if (mounted) {
-                        setState(devices);
-                    }
+                .getUserMedia(newConstraints)
+                .then((stream) => {
+                    let settings: Array<MediaTrackSettings> = [];
+
+                    stream.getVideoTracks().forEach((track) => {
+                        settings.push(track.getSettings());
+                    });
+
+                    setState(settings);
                 })
                 .catch((error) => console.log(error));
         };
@@ -33,7 +44,7 @@ const useMediaDevicesHook = () => {
 };
 
 const useMediaDevicesMock = () => {
-    const devices: InputDeviceInfo[] = [];
+    const devices: MediaTrackSettings[] = [];
 
     return devices;
 };

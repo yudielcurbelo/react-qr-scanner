@@ -4,6 +4,7 @@ import { Story } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
 
 import { QrScanner, IQrScannerProps } from '../src';
+import { defaultConstraints } from '../src/misc/defaultConstraints';
 
 const styles = {
     container: {
@@ -35,7 +36,9 @@ export const ScanCode = Template.bind({});
 
 ScanCode.args = {
     scanDelay: 100,
-    constraints: { facingMode: 'environment' }
+    tracker: true,
+    hideCount: false,
+    constraints: defaultConstraints
 };
 
 export default {

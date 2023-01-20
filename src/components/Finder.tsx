@@ -1,51 +1,49 @@
 import React, { Fragment, useState, useEffect } from 'react';
-import type { CSSProperties } from 'react';
 
-const styles: Record<string, CSSProperties> = {
-    count: {
-        bottom: 0,
-        right: 5,
-        fontSize: 30,
-        color: '#fff',
-        position: 'absolute',
-        zIndex: 1
-    }
-};
+import { Result } from '@zxing/library';
+
+import Tracker from './Tracker';
+import Counter from './Counter';
 
 interface FinderProps {
     scanCount: number;
     hideCount: boolean;
+    tracker: boolean;
     border?: number;
+    result?: Result;
+    video: HTMLVideoElement | null;
+    constraints?: MediaTrackConstraints;
+    deviceId?: string;
+    scanDelay: number;
 }
 
 export const Finder = (props: FinderProps) => {
-    const { scanCount, hideCount, border = 80 } = props;
+    const { scanCount, hideCount, tracker, border = 80, result, video, constraints, deviceId, scanDelay } = props;
 
     const [color, setColor] = useState('rgba(255, 0, 0, 0.5)');
 
     useEffect(() => {
-        if (scanCount === 0) return;
+        if (result?.getBarcodeFormat() == 11 && tracker) {
+            setColor('rgba(255, 0, 0, 0.5)');
+
+            return;
+        }
 
         setColor('rgba(0, 255, 0, 0.5)');
 
         let timer = setTimeout(() => {
             setColor('rgba(255, 0, 0, 0.5)');
-        }, 500);
+        }, scanDelay);
 
         return () => {
             clearTimeout(timer);
         };
     }, [scanCount]);
 
-    const Count = () => {
-        if (hideCount) return null;
-
-        return <div style={styles.count}>{scanCount}</div>;
-    };
-
     return (
         <Fragment>
-            <Count />
+            {!hideCount && <Counter scanCount={scanCount} />}
+            {tracker && <Tracker video={video} result={result} constraints={constraints} deviceId={deviceId} scanDelay={scanDelay} />}
             <svg
                 viewBox="0 0 100 100"
                 style={{
