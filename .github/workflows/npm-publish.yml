@@ -1,11 +1,11 @@
-name: publish package
+name: Publish to NPM
 
 on:
   release:
     types: [ published ]
 
 jobs:
-  release:
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -18,6 +18,8 @@ jobs:
           scope: '@yudiel'
       - name: Install Dependencies
         run: yarn
+      - name: Build
+        run: yarn build
       - name: Publish
         run: yarn publish --access public
         env:
