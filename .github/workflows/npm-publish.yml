@@ -19,6 +19,6 @@ jobs:
       - name: Install Dependencies
         run: yarn
       - name: Publish
-        run: yarn run publish --no-git-checks --access public
+        run: yarn publish --access public
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
