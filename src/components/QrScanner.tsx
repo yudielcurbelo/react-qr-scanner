@@ -26,7 +26,7 @@ const styles: Record<string, CSSProperties> = {
     }
 };
 
-export interface IQrScannerProps extends Omit<IUseQrScannerProps, 'onResult'> {
+export interface IQrScannerProps extends Omit<IUseQrScannerProps, 'onResult' | 'scanDelay' | 'constraints'> {
     containerStyle?: CSSProperties;
     videoStyle?: CSSProperties;
     onResult?: OnResultFunction;
@@ -35,6 +35,8 @@ export interface IQrScannerProps extends Omit<IUseQrScannerProps, 'onResult'> {
     hideCount?: boolean;
     tracker?: boolean;
     viewFinderBorder?: number;
+    constraints?: MediaTrackConstraints;
+    scanDelay?: number;
 }
 
 export const QrScanner = (props: IQrScannerProps) => {
