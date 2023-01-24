@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import type { CSSProperties, ReactElement } from 'react';
 
-import { Result } from '@zxing/library';
+import { DecodeHintType, Result } from '@zxing/library';
 
 import { Finder } from './Finder';
-import { IUseQrScannerProps, useQrScanner } from '../hooks/useQrScanner';
-import { OnResultFunction } from '../types';
+import { useQrScanner } from '../hooks/useQrScanner';
+import { OnErrorFunction, OnResultFunction } from '../types';
 import { defaultConstraints } from '../misc/defaultConstraints';
 
 const styles: Record<string, CSSProperties> = {
@@ -26,10 +26,11 @@ const styles: Record<string, CSSProperties> = {
     }
 };
 
-export interface IQrScannerProps extends Omit<IUseQrScannerProps, 'onResult' | 'scanDelay' | 'constraints'> {
+export interface IQrScannerProps {
+    onError: OnErrorFunction;
+    onResult?: OnResultFunction;
     containerStyle?: CSSProperties;
     videoStyle?: CSSProperties;
-    onResult?: OnResultFunction;
     onDecode?: (result: string) => void;
     viewFinder?: (props: any) => ReactElement | null;
     hideCount?: boolean;
@@ -37,6 +38,8 @@ export interface IQrScannerProps extends Omit<IUseQrScannerProps, 'onResult' | '
     viewFinderBorder?: number;
     constraints?: MediaTrackConstraints;
     scanDelay?: number;
+    deviceId?: string;
+    hints?: Map<DecodeHintType, any>;
 }
 
 export const QrScanner = (props: IQrScannerProps) => {
