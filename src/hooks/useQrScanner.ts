@@ -33,15 +33,19 @@ export const useQrScanner = (props: IUseQrScannerProps) => {
     const startDecoding = useCallback(async () => {
         if (!videoRef.current) return;
 
-        if (deviceId) {
-            await reader.decodeFromVideoDevice(deviceId, videoRef.current, onDecode);
-        } else {
-            let newConstraints: MediaStreamConstraints = {
-                audio: false,
-                video: constraints
-            };
+        try {
+            if (deviceId) {
+                await reader.decodeFromVideoDevice(deviceId, videoRef.current, onDecode);
+            } else {
+                let newConstraints: MediaStreamConstraints = {
+                    audio: false,
+                    video: constraints
+                };
 
-            await reader.decodeFromConstraints(newConstraints, videoRef.current, onDecode);
+                await reader.decodeFromConstraints(newConstraints, videoRef.current, onDecode);
+            }
+        } catch (error) {
+            onErrorRef.current(error as Error);
         }
     }, [reader, deviceId, constraints, onDecode]);
 
