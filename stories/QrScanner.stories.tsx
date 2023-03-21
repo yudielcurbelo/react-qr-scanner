@@ -1,6 +1,5 @@
 import React from 'react';
 
-import { Story } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
 
 import { QrScanner, IQrScannerProps } from '../src';
@@ -13,7 +12,7 @@ const styles = {
     }
 };
 
-const Template: Story<IQrScannerProps> = (args) => {
+function Template(args: IQrScannerProps) {
     return (
         <div style={styles.container}>
             <QrScanner
@@ -30,10 +29,11 @@ const Template: Story<IQrScannerProps> = (args) => {
             />
         </div>
     );
-};
+}
 
 export const ScanCode = Template.bind({});
 
+// @ts-ignore
 ScanCode.args = {
     scanDelay: 100,
     tracker: true,
