@@ -17,7 +17,7 @@ export default [
                 name: 'ReactQrScanner',
                 sourcemap: true,
                 globals: { react: 'React' },
-                exports: 'named',
+                exports: 'named'
             },
             {
                 file: packageJson.module,
@@ -32,11 +32,16 @@ export default [
             if (warning.code === 'THIS_IS_UNDEFINED') return;
             warn(warning); // this requires Rollup 0.46
         },
-        plugins: [peerDepsExternal(), resolve(), commonjs(), typescript({
-            tsconfig: './tsconfig.json',
-            exclude: ['**/stories/**']
-        }), terser()],
-        external: ['react', 'react-dom', 'styled-components']
+        plugins: [
+            peerDepsExternal(),
+            resolve(),
+            commonjs(),
+            typescript({
+                tsconfig: './tsconfig.json',
+                exclude: ['**/stories/**']
+            }),
+            terser()],
+        external: ['react', 'react-dom']
     },
     {
         input: 'dist/esm/index.d.ts',
