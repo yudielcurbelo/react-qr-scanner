@@ -26,7 +26,7 @@ const styles: Record<string, CSSProperties> = {
     }
 };
 
-export interface IQrScannerProps {
+export interface QrScannerProps {
     onError: OnErrorFunction;
     onResult?: OnResultFunction;
     containerStyle?: CSSProperties;
@@ -42,7 +42,7 @@ export interface IQrScannerProps {
     hints?: Map<DecodeHintType, any>;
 }
 
-export const QrScanner = (props: IQrScannerProps) => {
+export const QrScanner = (props: QrScannerProps) => {
     const {
         containerStyle,
         videoStyle,

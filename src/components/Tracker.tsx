@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { Result } from '@zxing/library';
 import { useMediaDevices } from '../hooks/useMediaDevices';
 
-interface ITrackerProps {
+interface TrackerProps {
     result?: Result;
     video: HTMLVideoElement | null;
     constraints?: MediaTrackConstraints;
@@ -10,7 +10,7 @@ interface ITrackerProps {
     scanDelay: number;
 }
 
-const Tracker = (props: ITrackerProps) => {
+const Tracker = (props: TrackerProps) => {
     const { result, video, constraints, deviceId, scanDelay } = props;
 
     const canvasRef = useRef<HTMLCanvasElement>(null);

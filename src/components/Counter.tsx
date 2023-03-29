@@ -11,11 +11,11 @@ const styles: Record<string, CSSProperties> = {
     }
 };
 
-interface ICounterProps {
+interface CounterProps {
     scanCount: number;
 }
 
-const Counter = (props: ICounterProps) => {
+const Counter = (props: CounterProps) => {
     const { scanCount } = props;
 
     return <div style={styles.count}>{scanCount}</div>;
