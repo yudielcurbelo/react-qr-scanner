@@ -3936,7 +3936,7 @@ __metadata:
     "@types/node": ^18.15.11
     "@types/react": ^18.0.37
     "@types/react-dom": ^18.0.11
-    "@zxing/library": ^0.19.3
+    "@zxing/library": ^0.20.0
     react: ^18.2.0
     react-dom: ^18.2.0
     rollup: ^3.20.6
@@ -3952,16 +3952,16 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@zxing/library@npm:^0.19.3":
-  version: 0.19.3
-  resolution: "@zxing/library@npm:0.19.3"
+"@zxing/library@npm:^0.20.0":
+  version: 0.20.0
+  resolution: "@zxing/library@npm:0.20.0"
   dependencies:
     "@zxing/text-encoding": ~0.9.0
     ts-custom-error: ^3.2.1
   dependenciesMeta:
     "@zxing/text-encoding":
       optional: true
-  checksum: 2a3adaccbde0e075ee4c3c73ab7fa9306be979dafeff6d373204470ea3cddab88608c6eca5e891c7d5e693c5df0f0664e14ea0a74d38e0658fc7464f5c986474
+  checksum: ba2d0e4d6213e74426fdaf096cd8af14f1c28c6d5d872e42d363ee67507d2b1d1c3a777395522df116670e5fdf59d799b48533465c7311ee09bb8ba3fbbd0e69
   languageName: node
   linkType: hard
 
