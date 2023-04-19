@@ -3936,7 +3936,7 @@ __metadata:
     "@types/node": ^18.15.11
     "@types/react": ^18.0.37
     "@types/react-dom": ^18.0.11
-    "@zxing/library": ^0.19.2
+    "@zxing/library": ^0.19.3
     react: ^18.2.0
     react-dom: ^18.2.0
     rollup: ^3.20.6
@@ -3952,16 +3952,16 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@zxing/library@npm:^0.19.2":
-  version: 0.19.2
-  resolution: "@zxing/library@npm:0.19.2"
+"@zxing/library@npm:^0.19.3":
+  version: 0.19.3
+  resolution: "@zxing/library@npm:0.19.3"
   dependencies:
     "@zxing/text-encoding": ~0.9.0
-    ts-custom-error: ^3.0.0
+    ts-custom-error: ^3.2.1
   dependenciesMeta:
     "@zxing/text-encoding":
       optional: true
-  checksum: 080e4780135d1b424f7fe6fe5d6c168c16f0dfa165ba546e66de738947421aba13ff62de105b721198cb58db77a0a9c377774baf75a169f4f412360f1c3898bf
+  checksum: 2a3adaccbde0e075ee4c3c73ab7fa9306be979dafeff6d373204470ea3cddab88608c6eca5e891c7d5e693c5df0f0664e14ea0a74d38e0658fc7464f5c986474
   languageName: node
   linkType: hard
 
@@ -9849,7 +9849,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ts-custom-error@npm:^3.0.0":
+"ts-custom-error@npm:^3.2.1":
   version: 3.3.1
   resolution: "ts-custom-error@npm:3.3.1"
   checksum: 50a1e825fced68d70049bd8d282379a635e43aa023a370fa8e736b12a6edba7f18a2d731fa194ac35303a8b625be56e121bdb31d8a0318250d1a8b277059fce3

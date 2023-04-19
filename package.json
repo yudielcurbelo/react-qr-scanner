@@ -59,7 +59,7 @@
     "react-dom": "^18.0.0"
   },
   "dependencies": {
-    "@zxing/library": "^0.19.2"
+    "@zxing/library": "^0.19.3"
   },
   "packageManager": "yarn@3.3.1"
 }
