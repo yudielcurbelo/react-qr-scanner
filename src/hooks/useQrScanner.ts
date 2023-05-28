@@ -34,7 +34,20 @@ export const useQrScanner = (props: UseQrScannerProps) => {
         if (!videoRef.current) return;
 
         try {
-            if (deviceId) {
+            if (deviceId && props.constraints) {
+                let deviceIdConstraints = {
+                    deviceId: deviceId
+                };
+
+                let videoConstraints = Object.assign(deviceIdConstraints, constraints);
+
+                let newConstraints: MediaStreamConstraints = {
+                    audio: false,
+                    video: videoConstraints
+                };
+
+                await reader.decodeFromConstraints(newConstraints, videoRef.current, onDecode);
+            } else if (deviceId) {
                 await reader.decodeFromVideoDevice(deviceId, videoRef.current, onDecode);
             } else {
                 let newConstraints: MediaStreamConstraints = {
