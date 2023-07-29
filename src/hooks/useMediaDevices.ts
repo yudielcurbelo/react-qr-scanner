@@ -10,6 +10,7 @@ const useMediaDevicesHook = (constraints?: MediaTrackConstraints) => {
 
     useEffect(() => {
         let mounted = true;
+        let mediaStream: MediaStream;
 
         let newConstraints: MediaStreamConstraints = {
             audio: false,
@@ -21,7 +22,7 @@ const useMediaDevicesHook = (constraints?: MediaTrackConstraints) => {
                 .getUserMedia(newConstraints)
                 .then((stream) => {
                     let settings: Array<MediaTrackSettings> = [];
-
+                    mediaStream = stream;
                     stream.getVideoTracks().forEach((track) => {
                         settings.push(track.getSettings());
                     });
@@ -37,6 +38,9 @@ const useMediaDevicesHook = (constraints?: MediaTrackConstraints) => {
         return () => {
             mounted = false;
             off(navigator.mediaDevices, 'devicechange', onChange);
+            mediaStream.getVideoTracks().forEach((track) => {
+                track.stop()
+            })
         };
     }, []);
 
