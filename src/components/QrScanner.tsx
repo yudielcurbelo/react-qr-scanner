@@ -92,6 +92,7 @@ export const QrScanner = (props: QrScannerProps) => {
             <video
                 ref={ref}
                 muted
+                playsInline
                 style={{
                     ...styles.video,
                     ...videoStyle
