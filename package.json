@@ -1,65 +1,65 @@
 {
-  "name": "@yudiel/react-qr-scanner",
-  "version": "1.1.10",
-  "description": "A library to scan qr codes in react.",
-  "author": "Yudiel Curbelo",
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/yudielcurbelo/react-qr-scanner.git"
-  },
-  "bugs": {
-    "url": "https://github.com/yudielcurbelo/react-qr-scanner/issues"
-  },
-  "homepage": "https://github.com/yudielcurbelo/react-qr-scanner#readme",
-  "main": "dist/cjs/index.js",
-  "module": "dist/esm/index.js",
-  "types": "dist/index.d.ts",
-  "files": [
-    "dist",
-    "src"
-  ],
-  "scripts": {
-    "build": "rollup -c",
-    "build:esm": "tsc",
-    "build:cjs": "tsc --module CommonJS --outDir dist/cjs",
-    "storybook": "NODE_OPTIONS=--openssl-legacy-provider && storybook dev -p 6006",
-    "build-storybook": "storybook build",
-    "publish": "npm publish",
-    "publish-beta": "npm publish --tag beta"
-  },
-  "devDependencies": {
-    "@babel/preset-env": "^7.22.9",
-    "@babel/preset-react": "^7.22.5",
-    "@babel/preset-typescript": "^7.22.5",
-    "@rollup/plugin-commonjs": "^25.0.3",
-    "@rollup/plugin-node-resolve": "^15.1.0",
-    "@rollup/plugin-typescript": "^11.1.2",
-    "@storybook/addon-actions": "^7.1.1",
-    "@storybook/addon-essentials": "^7.1.1",
-    "@storybook/addon-interactions": "^7.1.1",
-    "@storybook/addon-links": "^7.1.1",
-    "@storybook/react": "^7.1.1",
-    "@storybook/react-webpack5": "7.1.1",
-    "@types/node": "^20.4.5",
-    "@types/react": "^18.2.17",
-    "@types/react-dom": "^18.2.7",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "rollup": "^3.27.0",
-    "rollup-plugin-dts": "^5.3.0",
-    "rollup-plugin-peer-deps-external": "^2.2.4",
-    "rollup-plugin-terser": "^7.0.2",
-    "storybook": "7.1.1",
-    "tslib": "^2.6.1",
-    "typescript": "^5.1.6"
-  },
-  "peerDependencies": {
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
-  },
-  "dependencies": {
-    "@zxing/library": "^0.20.0"
-  },
-  "packageManager": "yarn@3.3.1"
+    "name": "@yudiel/react-qr-scanner",
+    "version": "1.1.12",
+    "description": "A library to scan qr codes in react.",
+    "author": "Yudiel Curbelo",
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/yudielcurbelo/react-qr-scanner.git"
+    },
+    "bugs": {
+        "url": "https://github.com/yudielcurbelo/react-qr-scanner/issues"
+    },
+    "homepage": "https://github.com/yudielcurbelo/react-qr-scanner#readme",
+    "main": "dist/cjs/index.js",
+    "module": "dist/esm/index.js",
+    "types": "dist/index.d.ts",
+    "files": [
+        "dist",
+        "src"
+    ],
+    "scripts": {
+        "build": "rollup -c",
+        "build:esm": "tsc",
+        "build:cjs": "tsc --module CommonJS --outDir dist/cjs",
+        "storybook": "NODE_OPTIONS=--openssl-legacy-provider && storybook dev -p 6006",
+        "build-storybook": "storybook build",
+        "publish": "npm publish",
+        "publish-beta": "npm publish --tag beta"
+    },
+    "devDependencies": {
+        "@babel/preset-env": "^7.22.9",
+        "@babel/preset-react": "^7.22.5",
+        "@babel/preset-typescript": "^7.22.5",
+        "@rollup/plugin-commonjs": "^25.0.3",
+        "@rollup/plugin-node-resolve": "^15.1.0",
+        "@rollup/plugin-typescript": "^11.1.2",
+        "@storybook/addon-actions": "^7.1.1",
+        "@storybook/addon-essentials": "^7.1.1",
+        "@storybook/addon-interactions": "^7.1.1",
+        "@storybook/addon-links": "^7.1.1",
+        "@storybook/react": "^7.1.1",
+        "@storybook/react-webpack5": "7.1.1",
+        "@types/node": "^20.4.5",
+        "@types/react": "^18.2.17",
+        "@types/react-dom": "^18.2.7",
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0",
+        "rollup": "^3.27.0",
+        "rollup-plugin-dts": "^5.3.0",
+        "rollup-plugin-peer-deps-external": "^2.2.4",
+        "rollup-plugin-terser": "^7.0.2",
+        "storybook": "7.1.1",
+        "tslib": "^2.6.1",
+        "typescript": "^5.1.6"
+    },
+    "peerDependencies": {
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0"
+    },
+    "dependencies": {
+        "@zxing/library": "^0.20.0"
+    },
+    "packageManager": "yarn@3.3.1"
 }
