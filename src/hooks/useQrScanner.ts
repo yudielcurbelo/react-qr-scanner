@@ -5,7 +5,7 @@ import { BrowserMultiFormatReader, DecodeContinuouslyCallback, DecodeHintType, N
 import deepEqual from '../utilities/deepEqual';
 import { OnResultFunction, OnErrorFunction } from '../types';
 
-export interface UseQrScannerProps {
+export interface IUseQrScannerProps {
     onResult: OnResultFunction;
     onError: OnErrorFunction;
     scanDelay: number;
@@ -14,7 +14,7 @@ export interface UseQrScannerProps {
     hints?: Map<DecodeHintType, any>;
 }
 
-export const useQrScanner = (props: UseQrScannerProps) => {
+export const useQrScanner = (props: IUseQrScannerProps) => {
     const { onResult, onError, scanDelay, hints, deviceId } = props;
 
     const onResultRef = useRef(onResult);
