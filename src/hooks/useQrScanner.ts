@@ -17,6 +17,7 @@ export interface IUseQrScannerProps {
 export const useQrScanner = (props: IUseQrScannerProps) => {
     const { onResult, onError, scanDelay, hints, deviceId } = props;
 
+    const isMounted = useRef(false);
     const onResultRef = useRef(onResult);
     const onErrorRef = useRef(onError);
     const videoRef = useRef<HTMLVideoElement>(null);
@@ -54,23 +55,6 @@ export const useQrScanner = (props: IUseQrScannerProps) => {
     }, [reader]);
 
     useEffect(() => {
-        const isEqual = deepEqual(props.constraints, constraints);
-
-        if (!isEqual) {
-            setConstraints(props.constraints);
-        }
-    }, [props.constraints]);
-
-    useEffect(() => {
-        onResultRef.current = onResult;
-    }, [onResult]);
-
-    useEffect(() => {
-        onErrorRef.current = onError;
-    }, [onError]);
-
-    const isMounted = useRef(true);
-    useEffect(() => {
         isMounted.current = true;
 
         (async () => {
@@ -86,6 +70,22 @@ export const useQrScanner = (props: IUseQrScannerProps) => {
             stopDecoding();
         };
     }, [startDecoding, stopDecoding]);
+    
+    useEffect(() => {
+        const isEqual = deepEqual(props.constraints, constraints);
+
+        if (!isEqual) {
+            setConstraints(props.constraints);
+        }
+    }, [props.constraints]);
+
+    useEffect(() => {
+        onResultRef.current = onResult;
+    }, [onResult]);
+
+    useEffect(() => {
+        onErrorRef.current = onError;
+    }, [onError]);
 
     return { ref: videoRef, start: startDecoding, stop: stopDecoding };
 };
