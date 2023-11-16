@@ -1,11 +1,6 @@
 import { useEffect, useRef, useCallback, useState, useMemo } from 'react';
 
-import {
-    BrowserMultiFormatReader,
-    DecodeContinuouslyCallback,
-    DecodeHintType,
-    NotFoundException
-} from '@zxing/library';
+import { BrowserMultiFormatReader, DecodeContinuouslyCallback, DecodeHintType, NotFoundException } from '@zxing/library';
 
 import deepEqual from '../utilities/deepEqual';
 import { OnResultFunction, OnErrorFunction } from '../types';
@@ -22,6 +17,7 @@ export interface IUseQrScannerProps {
 export const useQrScanner = (props: IUseQrScannerProps) => {
     const { onResult, onError, scanDelay, hints, deviceId } = props;
 
+    const isMounted = useRef(false);
     const onResultRef = useRef(onResult);
     const onErrorRef = useRef(onError);
     const videoRef = useRef<HTMLVideoElement>(null);
@@ -59,6 +55,23 @@ export const useQrScanner = (props: IUseQrScannerProps) => {
     }, [reader]);
 
     useEffect(() => {
+        isMounted.current = true;
+
+        (async () => {
+            await startDecoding();
+
+            if (!isMounted.current) {
+                stopDecoding();
+            }
+        })();
+
+        return () => {
+            isMounted.current = false;
+            stopDecoding();
+        };
+    }, [startDecoding, stopDecoding]);
+    
+    useEffect(() => {
         const isEqual = deepEqual(props.constraints, constraints);
 
         if (!isEqual) {
@@ -73,24 +86,6 @@ export const useQrScanner = (props: IUseQrScannerProps) => {
     useEffect(() => {
         onErrorRef.current = onError;
     }, [onError]);
-
-    useEffect(() => {
-        let isMounted = true;
-
-        (async () => {
-            await startDecoding();
-
-            if (!isMounted) {
-                stopDecoding();
-            }
-        })();
-
-        return () => {
-            isMounted = false;
-            stopDecoding();
-        };
-    }, [startDecoding, stopDecoding]);
-
 
     return { ref: videoRef, start: startDecoding, stop: stopDecoding };
 };
