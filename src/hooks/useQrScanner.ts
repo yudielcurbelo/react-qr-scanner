@@ -1,6 +1,11 @@
 import { useEffect, useRef, useCallback, useState, useMemo } from 'react';
 
-import { BrowserMultiFormatReader, DecodeContinuouslyCallback, DecodeHintType, NotFoundException } from '@zxing/library';
+import {
+    BrowserMultiFormatReader,
+    DecodeContinuouslyCallback,
+    DecodeHintType,
+    NotFoundException
+} from '@zxing/library';
 
 import deepEqual from '../utilities/deepEqual';
 import { OnResultFunction, OnErrorFunction } from '../types';
@@ -70,13 +75,22 @@ export const useQrScanner = (props: IUseQrScannerProps) => {
     }, [onError]);
 
     useEffect(() => {
+        let isMounted = true;
+
         (async () => {
             await startDecoding();
+
+            if (!isMounted) {
+                stopDecoding();
+            }
         })();
+
         return () => {
+            isMounted = false;
             stopDecoding();
         };
     }, [startDecoding, stopDecoding]);
+
 
     return { ref: videoRef, start: startDecoding, stop: stopDecoding };
 };
