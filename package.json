@@ -25,7 +25,7 @@
     "build:cjs": "tsc --module CommonJS --outDir dist/cjs",
     "storybook": "NODE_OPTIONS=--openssl-legacy-provider && storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "publish": "npm publish",
+    "publish-version": "npm publish",
     "publish-beta": "npm publish --tag beta"
   },
   "devDependencies": {
