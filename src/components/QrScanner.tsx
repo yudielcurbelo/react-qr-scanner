@@ -40,6 +40,7 @@ export interface QrScannerProps {
     scanDelay?: number;
     deviceId?: string;
     hints?: Map<DecodeHintType, any>;
+    stopDecoding?: boolean;
 }
 
 export const QrScanner = (props: QrScannerProps) => {

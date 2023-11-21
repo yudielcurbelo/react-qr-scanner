@@ -12,10 +12,11 @@ export interface IUseQrScannerProps {
     constraints: MediaTrackConstraints;
     deviceId?: string;
     hints?: Map<DecodeHintType, any>;
+    stopDecoding?: boolean;
 }
 
 export const useQrScanner = (props: IUseQrScannerProps) => {
-    const { onResult, onError, scanDelay, hints, deviceId } = props;
+    const { onResult, onError, scanDelay, hints, deviceId, stopDecoding } = props;
 
     const isMounted = useRef(false);
     const onResultRef = useRef(onResult);
@@ -31,7 +32,15 @@ export const useQrScanner = (props: IUseQrScannerProps) => {
         if (error && !(error instanceof NotFoundException)) onErrorRef.current(error);
     }, []);
 
-    const startDecoding = useCallback(async () => {
+    const readerReset = useCallback(() => {
+        reader.reset();
+    }, [reader]);
+
+    const readerStop = useCallback(() => {
+        reader.stopAsyncDecode();
+    }, [reader]);
+
+    const readerStart = useCallback(async () => {
         if (!videoRef.current) return;
 
         try {
@@ -50,27 +59,28 @@ export const useQrScanner = (props: IUseQrScannerProps) => {
         }
     }, [reader, deviceId, constraints, onDecode]);
 
-    const stopDecoding = useCallback(() => {
-        reader.reset();
-    }, [reader]);
-
     useEffect(() => {
         isMounted.current = true;
 
+        if (stopDecoding) {
+            readerStop();
+            return;
+        }
+
         (async () => {
-            await startDecoding();
+            await readerStart();
 
             if (!isMounted.current) {
-                stopDecoding();
+                readerReset();
             }
         })();
 
         return () => {
             isMounted.current = false;
-            stopDecoding();
+            readerReset();
         };
-    }, [startDecoding, stopDecoding]);
-    
+    }, [readerStart, readerReset, stopDecoding]);
+
     useEffect(() => {
         const isEqual = deepEqual(props.constraints, constraints);
 
@@ -87,5 +97,5 @@ export const useQrScanner = (props: IUseQrScannerProps) => {
         onErrorRef.current = onError;
     }, [onError]);
 
-    return { ref: videoRef, start: startDecoding, stop: stopDecoding };
+    return { ref: videoRef, start: readerStart, stop: stopDecoding };
 };

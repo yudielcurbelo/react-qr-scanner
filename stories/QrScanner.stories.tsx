@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import { action } from '@storybook/addon-actions';
 
@@ -13,10 +13,16 @@ const styles = {
 };
 
 function Template(args: QrScannerProps) {
+    const [stopDecoding, setStopDecoding] = useState(false);
+
     return (
         <div style={styles.container}>
+            <button onClick={() => setStopDecoding((prev) => !prev)} style={{ marginBottom: 5 }}>
+                {stopDecoding ? 'Start Decoding' : 'Stop Decoding'}
+            </button>
             <QrScanner
                 {...args}
+                stopDecoding={stopDecoding}
                 onResult={(result) => {
                     action('onResult')(result);
                 }}
