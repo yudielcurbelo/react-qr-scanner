@@ -38,9 +38,13 @@ const useMediaDevicesHook = (constraints?: MediaTrackConstraints) => {
         return () => {
             mounted = false;
             off(navigator.mediaDevices, 'devicechange', onChange);
-            mediaStream.getVideoTracks().forEach((track) => {
-                track.stop()
-            })
+            // the mediaStream is undefined if the cleanup is called before
+            // there's any stream available
+            if(typeof mediaStream !== 'undefined') {
+                mediaStream.getVideoTracks().forEach((track) => {
+                    track.stop()
+                });
+            }
         };
     }, []);
 
