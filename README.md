@@ -52,3 +52,4 @@ const App = () => {
 | onError        | `function`                                                                                      | none                            | Scan event handler for error object.                              |
 | ViewFinder     | `component`                                                                                     | none                            | ViewFinder component to rendering as overlay in the video element |
 | hideCount      | `boolean`                                                                                       | `true`                          | Hide the scanned count as overlay in the video element            |
+| stopDecoding   | `boolean`                                                                                       | `false`                         | Stop the decoding process                                         |
