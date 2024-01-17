@@ -29,7 +29,18 @@ export const useQrScanner = (props: IUseQrScannerProps) => {
 
     const onDecode = useCallback<DecodeContinuouslyCallback>((result, error) => {
         if (result) onResultRef.current(result);
-        if (error && !(error instanceof NotFoundException)) onErrorRef.current(error);
+
+        if (error) {
+            if (error instanceof NotFoundException) {
+                return;
+            }
+
+            if (error instanceof DOMException && error.name === 'IndexSizeError') {
+                return;
+            }
+
+            onErrorRef.current(error);
+        }
     }, []);
 
     const readerReset = useCallback(() => {
