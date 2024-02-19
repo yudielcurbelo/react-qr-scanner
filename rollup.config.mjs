@@ -1,4 +1,5 @@
 import dts from 'rollup-plugin-dts';
+import copy from 'rollup-plugin-copy';
 import resolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
 import typescript from '@rollup/plugin-typescript';
@@ -39,6 +40,12 @@ export default [
             typescript({
                 tsconfig: './tsconfig.json',
                 exclude: ['**/stories/**']
+            }),
+            copy({
+                targets: [
+                    { src: 'src/assets/*', dest: 'dist/cjs/assets' },
+                    { src: 'src/assets/*', dest: 'dist/esm/assets' }
+                ]
             }),
             terser()],
         external: ['react', 'react-dom']

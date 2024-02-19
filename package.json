@@ -1,6 +1,6 @@
 {
   "name": "@yudiel/react-qr-scanner",
-  "version": "1.2.8",
+  "version": "1.2.9",
   "description": "A library to scan qr codes in react.",
   "author": "Yudiel Curbelo",
   "license": "MIT",
@@ -16,8 +16,7 @@
   "module": "dist/esm/index.js",
   "types": "dist/index.d.ts",
   "files": [
-    "dist",
-    "src/assets"
+    "dist"
   ],
   "scripts": {
     "build": "rollup -c",
@@ -47,6 +46,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "rollup": "^4.12.0",
+    "rollup-plugin-copy": "^3.5.0",
     "rollup-plugin-dts": "^6.1.0",
     "rollup-plugin-peer-deps-external": "^2.2.4",
     "rollup-plugin-terser": "^7.0.2",
