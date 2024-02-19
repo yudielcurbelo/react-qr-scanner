@@ -43,8 +43,7 @@ export default [
             }),
             copy({
                 targets: [
-                    { src: 'src/assets/*', dest: 'dist/cjs/assets' },
-                    { src: 'src/assets/*', dest: 'dist/esm/assets' }
+                    { src: 'src/assets/*', dest: 'dist/assets' },
                 ]
             }),
             terser()],
