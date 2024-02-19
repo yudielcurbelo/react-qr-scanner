@@ -26,8 +26,8 @@ const styles: Record<string, CSSProperties> = {
     }
 };
 
-export interface QrScannerProps {
-    onError: OnErrorFunction;
+export interface IQrScannerProps {
+    onError?: OnErrorFunction;
     onResult?: OnResultFunction;
     containerStyle?: CSSProperties;
     videoStyle?: CSSProperties;
@@ -41,37 +41,52 @@ export interface QrScannerProps {
     deviceId?: string;
     hints?: Map<DecodeHintType, any>;
     stopDecoding?: boolean;
+    audio?: boolean;
 }
 
-export const QrScanner = (props: QrScannerProps) => {
+export const QrScanner = (props: IQrScannerProps) => {
     const {
         containerStyle,
         videoStyle,
         constraints = defaultConstraints,
         onResult,
         onDecode,
+        onError,
         viewFinder: ViewFinder,
         hideCount = true,
         tracker = false,
         viewFinderBorder,
         deviceId,
         scanDelay = 100,
+        audio = true,
         ...rest
     } = props;
 
     const [scanCount, setScanCount] = useState(0);
     const [result, setResult] = useState<Result>();
 
-    const handleOnResult = (result: Result) => {
+    async function handleOnResult(result: Result) {
         setResult(result);
 
-        if (onResult) onResult(result);
-        if (onDecode) onDecode(result.getText());
+        onResult?.(result);
+        onDecode?.(result.getText());
 
         setScanCount((count) => count + 1);
-    };
+    }
 
-    const { ref } = useQrScanner({ onResult: handleOnResult, constraints, deviceId, scanDelay, ...rest });
+    function handleOnError(error: Error) {
+        onError?.(error);
+    }
+
+    const { ref } = useQrScanner({
+        onResult: handleOnResult,
+        onError: handleOnError,
+        constraints,
+        deviceId,
+        scanDelay,
+        audio,
+        ...rest
+    });
 
     return (
         <div style={{ ...styles.container, ...containerStyle }}>

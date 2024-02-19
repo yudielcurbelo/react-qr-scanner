@@ -5,6 +5,8 @@ import { BrowserMultiFormatReader, DecodeContinuouslyCallback, DecodeHintType, N
 import deepEqual from '../utilities/deepEqual';
 import { OnResultFunction, OnErrorFunction } from '../types';
 
+const audioUrl = new URL('../assets/scanner-beep.mp3', import.meta.url);
+
 export interface IUseQrScannerProps {
     onResult: OnResultFunction;
     onError: OnErrorFunction;
@@ -13,12 +15,13 @@ export interface IUseQrScannerProps {
     deviceId?: string;
     hints?: Map<DecodeHintType, any>;
     stopDecoding?: boolean;
+    audio?: boolean;
 }
 
 export const useQrScanner = (props: IUseQrScannerProps) => {
-    const { onResult, onError, scanDelay, hints, deviceId, stopDecoding } = props;
+    const { onResult, onError, scanDelay, hints, deviceId, stopDecoding, audio = true } = props;
 
-    const isMounted = useRef(false);
+    const mountedRef = useRef(false);
     const onResultRef = useRef(onResult);
     const onErrorRef = useRef(onError);
     const videoRef = useRef<HTMLVideoElement>(null);
@@ -28,7 +31,14 @@ export const useQrScanner = (props: IUseQrScannerProps) => {
     const reader = useMemo(() => new BrowserMultiFormatReader(hints, scanDelay), []);
 
     const onDecode = useCallback<DecodeContinuouslyCallback>((result, error) => {
-        if (result) onResultRef.current(result);
+        if (result) {
+            onResultRef.current(result);
+
+            if (audio) {
+                const audio = new Audio(audioUrl.href);
+                audio.play().catch((error) => console.error('Error playing the sound', error));
+            }
+        }
 
         if (error) {
             if (error instanceof NotFoundException) {
@@ -71,7 +81,7 @@ export const useQrScanner = (props: IUseQrScannerProps) => {
     }, [reader, deviceId, constraints, onDecode]);
 
     useEffect(() => {
-        isMounted.current = true;
+        mountedRef.current = true;
 
         if (stopDecoding) {
             readerStop();
@@ -81,13 +91,13 @@ export const useQrScanner = (props: IUseQrScannerProps) => {
         (async () => {
             await readerStart();
 
-            if (!isMounted.current) {
+            if (!mountedRef.current) {
                 readerReset();
             }
         })();
 
         return () => {
-            isMounted.current = false;
+            mountedRef.current = false;
             readerReset();
         };
     }, [readerStart, readerReset, stopDecoding]);

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 import { action } from '@storybook/addon-actions';
 
-import { QrScanner, QrScannerProps } from '../src';
+import { QrScanner, IQrScannerProps } from '../src';
 import { defaultConstraints } from '../src/misc/defaultConstraints';
 
 const styles = {
@@ -12,7 +12,7 @@ const styles = {
     }
 };
 
-function Template(args: QrScannerProps) {
+function Template(args: IQrScannerProps) {
     const [stopDecoding, setStopDecoding] = useState(false);
 
     return (
