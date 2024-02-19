@@ -25,6 +25,7 @@ export const useQrScanner = (props: IUseQrScannerProps) => {
     const onResultRef = useRef(onResult);
     const onErrorRef = useRef(onError);
     const videoRef = useRef<HTMLVideoElement>(null);
+    const audioRef = useRef(new Audio(audioUrl.href));
 
     const [constraints, setConstraints] = useState(props.constraints);
 
@@ -34,9 +35,8 @@ export const useQrScanner = (props: IUseQrScannerProps) => {
         if (result) {
             onResultRef.current(result);
 
-            if (audio) {
-                const audio = new Audio(audioUrl.href);
-                audio.play().catch((error) => console.error('Error playing the sound', error));
+            if (audio && audioRef.current && audioRef.current.paused) {
+                audioRef.current.play().catch((error) => console.error('Error playing the sound', error));
             }
         }
 
