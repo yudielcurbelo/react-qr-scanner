@@ -1,14 +1,6 @@
-import { Result } from '@zxing/library';
-
-export type OnResultFunction = (result: Result) => void;
-
-export type OnErrorFunction = (error: Error) => void;
-
-export type Primitive =
-    | null
-    | undefined
-    | string
-    | number
-    | boolean
-    | symbol
-    | bigint;
+export { default as OnResultFunction } from './OnResult';
+export { default as OnErrorFunction } from './OnError';
+export { default as IScannerControl } from './IScannerControls';
+export { default as IBrowserScannerOptions } from './IScannerOptions';
+export { default as IScannerComponents } from './IScannerComponents';
+export { default as IScannerStyles } from './IScannerStyles';

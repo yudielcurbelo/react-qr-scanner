@@ -1,24 +1,23 @@
-import React, { CSSProperties } from 'react';
+import React, { useState, useEffect } from 'react';
 
-const styles: Record<string, CSSProperties> = {
-    count: {
-        bottom: 0,
-        right: 5,
-        fontSize: 30,
-        color: '#fff',
-        position: 'absolute',
-        zIndex: 1
-    }
-};
+import { Result } from '@zxing/library';
 
-interface CounterProps {
-    scanCount: number;
+interface ICounterProps {
+    result?: Result;
 }
 
-const Counter = (props: CounterProps) => {
-    const { scanCount } = props;
+export default function Counter(props: ICounterProps) {
+    const { result } = props;
 
-    return <div style={styles.count}>{scanCount}</div>;
-};
+    const [count, setCount] = useState(0);
 
-export default Counter;
+    useEffect(() => {
+        if (result === undefined) {
+            return;
+        }
+
+        setCount((prevCount) => prevCount + 1);
+    }, [result]);
+
+    return <div style={{ top: 0, right: 5, fontSize: 28, color: '#FFFFFF', position: 'absolute', zIndex: 1 }}>{count}</div>;
+}
