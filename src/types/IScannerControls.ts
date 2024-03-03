@@ -1,5 +1,5 @@
 interface IScannerControls {
-    stop: () => void;
+    stop: () => Promise<void>;
 
     switchTorch?: (onOff: boolean) => Promise<void>;
 

@@ -10,236 +10,7 @@ export class BrowserScanner {
 
     public constructor(protected readonly reader: Reader, public readonly options: IBrowserScannerOptions) {}
 
-    public static addVideoSource(videoElement: HTMLVideoElement, stream: MediaStream): void {
-        try {
-            videoElement.srcObject = stream;
-        } catch (err) {
-            console.error('Got interrupted by new loading request');
-        }
-    }
-
-    public static async mediaStreamSetTorch(track: MediaStreamTrack, onOff: boolean) {
-        await track.applyConstraints({
-            advanced: [
-                {
-                    fillLightMode: onOff ? 'flash' : 'off',
-                    torch: onOff
-                } as any
-            ]
-        });
-    }
-
-    public static mediaStreamIsTorchCompatible(params: MediaStream) {
-        const tracks = params.getVideoTracks();
-
-        for (const track of tracks) {
-            if (BrowserScanner.mediaStreamIsTorchCompatibleTrack(track)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    public static mediaStreamIsTorchCompatibleTrack(track: MediaStreamTrack) {
-        try {
-            const capabilities = track.getCapabilities();
-
-            return 'torch' in capabilities;
-        } catch (err) {
-            console.error(err);
-            console.warn('Your browser may be not fully compatible with WebRTC and/or ImageCapture specs. Torch will not be available.');
-
-            return false;
-        }
-    }
-
-    public static isVideoPlaying(video: HTMLVideoElement): boolean {
-        return video.currentTime > 0 && !video.paused && video.readyState > 2;
-    }
-
-    public static getMediaElement(mediaElementId: string, type: string): HTMLVisualMediaElement {
-        const mediaElement = document.getElementById(mediaElementId);
-
-        if (!mediaElement) {
-            throw new ArgumentException(`element with id '${mediaElementId}' not found`);
-        }
-
-        if (mediaElement.nodeName.toLowerCase() !== type.toLowerCase()) {
-            throw new ArgumentException(`element with id '${mediaElementId}' must be an ${type} element`);
-        }
-
-        return mediaElement as HTMLVisualMediaElement;
-    }
-
-    public static createVideoElement(videoThingy?: HTMLVideoElement | string): HTMLVideoElement {
-        if (videoThingy instanceof HTMLVideoElement) {
-            return videoThingy;
-        }
-
-        if (typeof videoThingy === 'string') {
-            return BrowserScanner.getMediaElement(videoThingy, 'video') as HTMLVideoElement;
-        }
-
-        if (!videoThingy && typeof document !== 'undefined') {
-            const videoElement = document.createElement('video');
-            videoElement.width = 200;
-            videoElement.height = 200;
-            return videoElement;
-        }
-
-        throw new Error("Couldn't get videoElement from videoSource!");
-    }
-
-    public static prepareVideoElement(videoElem?: HTMLVideoElement | string): HTMLVideoElement {
-        const videoElement = BrowserScanner.createVideoElement(videoElem);
-
-        // Needed for iOS 11
-        videoElement.setAttribute('autoplay', 'true');
-        videoElement.setAttribute('muted', 'true');
-        videoElement.setAttribute('playsinline', 'true');
-
-        return videoElement;
-    }
-
-    public static createBinaryBitmapFromCanvas(canvas: HTMLCanvasElement) {
-        const luminanceSource = new HTMLCanvasElementLuminanceSource(canvas);
-        const hybridBinarizer = new HybridBinarizer(luminanceSource);
-
-        return new BinaryBitmap(hybridBinarizer);
-    }
-
-    public static drawImageOnCanvas(canvasElementContext: CanvasRenderingContext2D, srcElement: HTMLVisualMediaElement) {
-        canvasElementContext.drawImage(srcElement, 0, 0);
-    }
-
-    public static getMediaElementDimensions(mediaElement: HTMLVisualMediaElement) {
-        if (mediaElement instanceof HTMLVideoElement) {
-            return {
-                height: mediaElement.videoHeight,
-                width: mediaElement.videoWidth
-            };
-        }
-
-        if (mediaElement instanceof HTMLImageElement) {
-            return {
-                height: mediaElement.naturalHeight || mediaElement.height,
-                width: mediaElement.naturalWidth || mediaElement.width
-            };
-        }
-
-        throw new Error("Couldn't find the Source's dimensions!");
-    }
-
-    public static createCaptureCanvas(mediaElement: HTMLVisualMediaElement): HTMLCanvasElement {
-        if (!mediaElement) {
-            throw new ArgumentException('Cannot create a capture canvas without a media element.');
-        }
-
-        if (typeof document === 'undefined') {
-            throw new Error('The page "Document" is undefined, make sure you are running in a browser.');
-        }
-
-        const canvasElement = document.createElement('canvas');
-
-        const { width, height } = BrowserScanner.getMediaElementDimensions(mediaElement);
-
-        canvasElement.style.width = width + 'px';
-        canvasElement.style.height = height + 'px';
-        canvasElement.width = width;
-        canvasElement.height = height;
-
-        return canvasElement;
-    }
-
-    public static async tryPlayVideo(videoElement: HTMLVideoElement): Promise<boolean> {
-        if (videoElement?.ended) {
-            console.error('Trying to play video that has ended.');
-
-            return false;
-        }
-
-        if (BrowserScanner.isVideoPlaying(videoElement)) {
-            console.warn('Trying to play video that is already playing.');
-
-            return true;
-        }
-
-        try {
-            await videoElement.play();
-
-            return true;
-        } catch (error) {
-            console.warn('It was not possible to play the video.', error);
-
-            return false;
-        }
-    }
-
-    public static cleanVideoSource(videoElement: HTMLVideoElement): void {
-        if (!videoElement) {
-            return;
-        }
-
-        try {
-            videoElement.srcObject = null;
-        } catch (err) {
-            videoElement.src = '';
-        }
-
-        if (videoElement) {
-            videoElement.removeAttribute('src');
-        }
-    }
-
-    public static releaseAllStreams() {
-        if (BrowserScanner.streamTracker.length !== 0) {
-            BrowserScanner.streamTracker.forEach((mediaStream) => {
-                mediaStream.getTracks().forEach((track) => track.stop());
-            });
-        }
-
-        BrowserScanner.streamTracker = [];
-    }
-
-    protected static async playVideoOnLoadAsync(element: HTMLVideoElement, timeout: number): Promise<boolean> {
-        const isPlaying = await BrowserScanner.tryPlayVideo(element);
-
-        if (isPlaying) {
-            return true;
-        }
-
-        return new Promise<boolean>((resolve, reject) => {
-            const timeoutId = setTimeout(() => {
-                if (BrowserScanner.isVideoPlaying(element)) {
-                    return;
-                }
-                reject(false);
-                element.removeEventListener('canplay', videoCanPlayListener);
-            }, timeout);
-
-            const videoCanPlayListener: EventListener = () => {
-                BrowserScanner.tryPlayVideo(element).then((hasPlayed) => {
-                    clearTimeout(timeoutId);
-                    element.removeEventListener('canplay', videoCanPlayListener);
-                    resolve(hasPlayed);
-                });
-            };
-
-            element.addEventListener('canplay', videoCanPlayListener);
-        });
-    }
-
-    protected static async attachStreamToVideo(stream: MediaStream, preview?: string | HTMLVideoElement, previewPlayTimeout: number = 3000): Promise<HTMLVideoElement> {
-        const videoElement = BrowserScanner.prepareVideoElement(preview);
-
-        BrowserScanner.addVideoSource(videoElement, stream);
-
-        await BrowserScanner.playVideoOnLoadAsync(videoElement, previewPlayTimeout);
-
-        return videoElement;
-    }
-
+    // Public Decodes
     public decodeBitmap(binaryBitmap: BinaryBitmap): Result {
         return this.reader.decode(binaryBitmap, this.options.hints);
     }
@@ -281,8 +52,8 @@ export class BrowserScanner {
         const controls: IScannerControl = {
             ...originalControls,
 
-            stop() {
-                originalControls.stop();
+            async stop() {
+                await originalControls.stop();
             },
 
             async setStreamVideoConstraints(constraints: MediaTrackConstraints, trackFilter?: (track: MediaStreamTrack) => MediaStreamTrack[]) {
@@ -340,8 +111,8 @@ export class BrowserScanner {
             controls.switchTorch = switchTorch;
 
             controls.stop = async () => {
-                originalControls.stop();
                 await switchTorch(false);
+                await originalControls.stop();
             };
         }
 
@@ -364,7 +135,276 @@ export class BrowserScanner {
         return await this.decodeFromConstraints(constraints, previewElem, callbackFn);
     }
 
-    public scan(element: HTMLVisualMediaElement, callbackFn: DecodeContinuouslyCallback, finalizeCallback?: (error?: Error) => void): IScannerControl {
+    // Public Utils
+    public static cleanVideoSource(videoElement: HTMLVideoElement): void {
+        if (!videoElement) {
+            return;
+        }
+
+        try {
+            videoElement.srcObject = null;
+        } catch (err) {
+            videoElement.src = '';
+        }
+
+        if (videoElement) {
+            videoElement.removeAttribute('src');
+        }
+    }
+
+    public static releaseAllStreams() {
+        if (BrowserScanner.streamTracker.length !== 0) {
+            BrowserScanner.streamTracker.forEach((mediaStream) => {
+                mediaStream.getTracks().forEach((track) => track.stop());
+            });
+        }
+
+        BrowserScanner.streamTracker = [];
+    }
+
+    public static async listVideoInputDevices(requestPermission?: boolean): Promise<MediaDeviceInfo[]> {
+        if (!hasNavigator()) {
+            throw new Error("Can't enumerate devices, navigator is not present.");
+        }
+
+        if (!canEnumerateDevices()) {
+            throw new Error("Can't enumerate devices, method not supported.");
+        }
+
+        if (requestPermission) {
+            await navigator.mediaDevices.getUserMedia({ video: true });
+        }
+
+        const devices = await navigator.mediaDevices.enumerateDevices();
+
+        const videoDevices: MediaDeviceInfo[] = [];
+
+        for (const device of devices) {
+            const kind = (device.kind as string) === 'video' ? 'videoinput' : device.kind;
+
+            if (kind !== 'videoinput') {
+                continue;
+            }
+
+            const deviceId = device.deviceId || (device as any).id;
+            const label = device.label || `Video device ${videoDevices.length + 1}`;
+            const groupId = device.groupId;
+
+            const videoDevice = { deviceId, label, kind, groupId } as MediaDeviceInfo;
+
+            videoDevices.push(videoDevice);
+        }
+
+        return videoDevices;
+    }
+
+    // Private
+    private static addVideoSource(videoElement: HTMLVideoElement, stream: MediaStream): void {
+        try {
+            videoElement.srcObject = stream;
+        } catch (err) {
+            console.error('Got interrupted by new loading request');
+        }
+    }
+
+    private static async mediaStreamSetTorch(track: MediaStreamTrack, onOff: boolean) {
+        await track.applyConstraints({
+            advanced: [
+                {
+                    fillLightMode: onOff ? 'flash' : 'off',
+                    torch: onOff
+                } as any
+            ]
+        });
+    }
+
+    private static mediaStreamIsTorchCompatible(params: MediaStream) {
+        const tracks = params.getVideoTracks();
+
+        for (const track of tracks) {
+            if (BrowserScanner.mediaStreamIsTorchCompatibleTrack(track)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private static mediaStreamIsTorchCompatibleTrack(track: MediaStreamTrack) {
+        try {
+            const capabilities = track.getCapabilities();
+
+            return 'torch' in capabilities;
+        } catch (err) {
+            console.error(err);
+            console.warn('Your browser may be not fully compatible with WebRTC and/or ImageCapture specs. Torch will not be available.');
+
+            return false;
+        }
+    }
+
+    private static isVideoPlaying(video: HTMLVideoElement): boolean {
+        return video.currentTime > 0 && !video.paused && video.readyState > 2;
+    }
+
+    private static getMediaElement(mediaElementId: string, type: string): HTMLVisualMediaElement {
+        const mediaElement = document.getElementById(mediaElementId);
+
+        if (!mediaElement) {
+            throw new ArgumentException(`element with id '${mediaElementId}' not found`);
+        }
+
+        if (mediaElement.nodeName.toLowerCase() !== type.toLowerCase()) {
+            throw new ArgumentException(`element with id '${mediaElementId}' must be an ${type} element`);
+        }
+
+        return mediaElement as HTMLVisualMediaElement;
+    }
+
+    private static createVideoElement(videoThingy?: HTMLVideoElement | string): HTMLVideoElement {
+        if (videoThingy instanceof HTMLVideoElement) {
+            return videoThingy;
+        }
+
+        if (typeof videoThingy === 'string') {
+            return BrowserScanner.getMediaElement(videoThingy, 'video') as HTMLVideoElement;
+        }
+
+        if (!videoThingy && typeof document !== 'undefined') {
+            const videoElement = document.createElement('video');
+            videoElement.width = 200;
+            videoElement.height = 200;
+            return videoElement;
+        }
+
+        throw new Error("Couldn't get videoElement from videoSource!");
+    }
+
+    private static prepareVideoElement(videoElem?: HTMLVideoElement | string): HTMLVideoElement {
+        const videoElement = BrowserScanner.createVideoElement(videoElem);
+
+        // Needed for iOS
+        videoElement.setAttribute('autoplay', 'true');
+        videoElement.setAttribute('muted', 'true');
+        videoElement.setAttribute('playsinline', 'true');
+
+        return videoElement;
+    }
+
+    private static createBinaryBitmapFromCanvas(canvas: HTMLCanvasElement) {
+        const luminanceSource = new HTMLCanvasElementLuminanceSource(canvas);
+        const hybridBinarizer = new HybridBinarizer(luminanceSource);
+
+        return new BinaryBitmap(hybridBinarizer);
+    }
+
+    private static drawImageOnCanvas(canvasElementContext: CanvasRenderingContext2D, srcElement: HTMLVisualMediaElement) {
+        canvasElementContext.drawImage(srcElement, 0, 0);
+    }
+
+    private static getMediaElementDimensions(mediaElement: HTMLVisualMediaElement) {
+        if (mediaElement instanceof HTMLVideoElement) {
+            return {
+                height: mediaElement.videoHeight,
+                width: mediaElement.videoWidth
+            };
+        }
+
+        if (mediaElement instanceof HTMLImageElement) {
+            return {
+                height: mediaElement.naturalHeight || mediaElement.height,
+                width: mediaElement.naturalWidth || mediaElement.width
+            };
+        }
+
+        throw new Error("Couldn't find the Source's dimensions!");
+    }
+
+    private static createCaptureCanvas(mediaElement: HTMLVisualMediaElement): HTMLCanvasElement {
+        if (!mediaElement) {
+            throw new ArgumentException('Cannot create a capture canvas without a media element.');
+        }
+
+        if (typeof document === 'undefined') {
+            throw new Error('The page "Document" is undefined, make sure you are running in a browser.');
+        }
+
+        const canvasElement = document.createElement('canvas');
+
+        const { width, height } = BrowserScanner.getMediaElementDimensions(mediaElement);
+
+        canvasElement.style.width = width + 'px';
+        canvasElement.style.height = height + 'px';
+        canvasElement.width = width;
+        canvasElement.height = height;
+
+        return canvasElement;
+    }
+
+    private static async tryPlayVideo(videoElement: HTMLVideoElement): Promise<boolean> {
+        if (videoElement?.ended) {
+            console.error('Trying to play video that has ended.');
+
+            return false;
+        }
+
+        if (BrowserScanner.isVideoPlaying(videoElement)) {
+            console.warn('Trying to play video that is already playing.');
+
+            return true;
+        }
+
+        try {
+            await videoElement.play();
+
+            return true;
+        } catch (error) {
+            console.warn('It was not possible to play the video.', error);
+
+            return false;
+        }
+    }
+
+    private static async playVideoOnLoadAsync(element: HTMLVideoElement, timeout: number): Promise<boolean> {
+        const isPlaying = await BrowserScanner.tryPlayVideo(element);
+
+        if (isPlaying) {
+            return true;
+        }
+
+        return new Promise<boolean>((resolve, reject) => {
+            const timeoutId = setTimeout(() => {
+                if (BrowserScanner.isVideoPlaying(element)) {
+                    return;
+                }
+
+                reject(false);
+                element.removeEventListener('canplay', videoCanPlayListener);
+            }, timeout);
+
+            const videoCanPlayListener: EventListener = () => {
+                BrowserScanner.tryPlayVideo(element).then((hasPlayed) => {
+                    clearTimeout(timeoutId);
+                    element.removeEventListener('canplay', videoCanPlayListener);
+                    resolve(hasPlayed);
+                });
+            };
+
+            element.addEventListener('canplay', videoCanPlayListener);
+        });
+    }
+
+    private static async attachStreamToVideo(stream: MediaStream, preview?: string | HTMLVideoElement, previewPlayTimeout: number = 3000): Promise<HTMLVideoElement> {
+        const videoElement = BrowserScanner.prepareVideoElement(preview);
+
+        BrowserScanner.addVideoSource(videoElement, stream);
+
+        await BrowserScanner.playVideoOnLoadAsync(videoElement, previewPlayTimeout);
+
+        return videoElement;
+    }
+
+    private scan(element: HTMLVisualMediaElement, callbackFn: DecodeContinuouslyCallback, finalizeCallback?: (error?: Error) => void): IScannerControl {
         BrowserScanner.checkCallbackFnOrThrow(callbackFn);
 
         let captureCanvas = BrowserScanner.createCaptureCanvas(element);
@@ -381,7 +421,7 @@ export class BrowserScanner {
         let stopScan = false;
         let lastTimeoutId: null | ReturnType<typeof setTimeout>;
 
-        const stop = () => {
+        const stop = async () => {
             stopScan = true;
 
             if (lastTimeoutId) {
@@ -440,42 +480,6 @@ export class BrowserScanner {
         loop();
 
         return controls;
-    }
-
-    public static async listVideoInputDevices(requestPermission?: boolean): Promise<MediaDeviceInfo[]> {
-        if (!hasNavigator()) {
-            throw new Error("Can't enumerate devices, navigator is not present.");
-        }
-
-        if (!canEnumerateDevices()) {
-            throw new Error("Can't enumerate devices, method not supported.");
-        }
-
-        if (requestPermission) {
-            await navigator.mediaDevices.getUserMedia({ video: true });
-        }
-
-        const devices = await navigator.mediaDevices.enumerateDevices();
-
-        const videoDevices: MediaDeviceInfo[] = [];
-
-        for (const device of devices) {
-            const kind = (device.kind as string) === 'video' ? 'videoinput' : device.kind;
-
-            if (kind !== 'videoinput') {
-                continue;
-            }
-
-            const deviceId = device.deviceId || (device as any).id;
-            const label = device.label || `Video device ${videoDevices.length + 1}`;
-            const groupId = device.groupId;
-
-            const videoDevice = { deviceId, label, kind, groupId } as MediaDeviceInfo;
-
-            videoDevices.push(videoDevice);
-        }
-
-        return videoDevices;
     }
 
     private async getUserMedia(constraints: MediaStreamConstraints): Promise<MediaStream> {

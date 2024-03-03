@@ -48,11 +48,10 @@ export function useContinuousScanner(props: IUseContinuousScannerProps): IUseCon
         controlRef.current?.switchTorch?.(value);
     }, []);
 
-    const stopScanning = useCallback(() => {
+    const stopScanning = useCallback(async () => {
         isScanningRef.current = false;
 
-        controlRef.current?.switchTorch?.(false);
-        controlRef.current?.stop();
+        await controlRef.current?.stop();
         controlRef.current = undefined;
 
         audioRef.current.pause();
@@ -60,14 +59,10 @@ export function useContinuousScanner(props: IUseContinuousScannerProps): IUseCon
         setHasTorch(false);
 
         BrowserScanner.releaseAllStreams();
-
-        if (videoRef.current) {
-            BrowserScanner.cleanVideoSource(videoRef.current);
-        }
     }, []);
 
     const handleResultOrError = useCallback(
-        (result: Result | null, error: Exception | undefined) => {
+        async (result: Result | null, error: Exception | undefined) => {
             if (result) {
                 if (result.getText() === '') {
                     return;
@@ -98,7 +93,7 @@ export function useContinuousScanner(props: IUseContinuousScannerProps): IUseCon
                     onErrorRef.current(error);
                 } else {
                     onErrorRef.current(error);
-                    stopScanning();
+                    await stopScanning();
                 }
             }
         },
@@ -135,7 +130,7 @@ export function useContinuousScanner(props: IUseContinuousScannerProps): IUseCon
             }
         } catch (error) {
             onError(error as Error);
-            stopScanning();
+            await stopScanning();
         }
     }, [stopScanning, options, handleResultOrError]);
 
@@ -148,7 +143,9 @@ export function useContinuousScanner(props: IUseContinuousScannerProps): IUseCon
     }, [onError]);
 
     useEffect(() => {
-        return () => stopScanning();
+        return () => {
+            (async () => await stopScanning())();
+        };
     }, [stopScanning]);
 
     useEffect(() => {

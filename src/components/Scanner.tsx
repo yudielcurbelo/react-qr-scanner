@@ -64,6 +64,7 @@ export const Scanner = (props: IScannerProps) => {
                 />
                 <video
                     ref={ref}
+                    autoPlay
                     muted
                     playsInline
                     style={{
