@@ -4,27 +4,27 @@ import TorchOn from '../assets/TorchOn';
 import TorchOff from '../assets/TorchOff';
 
 interface ITorchProps {
-    enabled: boolean;
+    scanning: boolean;
     switchTorch?: (value: boolean) => void;
 }
 
 export default function Torch(props: ITorchProps) {
-    const { enabled, switchTorch } = props;
+    const { scanning, switchTorch } = props;
 
     const [torch, setTorch] = useState(false);
 
     useEffect(() => {
-        if (!enabled) {
+        if (!scanning) {
             setTorch(false);
         }
-    }, [enabled]);
+    }, [scanning]);
 
     function toggleTorch() {
         switchTorch?.(!torch);
         setTorch(!torch);
     }
 
-    if (!enabled || switchTorch === undefined) {
+    if (!scanning || !switchTorch) {
         return null;
     }
 

@@ -21,6 +21,7 @@ interface IUseContinuousScannerReturn {
     startScanning: () => void;
     stopScanning: () => void;
     loading: boolean;
+    scanning: boolean;
     switchTorch?: (value: boolean) => void;
     getSettings?: () => MediaTrackSettings | undefined;
 }
@@ -28,7 +29,7 @@ interface IUseContinuousScannerReturn {
 export function useContinuousScanner(props: IUseContinuousScannerProps): IUseContinuousScannerReturn {
     const { onResult, onError, audio } = props;
 
-    const isScanningRef = useRef(false);
+    const scanningRef = useRef(false);
 
     const videoRef = useRef<HTMLVideoElement>(null);
     const audioRef = useRef(new Audio(base64Beep));
@@ -37,8 +38,8 @@ export function useContinuousScanner(props: IUseContinuousScannerProps): IUseCon
     const onErrorRef = useRef(onError);
 
     const [options, setOptions] = useState<IBrowserScannerOptions>(props.options);
-    const [hasTorch, setHasTorch] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [scanning, setScanning] = useState(false);
 
     const getSettings = useCallback(() => {
         return controlRef.current?.getStreamVideoSettings?.((track) => [track]);
@@ -49,14 +50,12 @@ export function useContinuousScanner(props: IUseContinuousScannerProps): IUseCon
     }, []);
 
     const stopScanning = useCallback(async () => {
-        isScanningRef.current = false;
+        setScanning(false);
 
         await controlRef.current?.stop();
         controlRef.current = undefined;
 
         audioRef.current.pause();
-
-        setHasTorch(false);
 
         BrowserScanner.releaseAllStreams();
     }, []);
@@ -101,11 +100,13 @@ export function useContinuousScanner(props: IUseContinuousScannerProps): IUseCon
     );
 
     const startScanning = useCallback(async () => {
-        if (!videoRef.current || isScanningRef.current) {
+        console.log('startScanning');
+
+        if (!videoRef.current || scanningRef.current) {
             return;
         }
 
-        isScanningRef.current = true;
+        setScanning(true);
 
         const reader = new BrowserMultiFormatScanner(options);
 
@@ -124,15 +125,15 @@ export function useContinuousScanner(props: IUseContinuousScannerProps): IUseCon
             }
 
             setLoading(false);
-
-            if (controlRef.current?.switchTorch) {
-                setHasTorch(true);
-            }
         } catch (error) {
             onError(error as Error);
             await stopScanning();
         }
     }, [stopScanning, options, handleResultOrError]);
+
+    useEffect(() => {
+        scanningRef.current = scanning;
+    }, [scanning]);
 
     useEffect(() => {
         onResultRef.current = onResult;
@@ -152,8 +153,7 @@ export function useContinuousScanner(props: IUseContinuousScannerProps): IUseCon
         const isEqual = deepEqual(options, props.options);
 
         if (!isEqual) {
-            isScanningRef.current = false;
-            setHasTorch(false);
+            setScanning(false);
             setOptions(props.options);
         }
     }, [props.options]);
@@ -163,7 +163,8 @@ export function useContinuousScanner(props: IUseContinuousScannerProps): IUseCon
         startScanning,
         stopScanning,
         loading,
-        switchTorch: hasTorch ? switchTorch : undefined,
+        scanning,
+        switchTorch: controlRef.current?.switchTorch ? switchTorch : undefined,
         getSettings
     };
 }

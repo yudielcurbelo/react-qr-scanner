@@ -9,7 +9,7 @@ import { IBrowserScannerOptions } from '../types';
 import OnOff from './OnOff';
 
 interface IFinderProps {
-    enabled: boolean;
+    scanning: boolean;
     loading: boolean;
     video: HTMLVideoElement | null;
     border?: number;
@@ -25,7 +25,7 @@ interface IFinderProps {
 }
 
 export default function Finder(props: IFinderProps) {
-    const { enabled, loading, video, border = 35, result, options, count, onOff, tracker = false, switchTorch, startScanning, stopScanning, getSettings } = props;
+    const { scanning, loading, video, border = 35, result, options, count, onOff, tracker = false, switchTorch, startScanning, stopScanning, getSettings } = props;
 
     const color = 'rgba(255, 0, 0, 0.5)';
     const stokeWidth = 3;
@@ -34,8 +34,8 @@ export default function Finder(props: IFinderProps) {
         <Fragment>
             {count && <Counter result={result} />}
             {tracker && <Tracker video={video} result={result} getSettings={getSettings} delay={options.delayBetweenScanAttempts ?? 0} />}
-            {onOff && <OnOff enabled={enabled} startScanning={startScanning} stopScanning={stopScanning} />}
-            <Torch enabled={enabled} switchTorch={switchTorch} />
+            {onOff && <OnOff scanning={scanning} startScanning={startScanning} stopScanning={stopScanning} />}
+            <Torch scanning={scanning} switchTorch={switchTorch} />
             <svg
                 viewBox="0 0 100 100"
                 style={{

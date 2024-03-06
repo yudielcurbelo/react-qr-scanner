@@ -33,7 +33,7 @@ export const Scanner = (props: IScannerProps) => {
     const newOptions = { ...defaultOptions, ...options };
     const newComponents = { ...defaultComponents, ...components };
 
-    const { ref, startScanning, stopScanning, loading, switchTorch, getSettings } = useContinuousScanner({
+    const { ref, startScanning, stopScanning, loading, scanning, switchTorch, getSettings } = useContinuousScanner({
         onResult: handleOnResult,
         onError: handleOnError,
         options: newOptions,
@@ -49,7 +49,7 @@ export const Scanner = (props: IScannerProps) => {
             <div style={{ ...defaultStyles.container, ...styles?.container }}>
                 <Finder
                     video={ref.current}
-                    enabled={enabled}
+                    scanning={scanning}
                     loading={loading}
                     result={result}
                     border={styles?.finderBorder}

@@ -61,6 +61,17 @@ const App = () => {
 | options    | `IScannerOptions`                        | Optional configuration options for the browser scanner.            | No       |
 | components | `IScannerComponents`                     | Optional components to include or exclude in the scanner.          | No       |
 
+### IUseContinuousScannerReturn Interface
+| Property           | Type                                           | Description                                                              |
+|--------------------|------------------------------------------------|--------------------------------------------------------------------------|
+| `ref`              | `RefObject<HTMLVideoElement>`                  | A reference to the video element used for scanning.                      |
+| `startScanning`    | `() => void`                                   | A function to initiate the scanning process.                             |
+| `stopScanning`     | `() => void`                                   | A function to stop the scanning process.                                 |
+| `loading`          | `boolean`                                      | Indicates whether the scanner is in the process of initializing.         |
+| `scanning`         | `boolean`                                      | Indicates whether the scanner is currently active and scanning.          |
+| `switchTorch`      | `(value: boolean) => void` \| `undefined`      | An optional function to toggle the device's torch (flashlight) feature.  |
+| `getSettings`      | `() => MediaTrackSettings \| undefined`        | An optional function to get the current settings of the media track.     |
+
 ### Error Interface
 
 | Property | Type     | Description                        |
