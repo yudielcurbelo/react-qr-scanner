@@ -3,8 +3,7 @@ import IScannerStyles from '../types/IScannerStyles';
 export const defaultStyles: IScannerStyles = {
     container: {
         width: '100%',
-        paddingTop: '100%',
-        overflow: 'hidden',
+        height: '100%',
         position: 'relative'
     },
     video: {
@@ -13,8 +12,9 @@ export const defaultStyles: IScannerStyles = {
         width: '100%',
         height: '100%',
         display: 'block',
-        overflow: 'hidden',
-        position: 'absolute'
+        overflow: 'hidden'
+        // position: 'absolute',
+        // objectFit: 'cover'
     },
     finderBorder: undefined
 };

@@ -1,41 +1,32 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 
-import { Result } from '@zxing/library';
-
-import Tracker from './Tracker';
-import Counter from './Counter';
-import Torch from './Torch';
-import { IBrowserScannerOptions } from '../types';
 import OnOff from './OnOff';
+import Torch from './Torch';
 
 interface IFinderProps {
     scanning: boolean;
     loading: boolean;
-    video: HTMLVideoElement | null;
+    capabilities: MediaTrackCapabilities;
     border?: number;
-    result?: Result;
-    options: IBrowserScannerOptions;
-    count?: boolean;
     onOff?: boolean;
-    tracker?: boolean;
-    switchTorch?: (value: boolean) => void;
     startScanning: (deviceId?: string | undefined) => void;
     stopScanning: () => void;
-    getSettings?: () => MediaTrackSettings | undefined;
+    torch: {
+        toggle?: (value: boolean) => void;
+        status?: boolean;
+    };
 }
 
 export default function Finder(props: IFinderProps) {
-    const { scanning, loading, video, border = 35, result, options, count, onOff, tracker = false, switchTorch, startScanning, stopScanning, getSettings } = props;
+    const { scanning, loading, capabilities, border = 35, onOff, torch, startScanning, stopScanning } = props;
 
     const color = 'rgba(255, 0, 0, 0.5)';
     const stokeWidth = 3;
 
     return (
-        <Fragment>
-            {count && <Counter result={result} />}
-            {tracker && <Tracker video={video} result={result} getSettings={getSettings} delay={options.delayBetweenScanAttempts ?? 0} />}
+        <div>
             {onOff && <OnOff scanning={scanning} startScanning={startScanning} stopScanning={stopScanning} />}
-            <Torch scanning={scanning} switchTorch={switchTorch} />
+            {torch.toggle && capabilities.torch && <Torch torch={torch.status ?? false} scanning={scanning} torchToggle={torch.toggle} />}
             <svg
                 viewBox="0 0 100 100"
                 style={{
@@ -43,10 +34,7 @@ export default function Finder(props: IFinderProps) {
                     left: 0,
                     zIndex: 1,
                     boxSizing: 'border-box',
-                    border: `${border >= 35 ? border : 35}px solid rgba(0, 0, 0, 0.2)`,
-                    position: 'absolute',
-                    width: '100%',
-                    height: '100%'
+                    border: `${border >= 35 ? border : 35}px solid rgba(0, 0, 0, 0.2)`
                 }}
             >
                 {loading && (
@@ -60,6 +48,6 @@ export default function Finder(props: IFinderProps) {
                 <path fill="none" d="M77,100 L100,100 L100,77" stroke={color} strokeWidth={stokeWidth} />
                 <path fill="none" d="M100,23 L100,0 77,0" stroke={color} strokeWidth={stokeWidth} />
             </svg>
-        </Fragment>
+        </div>
     );
 }

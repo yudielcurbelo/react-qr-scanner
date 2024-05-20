@@ -6,7 +6,7 @@ import CameraOn from '../assets/CameraOn';
 interface ITorchProps {
     scanning: boolean;
     startScanning: (deviceId?: string | undefined) => void;
-    stopScanning?: () => void;
+    stopScanning: () => void;
 }
 
 export default function OnOff(props: ITorchProps) {
@@ -17,15 +17,15 @@ export default function OnOff(props: ITorchProps) {
     function toggleScanning() {
         setButtonDisabled(true);
 
-        scanning ? stopScanning?.() : startScanning();
+        scanning ? stopScanning() : startScanning();
 
-        setTimeout(() => setButtonDisabled(false), 3000);
+        setTimeout(() => setButtonDisabled(false), 1000);
     }
 
     return (
         <div
             style={{
-                bottom: 50,
+                top: 290,
                 right: 3,
                 position: 'absolute',
                 zIndex: 2,

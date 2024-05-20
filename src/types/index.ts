@@ -1,6 +1,10 @@
-export { default as OnResultFunction } from './OnResult';
-export { default as OnErrorFunction } from './OnError';
-export { default as IScannerControl } from './IScannerControls';
-export { default as IBrowserScannerOptions } from './IScannerOptions';
 export { default as IScannerComponents } from './IScannerComponents';
+export { default as IPoint } from './IPoint';
+export { default as IBoundingBox } from './IBoundingBox';
+export { default as IUseScannerState } from './IUseScannerState';
+export { default as IDetectedBarcode } from './IDetectedBarcode';
+export { default as IStartTaskResult } from './IStartTaskResult';
+export { default as IStopTaskResult } from './IStopTaskResult';
+export { default as IStartCamera } from './IStartCamera';
 export { default as IScannerStyles } from './IScannerStyles';
+export { default as TrackFunction } from './TrackFunction';

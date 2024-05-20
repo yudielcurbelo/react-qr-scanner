@@ -4,29 +4,34 @@ import TorchOn from '../assets/TorchOn';
 import TorchOff from '../assets/TorchOff';
 
 interface ITorchProps {
+    torch: boolean;
     scanning: boolean;
-    switchTorch?: (value: boolean) => void;
+    torchToggle: (value: boolean) => void;
 }
 
 export default function Torch(props: ITorchProps) {
-    const { scanning, switchTorch } = props;
+    const { torch, scanning, torchToggle } = props;
 
-    const [torch, setTorch] = useState(false);
+    // const [torch, setTorch] = useState(false);
 
-    useEffect(() => {
-        if (!scanning) {
-            setTorch(false);
-        }
-    }, [scanning]);
+    // useEffect(() => {
+    //     if (!scanning) {
+    //         setTorch(false);
+    //     }
+    // }, [scanning]);
 
-    function toggleTorch() {
-        switchTorch?.(!torch);
-        setTorch(!torch);
+    function toggleTorch(value: boolean) {
+        // setTorch(value);
+        torchToggle(value);
     }
 
-    if (!scanning || !switchTorch) {
+    if (!scanning || !torchToggle) {
         return null;
     }
 
-    return <div style={{ bottom: 0, right: 3, position: 'absolute', zIndex: 2, cursor: 'pointer' }}>{torch ? <TorchOff onClick={toggleTorch} /> : <TorchOn onClick={toggleTorch} />}</div>;
+    return (
+        <div style={{ top: 335, right: 3, position: 'absolute', zIndex: 2, cursor: 'pointer' }}>
+            {torch ? <TorchOff onClick={() => toggleTorch(false)} /> : <TorchOn onClick={() => toggleTorch(true)} />}
+        </div>
+    );
 }

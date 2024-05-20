@@ -1,9 +1,11 @@
-import IScannerComponents from '../types/IScannerComponents';
+import { outline } from './overlays';
+
+import { IScannerComponents } from '../types';
 
 export const defaultComponents: IScannerComponents = {
     audio: true,
-    torch: true,
-    count: false,
-    tracker: false,
-    onOff: false
+    tracker: outline,
+    onOff: false,
+    finder: true,
+    torch: true
 };

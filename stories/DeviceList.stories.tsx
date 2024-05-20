@@ -1,11 +1,11 @@
 import React from 'react';
 
-import { useDeviceList } from '../src/index';
+import { useDevices } from '../src';
 
 function Template() {
-    const state = useDeviceList();
+    const devices = useDevices();
 
-    return <pre>{JSON.stringify(state, null, 2)}</pre>;
+    return <pre>{JSON.stringify(devices, null, 2)}</pre>;
 }
 
 export const DeviceList = Template.bind({});

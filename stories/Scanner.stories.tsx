@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 
 import { action } from '@storybook/addon-actions';
 
-import { Scanner as ScannerComp, IScannerProps } from '../src';
+import { Scanner as ScannerComp, IScannerProps, outline, centerText, boundingBox, useDevices } from '../src';
+
 import { defaultConstraints } from '../src/misc';
-import Devices from '../src/components/Devices';
 
 const styles = {
     container: {
@@ -17,38 +17,61 @@ const styles = {
 };
 
 function Template(args: IScannerProps) {
-    const [deviceId, setDeviceId] = useState('');
+    const [deviceId, setDeviceId] = useState<string | undefined>(undefined);
 
-    function handleOnChange(deviceId: string) {
-        setDeviceId(deviceId);
-    }
+    const devices = useDevices();
 
     return (
         <div style={styles.container}>
             <div style={styles.devices}>
-                <Devices onChange={handleOnChange} />
+                <select onChange={(e) => setDeviceId(e.target.value)}>
+                    <option value={undefined}>Select a device</option>
+                    {devices.map((device, index) => (
+                        <option key={index} value={device.deviceId}>
+                            {device.label}
+                        </option>
+                    ))}
+                </select>
             </div>
             <ScannerComp
                 {...args}
-                enabled={true}
-                onResult={(text) => {
-                    action('onResult')(text);
+                formats={[
+                    'qr_code',
+                    'micro_qr_code',
+                    'rm_qr_code',
+                    'maxi_code',
+                    'pdf417',
+                    'aztec',
+                    'data_matrix',
+                    'matrix_codes',
+                    'dx_film_edge',
+                    'databar',
+                    'databar_expanded',
+                    'codabar',
+                    'code_39',
+                    'code_93',
+                    'code_128',
+                    'ean_8',
+                    'ean_13',
+                    'itf',
+                    'linear_codes',
+                    'upc_a',
+                    'upc_e'
+                ]}
+                constraints={{
+                    deviceId: deviceId
                 }}
-                onError={(error) => {
-                    action('onError')(error?.message);
+                onScan={(detectedCodes) => {
+                    action('onScan')(detectedCodes);
                 }}
                 components={{
-                    count: true,
                     audio: true,
-                    tracker: true,
+                    onOff: true,
                     torch: true,
-                    onOff: true
+                    tracker: centerText
                 }}
-                options={{
-                    deviceId: deviceId,
-                    delayBetweenScanAttempts: 100,
-                    delayBetweenScanSuccess: 100
-                }}
+                allowMultiple={true}
+                scanDelay={2000}
             />
         </div>
     );
@@ -58,8 +81,10 @@ export const Scanner = Template.bind({});
 
 // @ts-ignore
 Scanner.args = {
-    tracker: true,
-    count: false,
+    components: {
+        audio: true,
+        onOff: true
+    },
     constraints: defaultConstraints,
     deviceId: ''
 };

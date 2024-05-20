@@ -1,9 +1,11 @@
+import { TrackFunction } from './index';
+
 interface IScannerComponents {
-    tracker?: boolean;
+    tracker?: TrackFunction;
     audio?: boolean;
-    torch?: boolean;
-    count?: boolean;
     onOff?: boolean;
+    finder?: boolean;
+    torch?: boolean;
 }
 
 export default IScannerComponents;
