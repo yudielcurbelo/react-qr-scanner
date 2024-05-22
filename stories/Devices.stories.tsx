@@ -8,8 +8,8 @@ function Template() {
     return <pre>{JSON.stringify(devices, null, 2)}</pre>;
 }
 
-export const DeviceList = Template.bind({});
+export const Devices = Template.bind({});
 
 export default {
-    title: 'Device List'
+    title: 'Devices'
 };
