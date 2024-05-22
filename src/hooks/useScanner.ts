@@ -19,11 +19,17 @@ interface IUseScannerProps {
 
 export default function useScanner({ videoElementRef, onScan, onFound, retryDelay = 100, scanDelay = 0, formats = [], audio = true, allowMultiple = false }: IUseScannerProps) {
     const barcodeDetectorRef = useRef(new BarcodeDetector({ formats }));
-    const audioRef = useRef(new Audio(base64Beep));
+    const audioRef = useRef<HTMLAudioElement | null>(null);
 
     useEffect(() => {
         barcodeDetectorRef.current = new BarcodeDetector({ formats });
     }, [formats]);
+
+    useEffect(() => {
+        if (typeof window !== 'undefined' && audio) {
+            audioRef.current = new Audio(base64Beep);
+        }
+    }, [audio]);
 
     const processFrame = useCallback(
         (state: IUseScannerState) => async (timeNow: number) => {
@@ -49,12 +55,6 @@ export default function useScanner({ videoElementRef, onScan, onFound, retryDela
                         if (audio && audioRef.current && audioRef.current.paused) {
                             audioRef.current.play().catch((error) => console.error('Error playing the sound', error));
                         }
-
-                        // if (audio && audioRef.current) {
-                        //     audioRef.current.pause();
-                        //     audioRef.current.currentTime = 0;
-                        //     audioRef.current.play().catch((error) => console.error('Error playing the sound', error));
-                        // }
 
                         lastOnScan = timeNow;
 
