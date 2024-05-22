@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 import { action } from '@storybook/addon-actions';
 
-import { Scanner as ScannerComp, IScannerProps, outline, useDevices } from '../src';
+import { Scanner as ScannerComp, IScannerProps, centerText, useDevices } from '../src';
 
 import { defaultConstraints } from '../src/misc';
 
@@ -68,7 +68,7 @@ function Template(args: IScannerProps) {
                     audio: true,
                     onOff: true,
                     torch: true,
-                    tracker: outline
+                    tracker: centerText
                 }}
                 allowMultiple={true}
                 scanDelay={2000}
