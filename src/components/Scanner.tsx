@@ -6,6 +6,7 @@ import useCamera from '../hooks/useCamera';
 import useScanner from '../hooks/useScanner';
 import Finder from './Finder';
 
+import deepEqual from '../utilities/deepEqual';
 import { defaultComponents, defaultConstraints, defaultStyles } from '../misc';
 import { IDetectedBarcode, IPoint, IScannerComponents, IScannerStyles, TrackFunction } from '../types';
 
@@ -119,6 +120,7 @@ export function Scanner(props: IScannerProps) {
     const { onScan, constraints, formats = ['qr_code'], paused = false, torch = false, components, children, styles, allowMultiple, scanDelay } = props;
 
     const mergedConstraints = { ...defaultConstraints, ...constraints };
+    const mergedComponents = { ...defaultComponents, ...components };
 
     const videoRef = useRef<HTMLVideoElement>(null);
     const pauseFrameRef = useRef<HTMLCanvasElement>(null);
@@ -130,18 +132,16 @@ export function Scanner(props: IScannerProps) {
     const [constraintsCached, setConstraintsCached] = useState(mergedConstraints);
     const [torchCached, setTorchCached] = useState(torch);
 
-    const comps = { ...defaultComponents, ...components };
-
     const camera = useCamera();
 
     const { startScanning } = useScanner({
         videoElementRef: videoRef,
         onScan: onScan,
-        onFound: (detectedCodes) => onFound(detectedCodes, videoRef.current, trackingLayerRef.current, comps.tracker),
+        onFound: (detectedCodes) => onFound(detectedCodes, videoRef.current, trackingLayerRef.current, mergedComponents.tracker),
         formats: formats,
-        audio: comps.audio,
+        audio: mergedComponents.audio,
         allowMultiple: allowMultiple,
-        retryDelay: comps.tracker === undefined ? 500 : 10,
+        retryDelay: mergedComponents.tracker === undefined ? 500 : 10,
         scanDelay: scanDelay
     });
 
@@ -154,7 +154,7 @@ export function Scanner(props: IScannerProps) {
     }, []);
 
     useEffect(() => {
-        if (JSON.stringify(mergedConstraints) !== JSON.stringify(constraintsCached)) {
+        if (!deepEqual(mergedConstraints, constraintsCached)) {
             const newConstraints = mergedConstraints;
 
             if (constraints?.deviceId) {
@@ -268,15 +268,15 @@ export function Scanner(props: IScannerProps) {
                     height: '100%'
                 }}
             >
-                {comps.finder && (
+                {mergedComponents.finder && (
                     <Finder
                         scanning={isCameraActive}
                         capabilities={camera.capabilities}
                         loading={false}
-                        onOff={comps.onOff}
+                        onOff={mergedComponents.onOff}
                         torch={{
                             status: camera.torch,
-                            toggle: comps.torch ? (val) => setTorchCached(val) : undefined
+                            toggle: mergedComponents.torch ? (val) => setTorchCached(val) : undefined
                         }}
                         startScanning={async () => await onCameraChange()}
                         stopScanning={async () => {

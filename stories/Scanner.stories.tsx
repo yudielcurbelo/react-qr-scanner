@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 import { action } from '@storybook/addon-actions';
 
-import { Scanner as ScannerComp, IScannerProps, outline, centerText, boundingBox, useDevices } from '../src';
+import { Scanner as ScannerComp, IScannerProps, outline, useDevices } from '../src';
 
 import { defaultConstraints } from '../src/misc';
 
@@ -11,8 +11,8 @@ const styles = {
         width: 400,
         margin: 'auto'
     },
-    devices: {
-        marginBottom: 10
+    controls: {
+        marginBottom: 8
     }
 };
 
@@ -23,7 +23,7 @@ function Template(args: IScannerProps) {
 
     return (
         <div style={styles.container}>
-            <div style={styles.devices}>
+            <div style={styles.controls}>
                 <select onChange={(e) => setDeviceId(e.target.value)}>
                     <option value={undefined}>Select a device</option>
                     {devices.map((device, index) => (
@@ -68,7 +68,7 @@ function Template(args: IScannerProps) {
                     audio: true,
                     onOff: true,
                     torch: true,
-                    tracker: centerText
+                    tracker: outline
                 }}
                 allowMultiple={true}
                 scanDelay={2000}

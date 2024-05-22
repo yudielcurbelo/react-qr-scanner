@@ -24,9 +24,7 @@ export default function Finder(props: IFinderProps) {
     const stokeWidth = 3;
 
     return (
-        <div>
-            {onOff && <OnOff scanning={scanning} startScanning={startScanning} stopScanning={stopScanning} />}
-            {torch.toggle && capabilities.torch && <Torch torch={torch.status ?? false} scanning={scanning} torchToggle={torch.toggle} />}
+        <div style={{ position: 'relative' }}>
             <svg
                 viewBox="0 0 100 100"
                 style={{
@@ -48,6 +46,8 @@ export default function Finder(props: IFinderProps) {
                 <path fill="none" d="M77,100 L100,100 L100,77" stroke={color} strokeWidth={stokeWidth} />
                 <path fill="none" d="M100,23 L100,0 77,0" stroke={color} strokeWidth={stokeWidth} />
             </svg>
+            {onOff && <OnOff scanning={scanning} startScanning={startScanning} stopScanning={stopScanning} />}
+            {torch.toggle && capabilities.torch && <Torch torch={torch.status ?? false} scanning={scanning} torchToggle={torch.toggle} />}
         </div>
     );
 }

@@ -25,7 +25,7 @@ export default function OnOff(props: ITorchProps) {
     return (
         <div
             style={{
-                top: 290,
+                bottom: 85,
                 right: 3,
                 position: 'absolute',
                 zIndex: 2,
