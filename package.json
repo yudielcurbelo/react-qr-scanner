@@ -1,6 +1,6 @@
 {
   "name": "@yudiel/react-qr-scanner",
-  "version": "2.0.0-beta.12",
+  "version": "2.0.0-beta.14",
   "description": "A library to scan QR codes in React.",
   "author": "Yudiel Curbelo",
   "license": "MIT",
@@ -18,14 +18,22 @@
   "files": [
     "dist"
   ],
+  "keywords": [
+    "react",
+    "qrcode",
+    "qrcode-scan",
+    "qrcode-reader",
+    "qrcode-scanner",
+    "qr-code-scan",
+    "qr-code-reader",
+    "qr-code-scanner"
+  ],
   "scripts": {
     "build": "rollup -c",
     "build:esm": "tsc",
     "build:cjs": "tsc --module CommonJS --outDir dist/cjs",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build",
-    "publish": "npm publish",
-    "publish-beta": "npm publish --tag beta"
+    "build-storybook": "storybook build"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^25.0.8",
