@@ -149,8 +149,6 @@ export function Scanner(props: IScannerProps) {
         setIsMounted(true);
 
         return () => {
-            (async () => await camera.stopCamera())();
-
             setIsMounted(false);
         };
     }, []);

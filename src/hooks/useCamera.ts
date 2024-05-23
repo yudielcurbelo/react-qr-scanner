@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback } from 'react';
+import { useState, useRef, useCallback, useEffect } from 'react';
 
 import { shimGetUserMedia } from '../misc';
 import { IStartCamera, IStartTaskResult, IStopTaskResult } from '../types';
@@ -145,6 +145,12 @@ export default function useCamera() {
             throw new Error('Something went wrong with the camera task queue (stop task).');
         }
     }, [runStopTask]);
+
+    useEffect(() => {
+        return () => {
+            (async () => await stopCamera())();
+        };
+    }, []);
 
     return {
         torch,
