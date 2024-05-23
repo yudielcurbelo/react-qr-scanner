@@ -119,12 +119,12 @@ function onFound(detectedCodes: IDetectedBarcode[], videoEl?: HTMLVideoElement |
 export function Scanner(props: IScannerProps) {
     const { onScan, constraints, formats = ['qr_code'], paused = false, torch = false, components, children, styles, allowMultiple, scanDelay } = props;
 
-    const mergedConstraints = { ...defaultConstraints, ...constraints };
-    const mergedComponents = { ...defaultComponents, ...components };
-
     const videoRef = useRef<HTMLVideoElement>(null);
     const pauseFrameRef = useRef<HTMLCanvasElement>(null);
     const trackingLayerRef = useRef<HTMLCanvasElement>(null);
+
+    const mergedConstraints = useMemo(() => ({ ...defaultConstraints, ...constraints }), [constraints]);
+    const mergedComponents = useMemo(() => ({ ...defaultComponents, ...components }), [components]);
 
     const [isMounted, setIsMounted] = useState(false);
     const [isCameraActive, setIsCameraActive] = useState(true);
