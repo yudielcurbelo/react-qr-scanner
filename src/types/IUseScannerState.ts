@@ -1,4 +1,4 @@
-export default interface IUseScannerState {
+export interface IUseScannerState {
     lastScan: number;
     lastOnScan: number;
     contentBefore: string[];

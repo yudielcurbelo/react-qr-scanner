@@ -1,4 +1,4 @@
-export default interface IStopTaskResult {
+export interface IStopTaskResult {
     type: 'stop';
     data: {};
 }

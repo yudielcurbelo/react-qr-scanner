@@ -1,4 +1,4 @@
-export default interface IBoundingBox {
+export interface IBoundingBox {
     x: number;
     y: number;
     width: number;

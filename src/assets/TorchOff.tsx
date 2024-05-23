@@ -1,12 +1,12 @@
 import React, { CSSProperties } from 'react';
 
-interface IFlashOnProps {
+interface ITorchOffProps {
     onClick: () => void;
     className?: string;
     style?: CSSProperties;
 }
 
-export default function TorchOff(props: IFlashOnProps) {
+export default function TorchOff(props: ITorchOffProps) {
     const { onClick, className, style } = props;
 
     return (

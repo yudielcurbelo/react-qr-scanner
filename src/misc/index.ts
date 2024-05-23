@@ -4,4 +4,5 @@ export { defaultStyles } from './defaultStyles';
 
 export { default as idempotent } from './idempotent';
 export { default as shimGetUserMedia } from './shimGetUserMedia';
+
 export { outline, centerText, boundingBox } from './overlays';

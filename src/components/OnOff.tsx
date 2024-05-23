@@ -3,13 +3,13 @@ import React, { useState } from 'react';
 import CameraOff from '../assets/CameraOff';
 import CameraOn from '../assets/CameraOn';
 
-interface ITorchProps {
+interface IOnOffProps {
     scanning: boolean;
     startScanning: (deviceId?: string | undefined) => void;
     stopScanning: () => void;
 }
 
-export default function OnOff(props: ITorchProps) {
+export default function OnOff(props: IOnOffProps) {
     const { scanning, startScanning, stopScanning } = props;
 
     const [buttonDisabled, setButtonDisabled] = useState(false);

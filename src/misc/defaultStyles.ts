@@ -1,4 +1,4 @@
-import IScannerStyles from '../types/IScannerStyles';
+import { IScannerStyles } from '../types';
 
 export const defaultStyles: IScannerStyles = {
     container: {
@@ -13,8 +13,6 @@ export const defaultStyles: IScannerStyles = {
         height: '100%',
         display: 'block',
         overflow: 'hidden'
-        // position: 'absolute',
-        // objectFit: 'cover'
     },
     finderBorder: undefined
 };

@@ -1,4 +1,4 @@
-export default interface IStartTaskResult {
+export interface IStartTaskResult {
     type: 'start';
     data: {
         videoEl: HTMLVideoElement;

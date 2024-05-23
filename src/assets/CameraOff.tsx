@@ -1,13 +1,13 @@
 import React, { CSSProperties } from 'react';
 
-interface IFlashOnProps {
+interface ICameraOffProps {
     onClick: () => void;
     disabled: boolean;
     className?: string;
     style?: CSSProperties;
 }
 
-export default function CameraOff(props: IFlashOnProps) {
+export default function CameraOff(props: ICameraOffProps) {
     const { onClick, disabled, className } = props;
 
     const style = {

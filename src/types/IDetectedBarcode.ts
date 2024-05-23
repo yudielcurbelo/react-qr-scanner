@@ -1,6 +1,6 @@
 import { IBoundingBox, IPoint } from './index';
 
-export default interface IDetectedBarcode {
+export interface IDetectedBarcode {
     boundingBox: IBoundingBox;
     cornerPoints: IPoint[];
     format: string;
