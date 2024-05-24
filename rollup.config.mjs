@@ -41,11 +41,19 @@ export default [
             }),
             copy({
                 targets: [
-                    { src: 'src/assets/*', dest: 'dist/assets' },
+                    { src: 'src/assets/*', dest: 'dist/assets' }
                 ]
             }),
             terser()],
-        external: ['react', 'react-dom']
+        external: [
+            'react',
+            'react-dom',
+            'barcode-detector',
+            'webrtc-adapter/dist/chrome/getusermedia',
+            'webrtc-adapter/dist/firefox/getusermedia',
+            'webrtc-adapter/dist/safari/safari_shim',
+            'webrtc-adapter/dist/utils'
+        ]
     },
     {
         input: 'dist/esm/index.d.ts',
