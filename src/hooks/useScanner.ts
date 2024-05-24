@@ -20,6 +20,7 @@ interface IUseScannerProps {
 export default function useScanner({ videoElementRef, onScan, onFound, retryDelay = 100, scanDelay = 0, formats = [], audio = true, allowMultiple = false }: IUseScannerProps) {
     const barcodeDetectorRef = useRef(new BarcodeDetector({ formats }));
     const audioRef = useRef<HTMLAudioElement | null>(null);
+    const animationFrameIdRef = useRef<number | null>(null);
 
     useEffect(() => {
         barcodeDetectorRef.current = new BarcodeDetector({ formats });
@@ -37,7 +38,7 @@ export default function useScanner({ videoElementRef, onScan, onFound, retryDela
                 const { lastScan, contentBefore, lastScanHadContent } = state;
 
                 if (timeNow - lastScan < retryDelay) {
-                    window.requestAnimationFrame(processFrame(state));
+                    animationFrameIdRef.current = window.requestAnimationFrame(processFrame(state));
                 } else {
                     const detectedCodes = await barcodeDetectorRef.current.detect(videoElementRef.current);
 
@@ -76,7 +77,7 @@ export default function useScanner({ videoElementRef, onScan, onFound, retryDela
                         contentBefore: anyNewCodesDetected ? detectedCodes.map((code: DetectedBarcode) => code.rawValue) : contentBefore
                     };
 
-                    window.requestAnimationFrame(processFrame(newState));
+                    animationFrameIdRef.current = window.requestAnimationFrame(processFrame(newState));
                 }
             }
         },
@@ -93,10 +94,18 @@ export default function useScanner({ videoElementRef, onScan, onFound, retryDela
             lastScanHadContent: false
         };
 
-        window.requestAnimationFrame(processFrame(initialState));
+        animationFrameIdRef.current = window.requestAnimationFrame(processFrame(initialState));
     }, [processFrame]);
 
+    const stopScanning = useCallback(() => {
+        if (animationFrameIdRef.current !== null) {
+            window.cancelAnimationFrame(animationFrameIdRef.current);
+            animationFrameIdRef.current = null;
+        }
+    }, []);
+
     return {
-        startScanning
+        startScanning,
+        stopScanning
     };
 }
