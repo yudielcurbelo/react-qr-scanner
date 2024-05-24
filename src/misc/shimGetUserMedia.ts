@@ -7,7 +7,7 @@ import { shimGetUserMedia as safariShim } from 'webrtc-adapter/dist/safari/safar
 // @ts-ignore
 import { detectBrowser } from 'webrtc-adapter/dist/utils';
 
-import { idempotent } from './index';
+import idempotent from '../utilities/idempotent';
 
 export default idempotent(() => {
     const browserDetails = detectBrowser(window);
