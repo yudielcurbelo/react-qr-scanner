@@ -1,9 +1,8 @@
 import dts from 'rollup-plugin-dts';
 import copy from 'rollup-plugin-copy';
+import terser from '@rollup/plugin-terser';
 import commonjs from '@rollup/plugin-commonjs';
 import typescript from '@rollup/plugin-typescript';
-import peerDepsExternal from 'rollup-plugin-peer-deps-external';
-import { terser } from 'rollup-plugin-terser';
 
 import packageJson from './package.json' assert { type: 'json' };
 
@@ -28,12 +27,7 @@ export default [
                 exports: 'named'
             }
         ],
-        onwarn: (warning, warn) => {
-            if (warning.code === 'THIS_IS_UNDEFINED') return;
-            warn(warning); // this requires Rollup 0.46
-        },
         plugins: [
-            peerDepsExternal(),
             commonjs(),
             typescript({
                 tsconfig: './tsconfig.json',
