@@ -134,7 +134,7 @@ export function Scanner(props: IScannerProps) {
 
     const camera = useCamera();
 
-    const { startScanning } = useScanner({
+    const { startScanning, stopScanning } = useScanner({
         videoElementRef: videoRef,
         onScan: onScan,
         onFound: (detectedCodes) => onFound(detectedCodes, videoRef.current, trackingLayerRef.current, mergedComponents.tracker),
@@ -152,6 +152,13 @@ export function Scanner(props: IScannerProps) {
             setIsMounted(false);
         };
     }, []);
+
+    useEffect(() => {
+        if (isMounted) {
+            stopScanning();
+            startScanning();
+        }
+    }, [components?.tracker]);
 
     useEffect(() => {
         if (!deepEqual(mergedConstraints, constraintsCached)) {

@@ -2,9 +2,7 @@ import React, { useState } from 'react';
 
 import { action } from '@storybook/addon-actions';
 
-import { Scanner as ScannerComp, IScannerProps, centerText, useDevices } from '../src';
-
-import { defaultConstraints } from '../src/misc';
+import { Scanner as ScannerComp, IScannerProps, outline, boundingBox, centerText, useDevices } from '../src';
 
 const styles = {
     container: {
@@ -18,8 +16,22 @@ const styles = {
 
 function Template(args: IScannerProps) {
     const [deviceId, setDeviceId] = useState<string | undefined>(undefined);
+    const [tracker, setTracker] = useState<string | undefined>('centerText');
 
     const devices = useDevices();
+
+    function getTracker() {
+        switch (tracker) {
+            case 'outline':
+                return outline;
+            case 'boundingBox':
+                return boundingBox;
+            case 'centerText':
+                return centerText;
+            default:
+                return undefined;
+        }
+    }
 
     return (
         <div style={styles.container}>
@@ -31,6 +43,12 @@ function Template(args: IScannerProps) {
                             {device.label}
                         </option>
                     ))}
+                </select>
+                <select style={{ marginLeft: 5 }} onChange={(e) => setTracker(e.target.value)}>
+                    <option value="centerText">Center Text</option>
+                    <option value="outline">Outline</option>
+                    <option value="boundingBox">Bounding Box</option>
+                    <option value={undefined}>No Tracker</option>
                 </select>
             </div>
             <ScannerComp
@@ -68,7 +86,7 @@ function Template(args: IScannerProps) {
                     audio: true,
                     onOff: true,
                     torch: true,
-                    tracker: centerText
+                    tracker: getTracker()
                 }}
                 allowMultiple={true}
                 scanDelay={2000}
@@ -80,14 +98,7 @@ function Template(args: IScannerProps) {
 export const Scanner = Template.bind({});
 
 // @ts-ignore
-Scanner.args = {
-    components: {
-        audio: true,
-        onOff: true
-    },
-    constraints: defaultConstraints,
-    deviceId: ''
-};
+Scanner.args = {};
 
 export default {
     title: 'Scanner'
