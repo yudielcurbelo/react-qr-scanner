@@ -17,7 +17,9 @@ interface IUseScannerProps {
     scanDelay?: number;
 }
 
-export default function useScanner({ videoElementRef, onScan, onFound, retryDelay = 100, scanDelay = 0, formats = [], audio = true, allowMultiple = false }: IUseScannerProps) {
+export default function useScanner(props: IUseScannerProps) {
+    const { videoElementRef, onScan, onFound, retryDelay = 100, scanDelay = 0, formats = [], audio = true, allowMultiple = false } = props;
+
     const barcodeDetectorRef = useRef(new BarcodeDetector({ formats }));
     const audioRef = useRef<HTMLAudioElement | null>(null);
     const animationFrameIdRef = useRef<number | null>(null);
