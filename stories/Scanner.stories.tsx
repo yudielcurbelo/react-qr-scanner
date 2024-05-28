@@ -18,6 +18,8 @@ function Template(args: IScannerProps) {
     const [deviceId, setDeviceId] = useState<string | undefined>(undefined);
     const [tracker, setTracker] = useState<string | undefined>('centerText');
 
+    const [pause, setPause] = useState(false);
+
     const devices = useDevices();
 
     function getTracker() {
@@ -35,6 +37,9 @@ function Template(args: IScannerProps) {
 
     return (
         <div style={styles.container}>
+            <button style={{ marginBottom: 5 }} onClick={() => setPause((val) => !val)}>
+                {pause ? 'Pause Off' : 'Pause On'}
+            </button>
             <div style={styles.controls}>
                 <select onChange={(e) => setDeviceId(e.target.value)}>
                     <option value={undefined}>Select a device</option>
@@ -86,10 +91,12 @@ function Template(args: IScannerProps) {
                     audio: true,
                     onOff: true,
                     torch: true,
-                    tracker: getTracker()
+                    tracker: getTracker(),
+                    finder: false
                 }}
                 allowMultiple={true}
                 scanDelay={2000}
+                paused={pause}
             />
         </div>
     );
