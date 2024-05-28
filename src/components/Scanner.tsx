@@ -264,7 +264,16 @@ export function Scanner(props: IScannerProps) {
     return (
         <div style={{ ...defaultStyles.container, ...styles?.container }}>
             <video ref={videoRef} style={{ ...defaultStyles.video, visibility: paused ? 'hidden' : 'visible' }} autoPlay muted playsInline />
-            <canvas ref={pauseFrameRef} style={{ display: paused ? 'block' : 'none' }} />
+            <canvas
+                ref={pauseFrameRef}
+                style={{
+                    display: paused ? 'block' : 'none',
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    width: '100%'
+                }}
+            />
             <canvas ref={trackingLayerRef} style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }} />
             <div
                 style={{
