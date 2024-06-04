@@ -4394,8 +4394,8 @@ __metadata:
     typescript: "npm:^5.4.5"
     webrtc-adapter: "npm:9.0.1"
   peerDependencies:
-    react: ^18.2.0
-    react-dom: ^18.2.0
+    react: ^17 || ^18
+    react-dom: ^17 || ^18
   languageName: unknown
   linkType: soft
 
