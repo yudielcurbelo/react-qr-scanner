@@ -1,5 +1,4 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
-
 import { shimGetUserMedia } from '../misc';
 import { IStartCamera, IStartTaskResult, IStopTaskResult } from '../types';
 
@@ -8,11 +7,13 @@ type CreateObjectURLCompat = (obj: MediaSource | Blob | MediaStream) => string;
 
 export default function useCamera() {
     const taskQueue = useRef<Promise<TaskResult>>(Promise.resolve({ type: 'stop', data: {} }));
+    const currentStream = useRef<MediaStream | null>(null);
+    const currentVideoTrack = useRef<MediaStreamTrack | null>(null);
 
     const [capabilities, setCapabilities] = useState<MediaTrackCapabilities>({});
-    const [torch, setTorch] = useState<boolean>(false);
+    const [settings, setSettings] = useState<MediaTrackSettings>({});
 
-    const runStartTask = useCallback(async (videoEl: HTMLVideoElement, constraints: MediaTrackConstraints, torch: boolean): Promise<IStartTaskResult> => {
+    const runStartTask = useCallback(async (videoEl: HTMLVideoElement, constraints: MediaTrackConstraints): Promise<IStartTaskResult> => {
         if (!window.isSecureContext) {
             throw new Error('camera access is only permitted in secure context. Use HTTPS or localhost rather than HTTP.');
         }
@@ -51,40 +52,37 @@ export default function useCamera() {
         await new Promise((resolve) => setTimeout(resolve, 500));
 
         const [track] = stream.getVideoTracks();
-        const trackCapabilities: Partial<MediaTrackCapabilities> = track?.getCapabilities?.() ?? {};
 
-        let isTorchOn = false;
+        setSettings(track.getSettings());
+        setCapabilities(track.getCapabilities());
 
-        if (torch && trackCapabilities.torch) {
-            await track.applyConstraints({ advanced: [{ torch: true }] });
-            isTorchOn = true;
-        }
+        currentStream.current = stream;
+        currentVideoTrack.current = track;
 
         return {
             type: 'start',
             data: {
                 videoEl,
                 stream,
-                capabilities: trackCapabilities,
-                constraints,
-                isTorchOn
+                constraints
             }
         };
     }, []);
 
-    const runStopTask = useCallback(async (videoEl: HTMLVideoElement, stream: MediaStream, isTorchOn: boolean): Promise<IStopTaskResult> => {
+    const runStopTask = useCallback(async (videoEl: HTMLVideoElement, stream: MediaStream): Promise<IStopTaskResult> => {
         videoEl.src = '';
         videoEl.srcObject = null;
         videoEl.load();
 
         for (const track of stream.getTracks()) {
-            if (isTorchOn) {
-                await track.applyConstraints({ advanced: [{ torch: false }] });
-            }
-
             stream.removeTrack(track);
             track.stop();
         }
+
+        currentStream.current = null;
+        currentVideoTrack.current = null;
+
+        setSettings({});
 
         return {
             type: 'stop',
@@ -93,21 +91,21 @@ export default function useCamera() {
     }, []);
 
     const startCamera = useCallback(
-        async (videoEl: HTMLVideoElement, { constraints, torch, restart = false }: IStartCamera): Promise<Partial<MediaTrackCapabilities>> => {
+        async (videoEl: HTMLVideoElement, { constraints, restart = false }: IStartCamera) => {
             taskQueue.current = taskQueue.current.then((prevTaskResult) => {
                 if (prevTaskResult.type === 'start') {
                     const {
-                        data: { videoEl: prevVideoEl, stream: prevStream, constraints: prevConstraints, isTorchOn: prevIsTorchOn }
+                        data: { videoEl: prevVideoEl, stream: prevStream, constraints: prevConstraints }
                     } = prevTaskResult;
 
-                    if (!restart && videoEl === prevVideoEl && constraints === prevConstraints && torch === prevIsTorchOn) {
+                    if (!restart && videoEl === prevVideoEl && constraints === prevConstraints) {
                         return prevTaskResult;
                     }
 
-                    return runStopTask(prevVideoEl, prevStream, prevIsTorchOn).then(() => runStartTask(videoEl, constraints, torch));
+                    return runStopTask(prevVideoEl, prevStream).then(() => runStartTask(videoEl, constraints));
                 }
 
-                return runStartTask(videoEl, constraints, torch);
+                return runStartTask(videoEl, constraints);
             });
 
             const taskResult = await taskQueue.current;
@@ -115,11 +113,6 @@ export default function useCamera() {
             if (taskResult.type === 'stop') {
                 throw new Error('Something went wrong with the camera task queue (start task).');
             }
-
-            setCapabilities(taskResult.data.capabilities);
-            setTorch(taskResult.data.isTorchOn);
-
-            return taskResult.data.capabilities;
         },
         [runStartTask, runStopTask]
     );
@@ -131,12 +124,10 @@ export default function useCamera() {
             }
 
             const {
-                data: { videoEl, stream, isTorchOn }
+                data: { videoEl, stream }
             } = prevTaskResult;
 
-            setTorch(false);
-
-            return runStopTask(videoEl, stream, isTorchOn);
+            return runStopTask(videoEl, stream);
         });
 
         const taskResult = await taskQueue.current;
@@ -146,16 +137,42 @@ export default function useCamera() {
         }
     }, [runStopTask]);
 
+    const updateConstraints = useCallback(async (newConstraints: MediaTrackConstraints) => {
+        const videoTrack = currentVideoTrack.current;
+
+        if (videoTrack) {
+            // Mixing ImageCapture and non-ImageCapture constraints is not currently supported
+            if (newConstraints.advanced && newConstraints.advanced[0].zoom) {
+                const capabilities = videoTrack.getCapabilities();
+
+                if (capabilities.torch) {
+                    await videoTrack.applyConstraints({ advanced: [{ torch: false }] });
+                }
+            }
+
+            await videoTrack.applyConstraints(newConstraints);
+
+            const updatedCapabilities = videoTrack.getCapabilities();
+            const updatedSettings = videoTrack.getSettings();
+
+            setCapabilities(updatedCapabilities);
+            setSettings(updatedSettings);
+        } else {
+            throw new Error('No active video track found.');
+        }
+    }, []);
+
     useEffect(() => {
         return () => {
             (async () => await stopCamera())();
         };
-    }, []);
+    }, [stopCamera]);
 
     return {
-        torch,
         capabilities,
+        settings,
         startCamera,
-        stopCamera
+        stopCamera,
+        updateConstraints
     };
 }

@@ -3,8 +3,6 @@ export interface IStartTaskResult {
     data: {
         videoEl: HTMLVideoElement;
         stream: MediaStream;
-        capabilities: Partial<MediaTrackCapabilities>;
         constraints: MediaTrackConstraints;
-        isTorchOn: boolean;
     };
 }

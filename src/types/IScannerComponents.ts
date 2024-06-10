@@ -6,4 +6,5 @@ export interface IScannerComponents {
     onOff?: boolean;
     finder?: boolean;
     torch?: boolean;
+    zoom?: boolean;
 }

@@ -2,6 +2,7 @@ import React from 'react';
 
 import OnOff from './OnOff';
 import Torch from './Torch';
+import Zoom from './Zoom';
 
 interface IFinderProps {
     scanning: boolean;
@@ -11,14 +12,18 @@ interface IFinderProps {
     onOff?: boolean;
     startScanning: (deviceId?: string | undefined) => void;
     stopScanning: () => void;
-    torch: {
-        toggle?: (value: boolean) => void;
-        status?: boolean;
+    torch?: {
+        status: boolean;
+        toggle: (value: boolean) => void;
+    };
+    zoom?: {
+        value: number;
+        onChange: (value: number) => void;
     };
 }
 
 export default function Finder(props: IFinderProps) {
-    const { scanning, loading, capabilities, border = 35, onOff, torch, startScanning, stopScanning } = props;
+    const { scanning, loading, capabilities, border = 35, onOff, torch, zoom, startScanning, stopScanning } = props;
 
     const color = 'rgba(255, 0, 0, 0.5)';
     const stokeWidth = 3;
@@ -47,7 +52,8 @@ export default function Finder(props: IFinderProps) {
                 <path fill="none" d="M100,23 L100,0 77,0" stroke={color} strokeWidth={stokeWidth} />
             </svg>
             {onOff && <OnOff scanning={scanning} startScanning={startScanning} stopScanning={stopScanning} />}
-            {torch.toggle && capabilities.torch && <Torch torch={torch.status ?? false} scanning={scanning} torchToggle={torch.toggle} />}
+            {torch && capabilities.torch && <Torch scanning={scanning} status={torch.status} torchToggle={torch.toggle} />}
+            {zoom && capabilities.zoom && <Zoom scanning={scanning} capabilities={capabilities.zoom} value={zoom.value} onZoom={zoom.onChange} />}
         </div>
     );
 }

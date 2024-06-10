@@ -52,7 +52,6 @@ const App = () => {
 | `constraints`   | `MediaTrackConstraints`                       | No       | Optional media track constraints to apply to the video stream.           |
 | `formats`       | `BarcodeFormat[]`                             | No       | List of barcode formats to detect.                                       |
 | `paused`        | `boolean`                                     | No       | If `true`, scanning is paused.                                           |
-| `torch`         | `boolean`                                     | No       | If `true`, the device's torch (flashlight) is turned on, if available.   |
 | `children`      | `ReactNode`                                   | No       | Optional children to render inside the scanner component.                |
 | `components`    | `IScannerComponents`                          | No       | Custom components to use within the scanner.                             |
 | `styles`        | `IScannerStyles`                              | No       | Custom styles to apply to the scanner and its elements.                  |
@@ -91,8 +90,9 @@ export interface IScannerComponents {
     tracker?: TrackFunction;
     audio?: boolean;
     onOff?: boolean;
-    finder?: boolean;
     torch?: boolean;
+    zoom?: boolean;
+    finder?: boolean;
 }
 ```
 

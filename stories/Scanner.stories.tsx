@@ -91,8 +91,9 @@ function Template(args: IScannerProps) {
                     audio: true,
                     onOff: true,
                     torch: true,
-                    tracker: getTracker(),
-                    finder: false
+                    zoom: true,
+                    finder: true,
+                    tracker: getTracker()
                 }}
                 allowMultiple={true}
                 scanDelay={2000}

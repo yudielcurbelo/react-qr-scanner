@@ -15,7 +15,6 @@ export interface IScannerProps {
     constraints?: MediaTrackConstraints;
     formats?: BarcodeFormat[];
     paused?: boolean;
-    torch?: boolean;
     children?: ReactNode;
     components?: IScannerComponents;
     styles?: IScannerStyles;
@@ -117,7 +116,7 @@ function onFound(detectedCodes: IDetectedBarcode[], videoEl?: HTMLVideoElement |
 }
 
 export function Scanner(props: IScannerProps) {
-    const { onScan, constraints, formats = ['qr_code'], paused = false, torch = false, components, children, styles, allowMultiple, scanDelay } = props;
+    const { onScan, constraints, formats = ['qr_code'], paused = false, components, children, styles, allowMultiple, scanDelay } = props;
 
     const videoRef = useRef<HTMLVideoElement>(null);
     const pauseFrameRef = useRef<HTMLCanvasElement>(null);
@@ -130,7 +129,6 @@ export function Scanner(props: IScannerProps) {
     const [isCameraActive, setIsCameraActive] = useState(true);
 
     const [constraintsCached, setConstraintsCached] = useState(mergedConstraints);
-    const [torchCached, setTorchCached] = useState(torch);
 
     const camera = useCamera();
 
@@ -174,11 +172,10 @@ export function Scanner(props: IScannerProps) {
 
     const cameraSettings = useMemo(() => {
         return {
-            torch: torchCached,
             constraints: constraintsCached,
             shouldStream: isMounted && !paused
         };
-    }, [torchCached, constraintsCached, isMounted, paused]);
+    }, [constraintsCached, isMounted, paused]);
 
     const onCameraChange = async () => {
         const videoEl = videoRef.current;
@@ -290,10 +287,36 @@ export function Scanner(props: IScannerProps) {
                         capabilities={camera.capabilities}
                         loading={false}
                         onOff={mergedComponents.onOff}
-                        torch={{
-                            status: camera.torch,
-                            toggle: mergedComponents.torch ? (val) => setTorchCached(val) : undefined
-                        }}
+                        zoom={
+                            mergedComponents.zoom && camera.settings.zoom
+                                ? {
+                                      value: camera.settings.zoom,
+                                      onChange: async (value) => {
+                                          const newConstraints = {
+                                              ...constraintsCached,
+                                              advanced: [{ zoom: value }]
+                                          };
+
+                                          await camera.updateConstraints(newConstraints);
+                                      }
+                                  }
+                                : undefined
+                        }
+                        torch={
+                            mergedComponents.torch
+                                ? {
+                                      status: camera.settings.torch ?? false,
+                                      toggle: async (value) => {
+                                          const newConstraints = {
+                                              ...constraintsCached,
+                                              advanced: [{ torch: value }]
+                                          };
+
+                                          await camera.updateConstraints(newConstraints);
+                                      }
+                                  }
+                                : undefined
+                        }
                         startScanning={async () => await onCameraChange()}
                         stopScanning={async () => {
                             await camera.stopCamera();
