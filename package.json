@@ -36,22 +36,22 @@
     "build-storybook": "storybook build"
   },
   "devDependencies": {
-    "@rollup/plugin-commonjs": "^25.0.8",
+    "@rollup/plugin-commonjs": "^26.0.1",
     "@rollup/plugin-terser": "^0.4.4",
     "@rollup/plugin-typescript": "^11.1.6",
-    "@storybook/addon-essentials": "^8.1.5",
-    "@storybook/addon-interactions": "^8.1.5",
-    "@storybook/addon-links": "^8.1.5",
+    "@storybook/addon-essentials": "^8.1.6",
+    "@storybook/addon-interactions": "^8.1.6",
+    "@storybook/addon-links": "^8.1.6",
     "@storybook/addon-webpack5-compiler-swc": "1.0.3",
-    "@storybook/react": "^8.1.5",
-    "@storybook/react-webpack5": "^8.1.5",
-    "@types/node": "^20.12.13",
+    "@storybook/react": "^8.1.6",
+    "@storybook/react-webpack5": "^8.1.6",
+    "@types/node": "^20.14.2",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
     "rollup": "^4.18.0",
     "rollup-plugin-copy": "^3.5.0",
     "rollup-plugin-dts": "^6.1.1",
-    "storybook": "8.1.5",
+    "storybook": "8.1.6",
     "typescript": "^5.4.5"
   },
   "peerDependencies": {
@@ -59,7 +59,7 @@
     "react-dom": "^17 || ^18"
   },
   "dependencies": {
-    "barcode-detector": "^2.2.6",
+    "barcode-detector": "^2.2.7",
     "webrtc-adapter": "9.0.1"
   },
   "packageManager": "yarn@4.0.2"
