@@ -1,6 +1,6 @@
 {
   "name": "@yudiel/react-qr-scanner",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "description": "A library to scan QR codes in React.",
   "author": "Yudiel Curbelo",
   "license": "MIT",
