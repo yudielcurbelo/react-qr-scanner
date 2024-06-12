@@ -20,7 +20,7 @@ npm install @yudiel/react-qr-scanner
 import { Scanner } from '@yudiel/react-qr-scanner';
 
 const App = () => {
-    return <Scanner onScan={(result) => console.log(result)} />
+    return <Scanner onResult={(result) => console.log(result)} />
 }
 ```
 
