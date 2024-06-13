@@ -260,7 +260,7 @@ export function Scanner(props: IScannerProps) {
 
     return (
         <div style={{ ...defaultStyles.container, ...styles?.container }}>
-            <video ref={videoRef} style={{ ...defaultStyles.video, visibility: paused ? 'hidden' : 'visible' }} autoPlay muted playsInline />
+            <video ref={videoRef} style={{ ...defaultStyles.video, ...styles?.video, visibility: paused ? 'hidden' : 'visible' }} autoPlay muted playsInline />
             <canvas
                 ref={pauseFrameRef}
                 style={{
