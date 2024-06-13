@@ -55,6 +55,7 @@ const App = () => {
 | `children`      | `ReactNode`                                   | No       | Optional children to render inside the scanner component.                |
 | `components`    | `IScannerComponents`                          | No       | Custom components to use within the scanner.                             |
 | `styles`        | `IScannerStyles`                              | No       | Custom styles to apply to the scanner and its elements.                  |
+| `classNames`    | `IScannerClassNames`                          | No       | Custom classNames to apply to the scanner and its elements.              |
 | `allowMultiple` | `boolean`                                     | No       | If `true`, ignore same barcode being scanned.                            |
 | `scanDelay`     | `number`                                      | No       | Delay in milliseconds between scans.                                     |
 

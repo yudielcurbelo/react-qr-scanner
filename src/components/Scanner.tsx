@@ -8,7 +8,7 @@ import useScanner from '../hooks/useScanner';
 
 import deepEqual from '../utilities/deepEqual';
 import { defaultComponents, defaultConstraints, defaultStyles } from '../misc';
-import { IDetectedBarcode, IPoint, IScannerComponents, IScannerStyles, TrackFunction } from '../types';
+import { IDetectedBarcode, IPoint, IScannerClassNames, IScannerComponents, IScannerStyles, TrackFunction } from '../types';
 
 export interface IScannerProps {
     onScan: (detectedCodes: IDetectedBarcode[]) => void;
@@ -18,6 +18,7 @@ export interface IScannerProps {
     children?: ReactNode;
     components?: IScannerComponents;
     styles?: IScannerStyles;
+    classNames?: IScannerClassNames;
     allowMultiple?: boolean;
     scanDelay?: number;
 }
@@ -116,7 +117,7 @@ function onFound(detectedCodes: IDetectedBarcode[], videoEl?: HTMLVideoElement |
 }
 
 export function Scanner(props: IScannerProps) {
-    const { onScan, constraints, formats = ['qr_code'], paused = false, components, children, styles, allowMultiple, scanDelay } = props;
+    const { onScan, constraints, formats = ['qr_code'], paused = false, components, children, styles, classNames, allowMultiple, scanDelay } = props;
 
     const videoRef = useRef<HTMLVideoElement>(null);
     const pauseFrameRef = useRef<HTMLCanvasElement>(null);
@@ -259,8 +260,8 @@ export function Scanner(props: IScannerProps) {
     }, [shouldScan]);
 
     return (
-        <div style={{ ...defaultStyles.container, ...styles?.container }}>
-            <video ref={videoRef} style={{ ...defaultStyles.video, ...styles?.video, visibility: paused ? 'hidden' : 'visible' }} autoPlay muted playsInline />
+        <div style={{ ...defaultStyles.container, ...styles?.container }} className={classNames?.container}>
+            <video ref={videoRef} style={{ ...defaultStyles.video, ...styles?.video, visibility: paused ? 'hidden' : 'visible' }} className={classNames?.video} autoPlay muted playsInline />
             <canvas
                 ref={pauseFrameRef}
                 style={{

@@ -7,4 +7,5 @@ export type { IStartTaskResult } from './IStartTaskResult';
 export type { IStopTaskResult } from './IStopTaskResult';
 export type { IStartCamera } from './IStartCamera';
 export type { IScannerStyles } from './IScannerStyles';
+export type { IScannerClassNames } from './IScannerClassNames';
 export type { TrackFunction } from './TrackFunction';
