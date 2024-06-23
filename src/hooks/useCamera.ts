@@ -163,9 +163,7 @@ export default function useCamera() {
     }, []);
 
     useEffect(() => {
-        return () => {
-            (async () => await stopCamera())();
-        };
+        return () => stopCamera();
     }, [stopCamera]);
 
     return {
