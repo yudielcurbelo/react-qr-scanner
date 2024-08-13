@@ -212,7 +212,7 @@ export function Scanner(props: IScannerProps) {
                     await camera.stopCamera();
                 }
             } catch (error) {
-                if (onError) onError(error);
+                onError?.(error);
                 console.error('error', error);
             }
         } else {
