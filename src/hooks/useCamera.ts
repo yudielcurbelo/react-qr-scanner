@@ -54,7 +54,7 @@ export default function useCamera() {
         const [track] = stream.getVideoTracks();
 
         setSettings(track.getSettings());
-        setCapabilities(track.getCapabilities());
+        setCapabilities(track?.getCapabilities?.() ?? {});
 
         currentStream.current = stream;
         currentVideoTrack.current = track;
