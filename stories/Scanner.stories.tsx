@@ -87,6 +87,9 @@ function Template(args: IScannerProps) {
                 onScan={(detectedCodes) => {
                     action('onScan')(detectedCodes);
                 }}
+                onError={(error) => {
+                    console.log(`onError: ${error}'`);
+                }}
                 components={{
                     audio: true,
                     onOff: true,
