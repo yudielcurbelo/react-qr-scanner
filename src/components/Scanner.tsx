@@ -12,7 +12,7 @@ import { IDetectedBarcode, IPoint, IScannerClassNames, IScannerComponents, IScan
 
 export interface IScannerProps {
     onScan: (detectedCodes: IDetectedBarcode[]) => void;
-    onError: (error: unknown) => void;
+    onError?: (error: unknown) => void;
     constraints?: MediaTrackConstraints;
     formats?: BarcodeFormat[];
     paused?: boolean;
