@@ -1,0 +1,1 @@
+{"version":3,"file":"TorchOff.d.ts","sourceRoot":"","sources":["../../src/assets/TorchOff.tsx"],"names":[],"mappings":"AAAA,OAAO,KAAK,EAAE,EAAE,aAAa,EAAE,MAAM,OAAO,CAAC;AAE7C,UAAU,cAAc;IACpB,OAAO,EAAE,MAAM,IAAI,CAAC;IACpB,SAAS,CAAC,EAAE,MAAM,CAAC;IACnB,KAAK,CAAC,EAAE,aAAa,CAAC;CACzB;AAED,MAAM,CAAC,OAAO,UAAU,QAAQ,CAAC,KAAK,EAAE,cAAc,qBAarD"}

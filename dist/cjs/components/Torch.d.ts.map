@@ -1,0 +1,1 @@
+{"version":3,"file":"Torch.d.ts","sourceRoot":"","sources":["../../src/components/Torch.tsx"],"names":[],"mappings":"AAAA,OAAO,KAAK,MAAM,OAAO,CAAC;AAK1B,UAAU,WAAW;IACjB,QAAQ,EAAE,OAAO,CAAC;IAClB,MAAM,EAAE,OAAO,CAAC;IAChB,WAAW,EAAE,CAAC,KAAK,EAAE,OAAO,KAAK,IAAI,CAAC;CACzC;AAED,MAAM,CAAC,OAAO,UAAU,KAAK,CAAC,KAAK,EAAE,WAAW,4BAgB/C"}

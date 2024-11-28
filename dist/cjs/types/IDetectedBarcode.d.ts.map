@@ -1,0 +1,1 @@
+{"version":3,"file":"IDetectedBarcode.d.ts","sourceRoot":"","sources":["../../src/types/IDetectedBarcode.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,YAAY,EAAE,MAAM,EAAE,MAAM,SAAS,CAAC;AAE/C,MAAM,WAAW,gBAAgB;IAC7B,WAAW,EAAE,YAAY,CAAC;IAC1B,YAAY,EAAE,MAAM,EAAE,CAAC;IACvB,MAAM,EAAE,MAAM,CAAC;IACf,QAAQ,EAAE,MAAM,CAAC;CACpB"}
