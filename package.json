@@ -1,6 +1,6 @@
 {
   "name": "@yudiel/react-qr-scanner",
-  "version": "2.0.8",
+  "version": "2.1.0",
   "description": "A library to scan QR codes in React.",
   "author": "Yudiel Curbelo",
   "license": "MIT",
@@ -39,27 +39,27 @@
     "@rollup/plugin-commonjs": "^26.0.1",
     "@rollup/plugin-terser": "^0.4.4",
     "@rollup/plugin-typescript": "^11.1.6",
-    "@storybook/addon-essentials": "^8.2.9",
-    "@storybook/addon-interactions": "^8.2.9",
-    "@storybook/addon-links": "^8.2.9",
+    "@storybook/addon-essentials": "^8.4.7",
+    "@storybook/addon-interactions": "^8.4.7",
+    "@storybook/addon-links": "^8.4.7",
     "@storybook/addon-webpack5-compiler-swc": "1.0.5",
-    "@storybook/react": "^8.2.9",
-    "@storybook/react-webpack5": "^8.2.9",
-    "@types/node": "^22.2.0",
-    "@types/react": "^18.3.3",
-    "@types/react-dom": "^18.3.0",
+    "@storybook/react": "^8.4.7",
+    "@storybook/react-webpack5": "^8.4.7",
+    "@types/node": "^22.10.2",
+    "@types/react": "^19.0.1",
+    "@types/react-dom": "^19.0.2",
     "rollup": "^4.20.0",
     "rollup-plugin-copy": "^3.5.0",
     "rollup-plugin-dts": "^6.1.1",
-    "storybook": "8.2.9",
-    "typescript": "^5.5.4"
+    "storybook": "8.4.7",
+    "typescript": "^5.7.2"
   },
   "peerDependencies": {
-    "react": "^17 || ^18",
-    "react-dom": "^17 || ^18"
+    "react": "^17 || ^18 || ^19",
+    "react-dom": "^17 || ^18 || ^19"
   },
   "dependencies": {
-    "barcode-detector": "^2.2.7",
+    "barcode-detector": "^2.3.1",
     "webrtc-adapter": "9.0.1"
   },
   "packageManager": "yarn@4.0.2"

@@ -7,7 +7,7 @@ import { IUseScannerState } from '../types';
 import { base64Beep } from '../assets/base64Beep';
 
 interface IUseScannerProps {
-    videoElementRef: RefObject<HTMLVideoElement>;
+    videoElementRef: RefObject<HTMLVideoElement | null>;
     onScan: (result: DetectedBarcode[]) => void;
     onFound: (result: DetectedBarcode[]) => void;
     formats?: BarcodeFormat[];
