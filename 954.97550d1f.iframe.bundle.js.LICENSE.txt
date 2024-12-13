@@ -1,13 +1,6 @@
-/*!
- * is-plain-object <https://github.com/jonschlinkert/is-plain-object>
- *
- * Copyright (c) 2014-2017, Jon Schlinkert.
- * Released under the MIT License.
- */
-
 /**
  * @license React
- * react-dom.production.min.js
+ * react-dom-test-utils.production.min.js
  *
  * Copyright (c) Facebook, Inc. and its affiliates.
  *
@@ -17,7 +10,7 @@
 
 /**
  * @license React
- * react-is.production.min.js
+ * react-dom.production.min.js
  *
  * Copyright (c) Facebook, Inc. and its affiliates.
  *
