@@ -8,56 +8,27 @@ import packageJson from './package.json' with { type: 'json' };
 export default [
     {
         input: 'src/index.ts',
-        output: {
-            file: packageJson.main,
-            format: 'cjs',
-            name: 'ReactQrScanner',
-            sourcemap: true,
-            globals: { react: 'React' },
-            exports: 'named'
-        },
-        plugins: [
-            commonjs(),
-            typescript({
-                tsconfig: './tsconfig.json',
-                compilerOptions: {
-                    declaration: true,
-                    declarationDir: 'dist/cjs'
-                },
-                exclude: ['**/stories/**']
-            }),
-            copy({
-                targets: [{ src: 'src/assets/*', dest: 'dist/assets' }]
-            }),
-            terser()
+        output: [
+            {
+                dir: 'dist',
+                format: 'cjs',
+                entryFileNames: '[name].cjs.js',
+                sourcemap: true
+            },
+            {
+                dir: 'dist',
+                format: 'esm',
+                entryFileNames: '[name].esm.mjs',
+                sourcemap: true
+            }
         ],
-        external: [
-            'react',
-            'react-dom',
-            'barcode-detector',
-            'webrtc-adapter/dist/chrome/getusermedia',
-            'webrtc-adapter/dist/firefox/getusermedia',
-            'webrtc-adapter/dist/safari/safari_shim',
-            'webrtc-adapter/dist/utils'
-        ]
-    },
-    {
-        input: 'src/index.ts',
-        output: {
-            file: packageJson.module,
-            format: 'esm',
-            name: 'ReactQrScanner',
-            sourcemap: true,
-            globals: { react: 'React' },
-            exports: 'named'
-        },
         plugins: [
             commonjs(),
             typescript({
                 tsconfig: './tsconfig.json',
                 compilerOptions: {
                     declaration: true,
-                    declarationDir: 'dist/esm'
+                    declarationDir: 'dist'
                 },
                 exclude: ['**/stories/**']
             }),
