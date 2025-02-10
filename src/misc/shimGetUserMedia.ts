@@ -5,7 +5,7 @@ import { shimGetUserMedia as firefoxShim } from 'webrtc-adapter/dist/firefox/get
 // @ts-ignore
 import { shimGetUserMedia as safariShim } from 'webrtc-adapter/dist/safari/safari_shim';
 // @ts-ignore
-import { detectBrowser } from 'webrtc-adapter/dist/utils';
+import { detectBrowser } from 'webrtc-adapter/dist/utils.js';
 
 import idempotent from '../utilities/idempotent';
 
