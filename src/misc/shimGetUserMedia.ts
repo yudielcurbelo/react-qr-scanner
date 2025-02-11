@@ -1,9 +1,9 @@
 // @ts-ignore
-import { shimGetUserMedia as chromeShim } from 'webrtc-adapter/dist/chrome/getusermedia';
+import { shimGetUserMedia as chromeShim } from 'webrtc-adapter/dist/chrome/getusermedia.js';
 // @ts-ignore
-import { shimGetUserMedia as firefoxShim } from 'webrtc-adapter/dist/firefox/getusermedia';
+import { shimGetUserMedia as firefoxShim } from 'webrtc-adapter/dist/firefox/getusermedia.js';
 // @ts-ignore
-import { shimGetUserMedia as safariShim } from 'webrtc-adapter/dist/safari/safari_shim';
+import { shimGetUserMedia as safariShim } from 'webrtc-adapter/dist/safari/safari_shim.js';
 // @ts-ignore
 import { detectBrowser } from 'webrtc-adapter/dist/utils.js';
 
