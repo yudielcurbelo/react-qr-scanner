@@ -1,5 +1,7 @@
+import 'webrtc-adapter';
+
 import { useState, useRef, useCallback, useEffect } from 'react';
-import { shimGetUserMedia } from '../misc';
+
 import { IStartCamera, IStartTaskResult, IStopTaskResult } from '../types';
 
 type TaskResult = IStartTaskResult | IStopTaskResult;
@@ -21,8 +23,6 @@ export default function useCamera() {
         if (navigator?.mediaDevices?.getUserMedia === undefined) {
             throw new Error('this browser has no Stream API support');
         }
-
-        shimGetUserMedia();
 
         const stream = await navigator.mediaDevices.getUserMedia({
             audio: false,
