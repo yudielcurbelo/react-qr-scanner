@@ -26,7 +26,7 @@ export default function OnOff(props: IOnOffProps) {
         <div
             style={{
                 bottom: 85,
-                right: 3,
+                right: 8,
                 position: 'absolute',
                 zIndex: 2,
                 cursor: buttonDisabled ? 'default' : 'pointer'

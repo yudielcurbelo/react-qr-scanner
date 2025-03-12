@@ -21,7 +21,7 @@ export default function Torch(props: ITorchProps) {
     }
 
     return (
-        <div style={{ bottom: 35, right: 3, position: 'absolute', zIndex: 2, cursor: 'pointer' }}>
+        <div style={{ bottom: 35, right: 8, position: 'absolute', zIndex: 2, cursor: 'pointer' }}>
             {status ? <TorchOff onClick={() => toggleTorch(false)} /> : <TorchOn onClick={() => toggleTorch(true)} />}
         </div>
     );

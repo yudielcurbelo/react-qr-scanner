@@ -29,10 +29,10 @@ export default function Zoom(props: IZoomProps) {
 
     return (
         <Fragment>
-            <div style={{ bottom: 130, right: 3, position: 'absolute', zIndex: 2, cursor: 'pointer' }}>
+            <div style={{ bottom: 130, right: 8, position: 'absolute', zIndex: 2, cursor: 'pointer' }}>
                 <ZoomOut disabled={value <= capabilities.min} onClick={handleZoomOut} />
             </div>
-            <div style={{ bottom: 180, right: 3, position: 'absolute', zIndex: 2, cursor: 'pointer' }}>
+            <div style={{ bottom: 180, right: 8, position: 'absolute', zIndex: 2, cursor: 'pointer' }}>
                 <ZoomIn disabled={value >= capabilities.max} onClick={handleZoomIn} />
             </div>
         </Fragment>

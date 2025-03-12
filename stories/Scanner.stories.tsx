@@ -6,7 +6,7 @@ import { Scanner as ScannerComp, IScannerProps, outline, boundingBox, centerText
 
 const styles = {
     container: {
-        width: 400,
+        width: '80%',
         margin: 'auto'
     },
     controls: {
@@ -50,9 +50,9 @@ function Template(args: IScannerProps) {
                     ))}
                 </select>
                 <select style={{ marginLeft: 5 }} onChange={(e) => setTracker(e.target.value)}>
-                    <option value="centerText">Center Text</option>
-                    <option value="outline">Outline</option>
-                    <option value="boundingBox">Bounding Box</option>
+                    <option value='centerText'>Center Text</option>
+                    <option value='outline'>Outline</option>
+                    <option value='boundingBox'>Bounding Box</option>
                     <option value={undefined}>No Tracker</option>
                 </select>
             </div>

@@ -8,7 +8,14 @@ import useScanner from '../hooks/useScanner';
 
 import deepEqual from '../utilities/deepEqual';
 import { defaultComponents, defaultConstraints, defaultStyles } from '../misc';
-import { IDetectedBarcode, IPoint, IScannerClassNames, IScannerComponents, IScannerStyles, TrackFunction } from '../types';
+import {
+    IDetectedBarcode,
+    IPoint,
+    IScannerClassNames,
+    IScannerComponents,
+    IScannerStyles,
+    TrackFunction
+} from '../types';
 
 export interface IScannerProps {
     onScan: (detectedCodes: IDetectedBarcode[]) => void;
@@ -118,7 +125,19 @@ function onFound(detectedCodes: IDetectedBarcode[], videoEl?: HTMLVideoElement |
 }
 
 export function Scanner(props: IScannerProps) {
-    const { onScan, constraints, formats = ['qr_code'], paused = false, components, children, styles, classNames, allowMultiple, scanDelay, onError } = props;
+    const {
+        onScan,
+        constraints,
+        formats = ['qr_code'],
+        paused = false,
+        components,
+        children,
+        styles,
+        classNames,
+        allowMultiple,
+        scanDelay,
+        onError
+    } = props;
 
     const videoRef = useRef<HTMLVideoElement>(null);
     const pauseFrameRef = useRef<HTMLCanvasElement>(null);
@@ -263,61 +282,56 @@ export function Scanner(props: IScannerProps) {
 
     return (
         <div style={{ ...defaultStyles.container, ...styles?.container }} className={classNames?.container}>
-            <video ref={videoRef} style={{ ...defaultStyles.video, ...styles?.video, visibility: paused ? 'hidden' : 'visible' }} className={classNames?.video} autoPlay muted playsInline />
+            <video ref={videoRef}
+                   style={{
+                       ...defaultStyles.video, ...styles?.video,
+                       visibility: paused ? 'hidden' : 'visible'
+                   }}
+                   className={classNames?.video} autoPlay muted playsInline />
             <canvas
                 ref={pauseFrameRef}
                 style={{
                     display: paused ? 'block' : 'none',
                     position: 'absolute',
-                    top: 0,
-                    left: 0,
-                    width: '100%'
-                }}
-            />
-            <canvas ref={trackingLayerRef} style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }} />
-            <div
-                style={{
-                    top: 0,
-                    left: 0,
-                    position: 'absolute',
                     width: '100%',
                     height: '100%'
                 }}
-            >
+            />
+            <canvas ref={trackingLayerRef} style={{ position: 'absolute', width: '100%', height: '100%' }} />
+            <div style={{ position: 'absolute', width: '100%', height: '100%' }}>
                 {mergedComponents.finder && (
                     <Finder
                         scanning={isCameraActive}
                         capabilities={camera.capabilities}
-                        loading={false}
                         onOff={mergedComponents.onOff}
                         zoom={
                             mergedComponents.zoom && camera.settings.zoom
                                 ? {
-                                      value: camera.settings.zoom,
-                                      onChange: async (value) => {
-                                          const newConstraints = {
-                                              ...constraintsCached,
-                                              advanced: [{ zoom: value }]
-                                          };
+                                    value: camera.settings.zoom,
+                                    onChange: async (value) => {
+                                        const newConstraints = {
+                                            ...constraintsCached,
+                                            advanced: [{ zoom: value }]
+                                        };
 
-                                          await camera.updateConstraints(newConstraints);
-                                      }
-                                  }
+                                        await camera.updateConstraints(newConstraints);
+                                    }
+                                }
                                 : undefined
                         }
                         torch={
                             mergedComponents.torch
                                 ? {
-                                      status: camera.settings.torch ?? false,
-                                      toggle: async (value) => {
-                                          const newConstraints = {
-                                              ...constraintsCached,
-                                              advanced: [{ torch: value }]
-                                          };
+                                    status: camera.settings.torch ?? false,
+                                    toggle: async (value) => {
+                                        const newConstraints = {
+                                            ...constraintsCached,
+                                            advanced: [{ torch: value }]
+                                        };
 
-                                          await camera.updateConstraints(newConstraints);
-                                      }
-                                  }
+                                        await camera.updateConstraints(newConstraints);
+                                    }
+                                }
                                 : undefined
                         }
                         startScanning={async () => await onCameraChange()}
@@ -326,7 +340,6 @@ export function Scanner(props: IScannerProps) {
                             clearCanvas(trackingLayerRef.current);
                             setIsCameraActive(false);
                         }}
-                        border={styles?.finderBorder}
                     />
                 )}
                 {children}
