@@ -35,7 +35,7 @@ const styles: Record<string, CSSProperties> = {
     },
     borderBox: {
         position: 'relative',
-        width: '80%',
+        width: '70%',
         aspectRatio: '1 / 1',
         border: '2px dashed rgba(239, 68, 68, 0.4)',
         borderRadius: '0.5rem',
