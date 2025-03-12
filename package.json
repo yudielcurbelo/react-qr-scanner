@@ -36,22 +36,22 @@
     "build-storybook": "storybook build"
   },
   "devDependencies": {
-    "@rollup/plugin-commonjs": "^28.0.2",
+    "@rollup/plugin-commonjs": "^28.0.3",
     "@rollup/plugin-terser": "^0.4.4",
     "@rollup/plugin-typescript": "^12.1.2",
-    "@storybook/addon-essentials": "^8.6.0",
-    "@storybook/addon-interactions": "^8.6.0",
-    "@storybook/addon-links": "^8.6.0",
+    "@storybook/addon-essentials": "^8.6.4",
+    "@storybook/addon-interactions": "^8.6.4",
+    "@storybook/addon-links": "^8.6.4",
     "@storybook/addon-webpack5-compiler-swc": "2.1.0",
-    "@storybook/react": "^8.6.0",
-    "@storybook/react-webpack5": "^8.6.0",
-    "@types/node": "^22.13.5",
+    "@storybook/react": "^8.6.4",
+    "@storybook/react-webpack5": "^8.6.4",
+    "@types/node": "^22.13.10",
     "@types/react": "^19.0.10",
     "@types/react-dom": "^19.0.4",
-    "rollup": "^4.34.8",
+    "rollup": "^4.35.0",
     "rollup-plugin-dts": "^6.1.1",
-    "storybook": "8.6.0",
-    "typescript": "^5.7.3"
+    "storybook": "8.6.4",
+    "typescript": "^5.8.2"
   },
   "peerDependencies": {
     "react": "^17 || ^18 || ^19",
