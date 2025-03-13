@@ -7,7 +7,7 @@ interface ICameraOnProps {
     style?: CSSProperties;
 }
 
-export default function CameraOn(props: ICameraOnProps) {
+export default function CameraOnIcon(props: ICameraOnProps) {
     const { onClick, disabled, className } = props;
 
     const style = {

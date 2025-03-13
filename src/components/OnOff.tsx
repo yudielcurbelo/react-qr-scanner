@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
-import CameraOff from '../assets/CameraOff';
-import CameraOn from '../assets/CameraOn';
+import CameraOffIcon from '../assets/CameraOffIcon';
+import CameraOnIcon from '../assets/CameraOnIcon';
 
 interface IOnOffProps {
     scanning: boolean;
@@ -32,7 +32,7 @@ export default function OnOff(props: IOnOffProps) {
                 cursor: buttonDisabled ? 'default' : 'pointer'
             }}
         >
-            {scanning ? <CameraOff disabled={buttonDisabled} onClick={toggleScanning} /> : <CameraOn disabled={buttonDisabled} onClick={toggleScanning} />}
+            {scanning ? <CameraOffIcon disabled={buttonDisabled} onClick={toggleScanning} /> : <CameraOnIcon disabled={buttonDisabled} onClick={toggleScanning} />}
         </div>
     );
 }

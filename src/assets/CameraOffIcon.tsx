@@ -7,7 +7,7 @@ interface ICameraOffProps {
     style?: CSSProperties;
 }
 
-export default function CameraOff(props: ICameraOffProps) {
+export default function CameraOffIcon(props: ICameraOffProps) {
     const { onClick, disabled, className } = props;
 
     const style = {

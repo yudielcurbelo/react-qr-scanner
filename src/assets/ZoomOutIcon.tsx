@@ -7,7 +7,7 @@ interface IZoomOutProps {
     disabled?: boolean;
 }
 
-export default function ZoomOut(props: IZoomOutProps) {
+export default function ZoomOutIcon(props: IZoomOutProps) {
     const { onClick, className, disabled = false } = props;
 
     const style = {

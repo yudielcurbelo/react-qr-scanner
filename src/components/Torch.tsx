@@ -1,7 +1,7 @@
 import React from 'react';
 
-import TorchOn from '../assets/TorchOn';
-import TorchOff from '../assets/TorchOff';
+import TorchOnIcon from '../assets/TorchOnIcon';
+import TorchOffIcon from '../assets/TorchOffIcon';
 
 interface ITorchProps {
     scanning: boolean;
@@ -22,7 +22,7 @@ export default function Torch(props: ITorchProps) {
 
     return (
         <div style={{ bottom: 35, right: 8, position: 'absolute', zIndex: 2, cursor: 'pointer' }}>
-            {status ? <TorchOff onClick={() => toggleTorch(false)} /> : <TorchOn onClick={() => toggleTorch(true)} />}
+            {status ? <TorchOffIcon onClick={() => toggleTorch(false)} /> : <TorchOnIcon onClick={() => toggleTorch(true)} />}
         </div>
     );
 }

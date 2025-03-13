@@ -6,7 +6,7 @@ interface ITorchOffProps {
     style?: CSSProperties;
 }
 
-export default function TorchOff(props: ITorchOffProps) {
+export default function TorchOffIcon(props: ITorchOffProps) {
     const { onClick, className, style } = props;
 
     return (

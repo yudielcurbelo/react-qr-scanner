@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 
-import ZoomIn from '../assets/ZoomIn';
-import ZoomOut from '../assets/ZoomOut';
+import ZoomInIcon from '../assets/ZoomInIcon';
+import ZoomOutIcon from '../assets/ZoomOutIcon';
 
 interface IZoomProps {
     scanning: boolean;
@@ -30,10 +30,10 @@ export default function Zoom(props: IZoomProps) {
     return (
         <Fragment>
             <div style={{ bottom: 130, right: 8, position: 'absolute', zIndex: 2, cursor: 'pointer' }}>
-                <ZoomOut disabled={value <= capabilities.min} onClick={handleZoomOut} />
+                <ZoomOutIcon disabled={value <= capabilities.min} onClick={handleZoomOut} />
             </div>
             <div style={{ bottom: 180, right: 8, position: 'absolute', zIndex: 2, cursor: 'pointer' }}>
-                <ZoomIn disabled={value >= capabilities.max} onClick={handleZoomIn} />
+                <ZoomInIcon disabled={value >= capabilities.max} onClick={handleZoomIn} />
             </div>
         </Fragment>
     );
