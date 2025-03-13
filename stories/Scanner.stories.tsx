@@ -7,6 +7,7 @@ import { Scanner as ScannerComp, IScannerProps, outline, boundingBox, centerText
 const styles = {
     container: {
         width: '80%',
+        maxWidth: 500,
         margin: 'auto'
     },
     controls: {
@@ -91,13 +92,13 @@ function Template(args: IScannerProps) {
                     console.log(`onError: ${error}'`);
                 }}
                 components={{
-                    audio: true,
                     onOff: true,
                     torch: true,
                     zoom: true,
                     finder: true,
                     tracker: getTracker()
                 }}
+                // sound={true}
                 allowMultiple={true}
                 scanDelay={2000}
                 paused={pause}

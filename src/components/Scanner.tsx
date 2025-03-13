@@ -29,6 +29,7 @@ export interface IScannerProps {
     classNames?: IScannerClassNames;
     allowMultiple?: boolean;
     scanDelay?: number;
+    sound?: boolean | string;
 }
 
 function clearCanvas(canvas: HTMLCanvasElement | null) {
@@ -136,7 +137,8 @@ export function Scanner(props: IScannerProps) {
         classNames,
         allowMultiple,
         scanDelay,
-        onError
+        onError,
+        sound
     } = props;
 
     const videoRef = useRef<HTMLVideoElement>(null);
@@ -158,10 +160,10 @@ export function Scanner(props: IScannerProps) {
         onScan: onScan,
         onFound: (detectedCodes) => onFound(detectedCodes, videoRef.current, trackingLayerRef.current, mergedComponents.tracker),
         formats: formats,
-        audio: mergedComponents.audio,
-        allowMultiple: allowMultiple,
         retryDelay: mergedComponents.tracker === undefined ? 500 : 10,
-        scanDelay: scanDelay
+        scanDelay: scanDelay,
+        allowMultiple: allowMultiple,
+        sound: sound
     });
 
     useEffect(() => {
@@ -337,6 +339,7 @@ export function Scanner(props: IScannerProps) {
                         startScanning={async () => await onCameraChange()}
                         stopScanning={async () => {
                             await camera.stopCamera();
+
                             clearCanvas(trackingLayerRef.current);
                             setIsCameraActive(false);
                         }}

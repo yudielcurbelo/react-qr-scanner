@@ -11,14 +11,23 @@ interface IUseScannerProps {
     onScan: (result: DetectedBarcode[]) => void;
     onFound: (result: DetectedBarcode[]) => void;
     formats?: BarcodeFormat[];
-    audio?: boolean;
+    sound?: boolean | string;
     allowMultiple?: boolean;
     retryDelay?: number;
     scanDelay?: number;
 }
 
 export default function useScanner(props: IUseScannerProps) {
-    const { videoElementRef, onScan, onFound, retryDelay = 100, scanDelay = 0, formats = [], audio = true, allowMultiple = false } = props;
+    const {
+        videoElementRef,
+        onScan,
+        onFound,
+        retryDelay = 100,
+        scanDelay = 0,
+        formats = [],
+        allowMultiple = false,
+        sound = true,
+    }: IUseScannerProps = props;
 
     const barcodeDetectorRef = useRef(new BarcodeDetector({ formats }));
     const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -29,10 +38,10 @@ export default function useScanner(props: IUseScannerProps) {
     }, [formats]);
 
     useEffect(() => {
-        if (typeof window !== 'undefined' && audio) {
-            audioRef.current = new Audio(base64Beep);
+        if (typeof window !== 'undefined' && sound) {
+            audioRef.current = new Audio(typeof sound === 'string' ? sound : base64Beep);
         }
-    }, [audio]);
+    }, [sound]);
 
     const processFrame = useCallback(
         (state: IUseScannerState) => async (timeNow: number) => {
@@ -55,7 +64,7 @@ export default function useScanner(props: IUseScannerProps) {
                     const scanDelayPassed = timeNow - lastOnScan >= scanDelay;
 
                     if (anyNewCodesDetected || (allowMultiple && currentScanHasContent && scanDelayPassed)) {
-                        if (audio && audioRef.current && audioRef.current.paused) {
+                        if (sound && audioRef.current && audioRef.current.paused) {
                             audioRef.current.play().catch((error) => console.error('Error playing the sound', error));
                         }
 
