@@ -237,10 +237,39 @@ export function Scanner(props: IScannerProps) {
                 console.error('error', error);
             }
         } else {
-            canvasEl.width = videoEl.videoWidth;
-            canvasEl.height = videoEl.videoHeight;
+            const videoWidth = videoEl.videoWidth;
+            const videoHeight = videoEl.videoHeight;
 
-            ctx.drawImage(videoEl, 0, 0, videoEl.videoWidth, videoEl.videoHeight);
+            const aspectRatio = videoWidth / videoHeight;
+
+            // Set canvas size based on video
+            canvasEl.width = videoWidth;
+            canvasEl.height = videoHeight;
+
+            // Clear canvas
+            ctx.clearRect(0, 0, canvasEl.width, canvasEl.height);
+
+            // Draw image scaled to fit
+            const canvasAspectRatio = canvasEl.width / canvasEl.height;
+
+            let drawWidth = canvasEl.width;
+            let drawHeight = canvasEl.height;
+            let offsetX = 0;
+            let offsetY = 0;
+
+            if (aspectRatio > canvasAspectRatio) {
+                // Video is wider
+                drawHeight = canvasEl.height;
+                drawWidth = drawHeight * aspectRatio;
+                offsetX = (canvasEl.width - drawWidth) / 2;
+            } else {
+                // Video is taller
+                drawWidth = canvasEl.width;
+                drawHeight = drawWidth / aspectRatio;
+                offsetY = (canvasEl.height - drawHeight) / 2;
+            }
+
+            ctx.drawImage(videoEl, offsetX, offsetY, drawWidth, drawHeight);
 
             await camera.stopCamera();
 
