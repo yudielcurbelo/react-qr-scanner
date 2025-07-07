@@ -7,10 +7,11 @@ interface IOnOffProps {
     scanning: boolean;
     startScanning: (deviceId?: string | undefined) => void;
     stopScanning: () => void;
+    style?: React.CSSProperties;
 }
 
 export default function OnOff(props: IOnOffProps) {
-    const { scanning, startScanning, stopScanning } = props;
+    const { scanning, style, startScanning, stopScanning } = props;
 
     const [buttonDisabled, setButtonDisabled] = useState(false);
 
@@ -32,7 +33,7 @@ export default function OnOff(props: IOnOffProps) {
                 cursor: buttonDisabled ? 'default' : 'pointer'
             }}
         >
-            {scanning ? <CameraOffIcon disabled={buttonDisabled} onClick={toggleScanning} /> : <CameraOnIcon disabled={buttonDisabled} onClick={toggleScanning} />}
+            {scanning ? <CameraOffIcon disabled={buttonDisabled} onClick={toggleScanning} style={style} /> : <CameraOnIcon disabled={buttonDisabled} onClick={toggleScanning} style={style} />}
         </div>
     );
 }

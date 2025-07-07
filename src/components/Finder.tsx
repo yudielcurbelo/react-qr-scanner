@@ -4,7 +4,7 @@ import OnOff from './OnOff';
 import Torch from './Torch';
 import Zoom from './Zoom';
 
-const styles: Record<string, CSSProperties> = {
+const defaultStyles: Record<string, CSSProperties> = {
     fullContainer: {
         width: '100%',
         height: '100%',
@@ -100,28 +100,45 @@ interface IFinderProps {
         value: number;
         onChange: (value: number) => void;
     };
+    styles?: {
+        // Custom styles for the Finder component
+        fullContainer?: React.CSSProperties;
+        innerContainer?: React.CSSProperties;
+        overlay?: React.CSSProperties;
+        borderBox?: React.CSSProperties;
+
+        // Common style for all four corners
+        corners?: React.CSSProperties;
+        // Custom style for the specific corners
+        cornerTopLeft?: React.CSSProperties;
+        cornerTopRight?: React.CSSProperties;
+        cornerBottomLeft?: React.CSSProperties;
+        cornerBottomRight?: React.CSSProperties;
+
+        // Custom styles for the buttons
+        onOff?: React.CSSProperties;
+        torch?: React.CSSProperties;
+        zoom?: React.CSSProperties;
+    };
 }
 
 export default function Finder(props: IFinderProps) {
-    const { scanning, capabilities, onOff, torch, zoom, startScanning, stopScanning } = props;
+    const { scanning, capabilities, onOff, torch, zoom, styles, startScanning, stopScanning } = props;
 
     return (
-        <div style={styles.fullContainer}>
-            <div style={styles.innerContainer}>
-                <div style={styles.overlay}>
-                    <div style={styles.borderBox}>
-                        <div style={styles.cornerTopLeft}></div>
-                        <div style={styles.cornerTopRight}></div>
-                        <div style={styles.cornerBottomLeft}></div>
-                        <div style={styles.cornerBottomRight}></div>
+        <div style={defaultStyles.fullContainer}>
+            <div style={defaultStyles.innerContainer}>
+                <div style={defaultStyles.overlay}>
+                    <div style={{ ...defaultStyles.borderBox, ...styles?.borderBox }}>
+                        <div style={{ ...defaultStyles.cornerTopLeft, ...styles?.corners }}></div>
+                        <div style={{ ...defaultStyles.cornerTopRight, ...styles?.corners }}></div>
+                        <div style={{ ...defaultStyles.cornerBottomLeft, ...styles?.corners }}></div>
+                        <div style={{ ...defaultStyles.cornerBottomRight, ...styles?.corners }}></div>
                     </div>
                 </div>
-                {onOff && <OnOff scanning={scanning} startScanning={startScanning} stopScanning={stopScanning} />}
-                {torch && capabilities.torch &&
-                    <Torch scanning={scanning} status={torch.status} torchToggle={torch.toggle} />}
-                {zoom && capabilities.zoom &&
-                    <Zoom scanning={scanning} capabilities={capabilities.zoom} value={zoom.value}
-                          onZoom={zoom.onChange} />}
+                {onOff && <OnOff scanning={scanning} startScanning={startScanning} stopScanning={stopScanning} style={styles?.onOff} />}
+                {torch && capabilities.torch && <Torch scanning={scanning} status={torch.status} torchToggle={torch.toggle} style={styles?.torch} />}
+                {zoom && capabilities.zoom && <Zoom scanning={scanning} capabilities={capabilities.zoom} value={zoom.value} onZoom={zoom.onChange} style={styles?.zoom} />}
             </div>
         </div>
     );

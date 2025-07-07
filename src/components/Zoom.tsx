@@ -8,10 +8,11 @@ interface IZoomProps {
     capabilities: { min: number; max: number; step: number };
     value: number;
     onZoom: (value: number) => void;
+    style?: React.CSSProperties;
 }
 
 export default function Zoom(props: IZoomProps) {
-    const { scanning, capabilities, onZoom, value } = props;
+    const { scanning, capabilities, onZoom, value, style } = props;
 
     if (!scanning || !onZoom) {
         return null;
@@ -30,10 +31,10 @@ export default function Zoom(props: IZoomProps) {
     return (
         <Fragment>
             <div style={{ bottom: 130, right: 8, position: 'absolute', zIndex: 2, cursor: 'pointer' }}>
-                <ZoomOutIcon disabled={value <= capabilities.min} onClick={handleZoomOut} />
+                <ZoomOutIcon disabled={value <= capabilities.min} onClick={handleZoomOut} style={style} />
             </div>
             <div style={{ bottom: 180, right: 8, position: 'absolute', zIndex: 2, cursor: 'pointer' }}>
-                <ZoomInIcon disabled={value >= capabilities.max} onClick={handleZoomIn} />
+                <ZoomInIcon disabled={value >= capabilities.max} onClick={handleZoomIn} style={style} />
             </div>
         </Fragment>
     );
