@@ -16,5 +16,19 @@ export const defaultStyles: IScannerStyles = {
         height: '100%',
         objectFit: 'cover',
         overflow: 'hidden'
+    },
+    onOff: {
+        cursor: 'pointer',
+        stroke: 'yellow'
+    },
+    zoom: {
+        cursor: 'pointer',
+        stroke: 'yellow',
+        fill: 'yellow'
+    },
+    torch: {
+        cursor: 'pointer',
+        stroke: 'yellow',
+        fill: 'yellow'
     }
 };
