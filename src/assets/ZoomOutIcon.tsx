@@ -10,10 +10,12 @@ interface IZoomOutProps {
 export default function ZoomOutIcon(props: IZoomOutProps) {
     const { onClick, className, disabled = false } = props;
 
+    const { cursor, stroke, fill } = props.style || {};
+
     const style = {
-        cursor: disabled ? 'default' : 'pointer',
-        stroke: disabled ? 'grey' : 'yellow',
-        fill: disabled ? 'grey' : 'yellow',
+        cursor: disabled ? 'default' : cursor,
+        stroke: disabled ? 'grey' : stroke,
+        fill: disabled ? 'grey' : fill,
         ...props.style
     };
 

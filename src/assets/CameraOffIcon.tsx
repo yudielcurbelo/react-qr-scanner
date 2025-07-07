@@ -10,9 +10,11 @@ interface ICameraOffProps {
 export default function CameraOffIcon(props: ICameraOffProps) {
     const { onClick, disabled, className } = props;
 
+    const { cursor, stroke } = props.style || {};
+
     const style = {
-        cursor: disabled ? 'default' : 'pointer',
-        stroke: disabled ? 'grey' : 'yellow',
+        cursor: disabled ? 'default' : cursor,
+        stroke: disabled ? 'grey' : stroke,
         strokeLineJoin: 'round',
         strokeLineCap: 'round',
         strokeWidth: 1.5,
