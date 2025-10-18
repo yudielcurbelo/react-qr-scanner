@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useMemo, ReactNode } from 'react';
+import React, { useState, useEffect, useRef, useMemo, ReactNode, forwardRef } from 'react';
 
 import type { BarcodeFormat } from 'barcode-detector';
 
@@ -8,14 +8,8 @@ import useScanner from '../hooks/useScanner';
 
 import deepEqual from '../utilities/deepEqual';
 import { defaultComponents, defaultConstraints, defaultStyles } from '../misc';
-import {
-    IDetectedBarcode,
-    IPoint,
-    IScannerClassNames,
-    IScannerComponents,
-    IScannerStyles,
-    TrackFunction
-} from '../types';
+import { IDetectedBarcode, IPoint, IScannerClassNames, IScannerComponents, IScannerStyles, TrackFunction } from '../types';
+import { mergeRefs } from '../utilities/mergeRefs';
 
 export interface IScannerProps {
     onScan: (detectedCodes: IDetectedBarcode[]) => void;
@@ -125,21 +119,8 @@ function onFound(detectedCodes: IDetectedBarcode[], videoEl?: HTMLVideoElement |
     }
 }
 
-export function Scanner(props: IScannerProps) {
-    const {
-        onScan,
-        constraints,
-        formats = ['qr_code'],
-        paused = false,
-        components,
-        children,
-        styles,
-        classNames,
-        allowMultiple,
-        scanDelay,
-        onError,
-        sound
-    } = props;
+export const Scanner = forwardRef<HTMLVideoElement, IScannerProps>((props, ref) => {
+    const { onScan, constraints, formats = ['qr_code'], paused = false, components, children, styles, classNames, allowMultiple, scanDelay, onError, sound } = props;
 
     const videoRef = useRef<HTMLVideoElement>(null);
     const pauseFrameRef = useRef<HTMLCanvasElement>(null);
@@ -284,12 +265,18 @@ export function Scanner(props: IScannerProps) {
 
     return (
         <div style={{ ...defaultStyles.container, ...styles?.container }} className={classNames?.container}>
-            <video ref={videoRef}
-                   style={{
-                       ...defaultStyles.video, ...styles?.video,
-                       visibility: paused ? 'hidden' : 'visible'
-                   }}
-                   className={classNames?.video} autoPlay muted playsInline />
+            <video
+                ref={mergeRefs(ref, videoRef)}
+                style={{
+                    ...defaultStyles.video,
+                    ...styles?.video,
+                    visibility: paused ? 'hidden' : 'visible'
+                }}
+                className={classNames?.video}
+                autoPlay
+                muted
+                playsInline
+            />
             <canvas
                 ref={pauseFrameRef}
                 style={{
@@ -309,31 +296,31 @@ export function Scanner(props: IScannerProps) {
                         zoom={
                             mergedComponents.zoom && camera.settings.zoom
                                 ? {
-                                    value: camera.settings.zoom,
-                                    onChange: async (value) => {
-                                        const newConstraints = {
-                                            ...constraintsCached,
-                                            advanced: [{ zoom: value }]
-                                        };
+                                      value: camera.settings.zoom,
+                                      onChange: async (value) => {
+                                          const newConstraints = {
+                                              ...constraintsCached,
+                                              advanced: [{ zoom: value }]
+                                          };
 
-                                        await camera.updateConstraints(newConstraints);
-                                    }
-                                }
+                                          await camera.updateConstraints(newConstraints);
+                                      }
+                                  }
                                 : undefined
                         }
                         torch={
                             mergedComponents.torch
                                 ? {
-                                    status: camera.settings.torch ?? false,
-                                    toggle: async (value) => {
-                                        const newConstraints = {
-                                            ...constraintsCached,
-                                            advanced: [{ torch: value }]
-                                        };
+                                      status: camera.settings.torch ?? false,
+                                      toggle: async (value) => {
+                                          const newConstraints = {
+                                              ...constraintsCached,
+                                              advanced: [{ torch: value }]
+                                          };
 
-                                        await camera.updateConstraints(newConstraints);
-                                    }
-                                }
+                                          await camera.updateConstraints(newConstraints);
+                                      }
+                                  }
                                 : undefined
                         }
                         startScanning={async () => await onCameraChange()}
@@ -349,4 +336,6 @@ export function Scanner(props: IScannerProps) {
             </div>
         </div>
     );
-}
+});
+
+Scanner.displayName = 'Scanner';
