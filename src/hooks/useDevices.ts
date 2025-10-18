@@ -1,17 +1,18 @@
-import { useState, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 export function useDevices() {
-    const [devices, setDevices] = useState<MediaDeviceInfo[]>([]);
+	const [devices, setDevices] = useState<MediaDeviceInfo[]>([]);
 
-    async function getDevices() {
-        return (await navigator.mediaDevices.enumerateDevices()).filter(({ kind }) => kind === 'videoinput');
-    }
+	const getDevices = useCallback(async () => {
+		const devices = await navigator.mediaDevices.enumerateDevices();
+		return devices.filter((d) => d.kind === 'videoinput');
+	}, []);
 
-    useEffect(() => {
-        (async () => {
-            setDevices(await getDevices());
-        })();
-    }, []);
+	useEffect(() => {
+		(async () => {
+			setDevices(await getDevices());
+		})();
+	}, [getDevices]);
 
-    return devices;
+	return devices;
 }

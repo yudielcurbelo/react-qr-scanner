@@ -1,33 +1,23 @@
 {
-  "compilerOptions": {
-    "sourceMap": true,
-    "module": "es2015",
-    "target": "es2018",
-    "moduleResolution": "node",
-    "outDir": "dist",
-    "jsx": "react",
-    "skipLibCheck": true,
-    "declaration": true,
-    "declarationMap": true,
-    "esModuleInterop": true,
-    "declarationDir": "dist/esm",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
-    "strict": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true
-  },
-  "include": [
-    "src"
-  ],
-  "exclude": [
-    "dist",
-    "node_modules",
-    "stories"
-  ]
+	"compilerOptions": {
+		"sourceMap": true,
+		"module": "es2015",
+		"target": "es2018",
+		"moduleResolution": "node",
+		"outDir": "dist",
+		"jsx": "react-jsx",
+		"skipLibCheck": true,
+		"declaration": true,
+		"declarationMap": true,
+		"esModuleInterop": true,
+		"declarationDir": "dist/esm",
+		"lib": ["dom", "dom.iterable", "esnext"],
+		"strict": true,
+		"noUnusedLocals": true,
+		"noUnusedParameters": true,
+		"noImplicitReturns": true,
+		"noFallthroughCasesInSwitch": true
+	},
+	"include": ["src"],
+	"exclude": ["dist", "node_modules", "stories"]
 }

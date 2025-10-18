@@ -1,6 +1,6 @@
 import type { CSSProperties } from 'react';
 
 export interface IScannerStyles {
-    container?: CSSProperties;
-    video?: CSSProperties;
+	container?: CSSProperties;
+	video?: CSSProperties;
 }

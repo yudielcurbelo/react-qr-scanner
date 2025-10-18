@@ -1,5 +1,5 @@
-export { defaultConstraints } from './defaultConstraints';
 export { defaultComponents } from './defaultComponents';
+export { defaultConstraints } from './defaultConstraints';
 export { defaultStyles } from './defaultStyles';
 
-export { outline, centerText, boundingBox } from './overlays';
+export { boundingBox, centerText, outline } from './overlays';

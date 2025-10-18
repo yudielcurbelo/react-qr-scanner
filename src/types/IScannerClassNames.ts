@@ -1,4 +1,4 @@
 export interface IScannerClassNames {
-    container?: string;
-    video?: string;
+	container?: string;
+	video?: string;
 }

@@ -1,11 +1,11 @@
-export type { IScannerComponents } from './IScannerComponents';
-export type { IPoint } from './IPoint';
 export type { IBoundingBox } from './IBoundingBox';
-export type { IUseScannerState } from './IUseScannerState';
 export type { IDetectedBarcode } from './IDetectedBarcode';
+export type { IPoint } from './IPoint';
+export type { IScannerClassNames } from './IScannerClassNames';
+export type { IScannerComponents } from './IScannerComponents';
+export type { IScannerStyles } from './IScannerStyles';
+export type { IStartCamera } from './IStartCamera';
 export type { IStartTaskResult } from './IStartTaskResult';
 export type { IStopTaskResult } from './IStopTaskResult';
-export type { IStartCamera } from './IStartCamera';
-export type { IScannerStyles } from './IScannerStyles';
-export type { IScannerClassNames } from './IScannerClassNames';
+export type { IUseScannerState } from './IUseScannerState';
 export type { TrackFunction } from './TrackFunction';

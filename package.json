@@ -1,65 +1,68 @@
 {
-  "name": "@yudiel/react-qr-scanner",
-  "version": "2.3.1",
-  "description": "A library to scan QR codes in React.",
-  "author": "Yudiel Curbelo",
-  "license": "MIT",
-  "homepage": "https://github.com/yudielcurbelo/react-qr-scanner#readme",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/yudielcurbelo/react-qr-scanner.git"
-  },
-  "bugs": {
-    "url": "https://github.com/yudielcurbelo/react-qr-scanner/issues"
-  },
-  "main": "dist/index.cjs.js",
-  "module": "dist/index.esm.mjs",
-  "types": "dist/index.d.ts",
-  "files": [
-    "dist"
-  ],
-  "keywords": [
-    "react",
-    "qrcode",
-    "qrcode-scan",
-    "qrcode-reader",
-    "qrcode-scanner",
-    "qr-code-scan",
-    "qr-code-reader",
-    "qr-code-scanner"
-  ],
-  "scripts": {
-    "build": "rollup -c",
-    "build:esm": "tsc",
-    "build:cjs": "tsc --module CommonJS --outDir dist/cjs",
-    "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
-  },
-  "devDependencies": {
-    "@rollup/plugin-commonjs": "^28.0.8",
-    "@rollup/plugin-terser": "^0.4.4",
-    "@rollup/plugin-typescript": "^12.1.4",
-    "@storybook/addon-links": "^9.1.13",
-    "@storybook/addon-webpack5-compiler-swc": "4.0.1",
-    "@storybook/react": "^9.1.13",
-    "@storybook/react-webpack5": "^9.1.13",
-    "@types/node": "^24.8.1",
-    "@types/react": "^19.2.2",
-    "@types/react-dom": "^19.2.2",
-    "react": "^19.2.0",
-    "react-dom": "^19.2.0",
-    "rollup": "^4.52.5",
-    "rollup-plugin-dts": "^6.2.3",
-    "storybook": "9.1.13",
-    "typescript": "^5.9.3"
-  },
-  "peerDependencies": {
-    "react": "^17 || ^18 || ^19",
-    "react-dom": "^17 || ^18 || ^19"
-  },
-  "dependencies": {
-    "barcode-detector": "3.0.6",
-    "webrtc-adapter": "9.0.3"
-  },
-  "packageManager": "yarn@4.10.3"
+	"name": "@yudiel/react-qr-scanner",
+	"version": "2.3.1",
+	"description": "A library to scan QR codes in React.",
+	"author": "Yudiel Curbelo",
+	"license": "MIT",
+	"homepage": "https://github.com/yudielcurbelo/react-qr-scanner#readme",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/yudielcurbelo/react-qr-scanner.git"
+	},
+	"bugs": {
+		"url": "https://github.com/yudielcurbelo/react-qr-scanner/issues"
+	},
+	"main": "dist/index.cjs.js",
+	"module": "dist/index.esm.mjs",
+	"types": "dist/index.d.ts",
+	"files": [
+		"dist"
+	],
+	"keywords": [
+		"react",
+		"qrcode",
+		"qrcode-scan",
+		"qrcode-reader",
+		"qrcode-scanner",
+		"qr-code-scan",
+		"qr-code-reader",
+		"qr-code-scanner"
+	],
+	"scripts": {
+		"build": "rollup -c",
+		"build:esm": "tsc",
+		"build:cjs": "tsc --module CommonJS --outDir dist/cjs",
+		"storybook": "storybook dev -p 6006",
+		"build-storybook": "storybook build",
+		"biome:lint": "biome lint --write",
+		"biome:check": "biome check --write"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "2.2.6",
+		"@rollup/plugin-commonjs": "^28.0.8",
+		"@rollup/plugin-terser": "^0.4.4",
+		"@rollup/plugin-typescript": "^12.1.4",
+		"@storybook/addon-links": "^9.1.13",
+		"@storybook/addon-webpack5-compiler-swc": "4.0.1",
+		"@storybook/react": "^9.1.13",
+		"@storybook/react-webpack5": "^9.1.13",
+		"@types/node": "^24.8.1",
+		"@types/react": "^19.2.2",
+		"@types/react-dom": "^19.2.2",
+		"react": "^19.2.0",
+		"react-dom": "^19.2.0",
+		"rollup": "^4.52.5",
+		"rollup-plugin-dts": "^6.2.3",
+		"storybook": "9.1.13",
+		"typescript": "^5.9.3"
+	},
+	"peerDependencies": {
+		"react": "^17 || ^18 || ^19",
+		"react-dom": "^17 || ^18 || ^19"
+	},
+	"dependencies": {
+		"barcode-detector": "3.0.6",
+		"webrtc-adapter": "9.0.3"
+	},
+	"packageManager": "yarn@4.10.3"
 }

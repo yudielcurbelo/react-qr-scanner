@@ -1,4 +1,4 @@
 export interface IStartCamera {
-    constraints: MediaTrackConstraints;
-    restart?: boolean;
+	constraints: MediaTrackConstraints;
+	restart?: boolean;
 }

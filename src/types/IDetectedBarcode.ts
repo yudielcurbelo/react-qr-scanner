@@ -1,8 +1,8 @@
-import { IBoundingBox, IPoint } from './index';
+import type { IBoundingBox, IPoint } from './index';
 
 export interface IDetectedBarcode {
-    boundingBox: IBoundingBox;
-    cornerPoints: IPoint[];
-    format: string;
-    rawValue: string;
+	boundingBox: IBoundingBox;
+	cornerPoints: IPoint[];
+	format: string;
+	rawValue: string;
 }

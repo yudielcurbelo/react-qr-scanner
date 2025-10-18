@@ -1,352 +1,410 @@
-import React, { useState, useEffect, useRef, useMemo, ReactNode } from 'react';
-
 import type { BarcodeFormat } from 'barcode-detector';
-
-import Finder from './Finder';
+import {
+	type ReactNode,
+	useCallback,
+	useEffect,
+	useMemo,
+	useRef,
+	useState,
+} from 'react';
 import useCamera from '../hooks/useCamera';
 import useScanner from '../hooks/useScanner';
-
-import deepEqual from '../utilities/deepEqual';
 import { defaultComponents, defaultConstraints, defaultStyles } from '../misc';
-import {
-    IDetectedBarcode,
-    IPoint,
-    IScannerClassNames,
-    IScannerComponents,
-    IScannerStyles,
-    TrackFunction
+import type {
+	IDetectedBarcode,
+	IPoint,
+	IScannerClassNames,
+	IScannerComponents,
+	IScannerStyles,
+	TrackFunction,
 } from '../types';
+import deepEqual from '../utilities/deepEqual';
+import Finder from './Finder';
 
 export interface IScannerProps {
-    onScan: (detectedCodes: IDetectedBarcode[]) => void;
-    onError?: (error: unknown) => void;
-    constraints?: MediaTrackConstraints;
-    formats?: BarcodeFormat[];
-    paused?: boolean;
-    children?: ReactNode;
-    components?: IScannerComponents;
-    styles?: IScannerStyles;
-    classNames?: IScannerClassNames;
-    allowMultiple?: boolean;
-    scanDelay?: number;
-    sound?: boolean | string;
+	onScan: (detectedCodes: IDetectedBarcode[]) => void;
+	onError?: (error: unknown) => void;
+	constraints?: MediaTrackConstraints;
+	formats?: BarcodeFormat[];
+	paused?: boolean;
+	children?: ReactNode;
+	components?: IScannerComponents;
+	styles?: IScannerStyles;
+	classNames?: IScannerClassNames;
+	allowMultiple?: boolean;
+	scanDelay?: number;
+	sound?: boolean | string;
 }
 
 function clearCanvas(canvas: HTMLCanvasElement | null) {
-    if (canvas === null) {
-        throw new Error('Canvas should always be defined when component is mounted.');
-    }
+	if (canvas === null) {
+		throw new Error(
+			'Canvas should always be defined when component is mounted.',
+		);
+	}
 
-    const ctx = canvas.getContext('2d');
+	const ctx = canvas.getContext('2d');
 
-    if (ctx === null) {
-        throw new Error('Canvas 2D context should be non-null');
-    }
+	if (ctx === null) {
+		throw new Error('Canvas 2D context should be non-null');
+	}
 
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+	ctx.clearRect(0, 0, canvas.width, canvas.height);
 }
 
-function onFound(detectedCodes: IDetectedBarcode[], videoEl?: HTMLVideoElement | null, trackingEl?: HTMLCanvasElement | null, tracker?: TrackFunction) {
-    const canvas = trackingEl;
+function onFound(
+	detectedCodes: IDetectedBarcode[],
+	videoEl?: HTMLVideoElement | null,
+	trackingEl?: HTMLCanvasElement | null,
+	tracker?: TrackFunction,
+) {
+	const canvas = trackingEl;
 
-    if (canvas === undefined || canvas === null) {
-        throw new Error('onFound handler should only be called when component is mounted. Thus tracking canvas is always defined.');
-    }
+	if (canvas === undefined || canvas === null) {
+		throw new Error(
+			'onFound handler should only be called when component is mounted. Thus tracking canvas is always defined.',
+		);
+	}
 
-    const video = videoEl;
+	const video = videoEl;
 
-    if (video === undefined || video === null) {
-        throw new Error('onFound handler should only be called when component is mounted. Thus video element is always defined.');
-    }
+	if (video === undefined || video === null) {
+		throw new Error(
+			'onFound handler should only be called when component is mounted. Thus video element is always defined.',
+		);
+	}
 
-    if (detectedCodes.length === 0 || tracker === undefined) {
-        clearCanvas(canvas);
-    } else {
-        const displayWidth = video.offsetWidth;
-        const displayHeight = video.offsetHeight;
+	if (detectedCodes.length === 0 || tracker === undefined) {
+		clearCanvas(canvas);
+	} else {
+		const displayWidth = video.offsetWidth;
+		const displayHeight = video.offsetHeight;
 
-        const resolutionWidth = video.videoWidth;
-        const resolutionHeight = video.videoHeight;
+		const resolutionWidth = video.videoWidth;
+		const resolutionHeight = video.videoHeight;
 
-        const largerRatio = Math.max(displayWidth / resolutionWidth, displayHeight / resolutionHeight);
-        const uncutWidth = resolutionWidth * largerRatio;
-        const uncutHeight = resolutionHeight * largerRatio;
+		const largerRatio = Math.max(
+			displayWidth / resolutionWidth,
+			displayHeight / resolutionHeight,
+		);
+		const uncutWidth = resolutionWidth * largerRatio;
+		const uncutHeight = resolutionHeight * largerRatio;
 
-        const xScalar = uncutWidth / resolutionWidth;
-        const yScalar = uncutHeight / resolutionHeight;
-        const xOffset = (displayWidth - uncutWidth) / 2;
-        const yOffset = (displayHeight - uncutHeight) / 2;
+		const xScalar = uncutWidth / resolutionWidth;
+		const yScalar = uncutHeight / resolutionHeight;
+		const xOffset = (displayWidth - uncutWidth) / 2;
+		const yOffset = (displayHeight - uncutHeight) / 2;
 
-        const scale = ({ x, y }: IPoint) => {
-            return {
-                x: Math.floor(x * xScalar),
-                y: Math.floor(y * yScalar)
-            };
-        };
+		const scale = ({ x, y }: IPoint) => {
+			return {
+				x: Math.floor(x * xScalar),
+				y: Math.floor(y * yScalar),
+			};
+		};
 
-        const translate = ({ x, y }: IPoint) => {
-            return {
-                x: Math.floor(x + xOffset),
-                y: Math.floor(y + yOffset)
-            };
-        };
+		const translate = ({ x, y }: IPoint) => {
+			return {
+				x: Math.floor(x + xOffset),
+				y: Math.floor(y + yOffset),
+			};
+		};
 
-        const adjustedCodes = detectedCodes.map((detectedCode) => {
-            const { boundingBox, cornerPoints } = detectedCode;
+		const adjustedCodes = detectedCodes.map((detectedCode) => {
+			const { boundingBox, cornerPoints } = detectedCode;
 
-            const { x, y } = translate(
-                scale({
-                    x: boundingBox.x,
-                    y: boundingBox.y
-                })
-            );
-            const { x: width, y: height } = scale({
-                x: boundingBox.width,
-                y: boundingBox.height
-            });
+			const { x, y } = translate(
+				scale({
+					x: boundingBox.x,
+					y: boundingBox.y,
+				}),
+			);
+			const { x: width, y: height } = scale({
+				x: boundingBox.width,
+				y: boundingBox.height,
+			});
 
-            return {
-                ...detectedCode,
-                cornerPoints: cornerPoints.map((point) => translate(scale(point))),
-                boundingBox: DOMRectReadOnly.fromRect({ x, y, width, height })
-            };
-        });
+			return {
+				...detectedCode,
+				cornerPoints: cornerPoints.map((point) => translate(scale(point))),
+				boundingBox: DOMRectReadOnly.fromRect({ x, y, width, height }),
+			};
+		});
 
-        canvas.width = video.offsetWidth;
-        canvas.height = video.offsetHeight;
+		canvas.width = video.offsetWidth;
+		canvas.height = video.offsetHeight;
 
-        const ctx = canvas.getContext('2d');
+		const ctx = canvas.getContext('2d');
 
-        if (ctx === null) {
-            throw new Error('onFound handler should only be called when component is mounted. Thus tracking canvas 2D context is always defined.');
-        }
+		if (ctx === null) {
+			throw new Error(
+				'onFound handler should only be called when component is mounted. Thus tracking canvas 2D context is always defined.',
+			);
+		}
 
-        tracker(adjustedCodes, ctx);
-    }
+		tracker(adjustedCodes, ctx);
+	}
 }
 
 export function Scanner(props: IScannerProps) {
-    const {
-        onScan,
-        constraints,
-        formats = ['qr_code'],
-        paused = false,
-        components,
-        children,
-        styles,
-        classNames,
-        allowMultiple,
-        scanDelay,
-        onError,
-        sound
-    } = props;
+	const {
+		onScan,
+		constraints,
+		formats = ['qr_code'],
+		paused = false,
+		components,
+		children,
+		styles,
+		classNames,
+		allowMultiple,
+		scanDelay,
+		onError,
+		sound,
+	} = props;
 
-    const videoRef = useRef<HTMLVideoElement>(null);
-    const pauseFrameRef = useRef<HTMLCanvasElement>(null);
-    const trackingLayerRef = useRef<HTMLCanvasElement>(null);
+	const videoRef = useRef<HTMLVideoElement>(null);
+	const pauseFrameRef = useRef<HTMLCanvasElement>(null);
+	const trackingLayerRef = useRef<HTMLCanvasElement>(null);
 
-    const mergedConstraints = useMemo(() => ({ ...defaultConstraints, ...constraints }), [constraints]);
-    const mergedComponents = useMemo(() => ({ ...defaultComponents, ...components }), [components]);
+	const mergedConstraints = useMemo(
+		() => ({ ...defaultConstraints, ...constraints }),
+		[constraints],
+	);
+	const mergedComponents = useMemo(
+		() => ({ ...defaultComponents, ...components }),
+		[components],
+	);
 
-    const [isMounted, setIsMounted] = useState(false);
-    const [isCameraActive, setIsCameraActive] = useState(true);
+	const [isMounted, setIsMounted] = useState(false);
+	const [isCameraActive, setIsCameraActive] = useState(true);
+	const [constraintsCached, setConstraintsCached] = useState(mergedConstraints);
 
-    const [constraintsCached, setConstraintsCached] = useState(mergedConstraints);
+	const camera = useCamera();
 
-    const camera = useCamera();
+	const cameraRef = useRef(camera);
+	const onErrorRef = useRef(onError);
 
-    const { startScanning, stopScanning } = useScanner({
-        videoElementRef: videoRef,
-        onScan: onScan,
-        onFound: (detectedCodes) => onFound(detectedCodes, videoRef.current, trackingLayerRef.current, mergedComponents.tracker),
-        formats: formats,
-        retryDelay: mergedComponents.tracker === undefined ? 500 : 10,
-        scanDelay: scanDelay,
-        allowMultiple: allowMultiple,
-        sound: sound
-    });
+	useEffect(() => {
+		cameraRef.current = camera;
+	}, [camera]);
 
-    useEffect(() => {
-        setIsMounted(true);
+	useEffect(() => {
+		onErrorRef.current = onError;
+	}, [onError]);
 
-        return () => {
-            setIsMounted(false);
-        };
-    }, []);
+	const { startScanning, stopScanning } = useScanner({
+		videoElementRef: videoRef,
+		onScan: onScan,
+		onFound: (detectedCodes) =>
+			onFound(
+				detectedCodes,
+				videoRef.current,
+				trackingLayerRef.current,
+				mergedComponents.tracker,
+			),
+		formats: formats,
+		retryDelay: mergedComponents.tracker === undefined ? 500 : 10,
+		scanDelay: scanDelay,
+		allowMultiple: allowMultiple,
+		sound: sound,
+	});
 
-    useEffect(() => {
-        if (isMounted) {
-            stopScanning();
-            startScanning();
-        }
-    }, [components?.tracker]);
+	useEffect(() => {
+		setIsMounted(true);
 
-    useEffect(() => {
-        if (!deepEqual(mergedConstraints, constraintsCached)) {
-            const newConstraints = mergedConstraints;
+		return () => {
+			setIsMounted(false);
+		};
+	}, []);
 
-            if (constraints?.deviceId) {
-                delete newConstraints.facingMode;
-            }
+	useEffect(() => {
+		if (isMounted) {
+			stopScanning();
+			startScanning();
+		}
+	}, [isMounted, startScanning, stopScanning]);
 
-            setConstraintsCached(newConstraints);
-        }
-    }, [constraints]);
+	useEffect(() => {
+		if (!deepEqual(mergedConstraints, constraintsCached)) {
+			const newConstraints = mergedConstraints;
 
-    const cameraSettings = useMemo(() => {
-        return {
-            constraints: constraintsCached,
-            shouldStream: isMounted && !paused
-        };
-    }, [constraintsCached, isMounted, paused]);
+			if (constraints?.deviceId) delete newConstraints.facingMode;
 
-    const onCameraChange = async () => {
-        const videoEl = videoRef.current;
+			setConstraintsCached(newConstraints);
+		}
+	}, [constraints, mergedConstraints, constraintsCached]);
 
-        if (videoEl === undefined || videoEl === null) {
-            throw new Error('Video should be defined when component is mounted.');
-        }
+	const cameraSettings = useMemo(() => {
+		return {
+			constraints: constraintsCached,
+			shouldStream: isMounted && !paused,
+		};
+	}, [constraintsCached, isMounted, paused]);
 
-        const canvasEl = pauseFrameRef.current;
+	const onCameraChange = useCallback(async () => {
+		const videoEl = videoRef.current;
 
-        if (canvasEl === undefined || canvasEl === null) {
-            throw new Error('Canvas should be defined when component is mounted.');
-        }
+		if (videoEl === undefined || videoEl === null) {
+			throw new Error('Video should be defined when component is mounted.');
+		}
 
-        const ctx = canvasEl.getContext('2d');
+		const canvasEl = pauseFrameRef.current;
 
-        if (ctx === undefined || ctx === null) {
-            throw new Error('Canvas should be defined when component is mounted.');
-        }
+		if (canvasEl === undefined || canvasEl === null) {
+			throw new Error('Canvas should be defined when component is mounted.');
+		}
 
-        if (cameraSettings.shouldStream) {
-            await camera.stopCamera();
+		const ctx = canvasEl.getContext('2d');
 
-            setIsCameraActive(false);
+		if (ctx === undefined || ctx === null) {
+			throw new Error('Canvas should be defined when component is mounted.');
+		}
 
-            try {
-                await camera.startCamera(videoEl, cameraSettings);
+		if (cameraSettings.shouldStream) {
+			await cameraRef.current.stopCamera();
 
-                if (videoEl) {
-                    setIsCameraActive(true);
-                } else {
-                    await camera.stopCamera();
-                }
-            } catch (error) {
-                onError?.(error);
-                console.error('error', error);
-            }
-        } else {
-            canvasEl.width = videoEl.videoWidth;
-            canvasEl.height = videoEl.videoHeight;
+			setIsCameraActive(false);
 
-            ctx.drawImage(videoEl, 0, 0, videoEl.videoWidth, videoEl.videoHeight);
+			try {
+				await cameraRef.current.startCamera(videoEl, cameraSettings);
 
-            await camera.stopCamera();
+				if (videoEl) {
+					setIsCameraActive(true);
+				} else {
+					await cameraRef.current.stopCamera();
+				}
+			} catch (error) {
+				onErrorRef.current?.(error);
+				console.error('error', error);
+			}
+		} else {
+			canvasEl.width = videoEl.videoWidth;
+			canvasEl.height = videoEl.videoHeight;
 
-            setIsCameraActive(false);
-        }
-    };
+			ctx.drawImage(videoEl, 0, 0, videoEl.videoWidth, videoEl.videoHeight);
 
-    useEffect(() => {
-        (async () => {
-            await onCameraChange();
-        })();
-    }, [cameraSettings]);
+			await cameraRef.current.stopCamera();
 
-    const shouldScan = useMemo(() => {
-        return cameraSettings.shouldStream && isCameraActive;
-    }, [cameraSettings.shouldStream, isCameraActive]);
+			setIsCameraActive(false);
+		}
+	}, [cameraSettings]);
 
-    useEffect(() => {
-        if (shouldScan) {
-            if (pauseFrameRef.current === undefined) {
-                throw new Error('shouldScan effect should only be triggered when component is mounted. Thus pause frame canvas is defined');
-            }
+	useEffect(() => {
+		(async () => {
+			await onCameraChange();
+		})();
+	}, [onCameraChange]);
 
-            clearCanvas(pauseFrameRef.current);
+	const shouldScan = useMemo(() => {
+		return cameraSettings.shouldStream && isCameraActive;
+	}, [cameraSettings.shouldStream, isCameraActive]);
 
-            if (trackingLayerRef.current === undefined) {
-                throw new Error('shouldScan effect should only be triggered when component is mounted. Thus tracking canvas is defined');
-            }
+	useEffect(() => {
+		if (shouldScan) {
+			if (pauseFrameRef.current === undefined) {
+				throw new Error(
+					'shouldScan effect should only be triggered when component is mounted. Thus pause frame canvas is defined',
+				);
+			}
 
-            clearCanvas(trackingLayerRef.current);
+			clearCanvas(pauseFrameRef.current);
 
-            const videoEl = videoRef.current;
+			if (trackingLayerRef.current === undefined) {
+				throw new Error(
+					'shouldScan effect should only be triggered when component is mounted. Thus tracking canvas is defined',
+				);
+			}
 
-            if (videoEl === undefined || videoEl === null) {
-                throw new Error('shouldScan effect should only be triggered when component is mounted. Thus video element is defined');
-            }
+			clearCanvas(trackingLayerRef.current);
 
-            startScanning();
-        }
-    }, [shouldScan]);
+			const videoEl = videoRef.current;
 
-    return (
-        <div style={{ ...defaultStyles.container, ...styles?.container }} className={classNames?.container}>
-            <video ref={videoRef}
-                   style={{
-                       ...defaultStyles.video, ...styles?.video,
-                       visibility: paused ? 'hidden' : 'visible'
-                   }}
-                   className={classNames?.video} autoPlay muted playsInline />
-            <canvas
-                ref={pauseFrameRef}
-                style={{
-                    display: paused ? 'block' : 'none',
-                    position: 'absolute',
-                    width: '100%',
-                    height: '100%'
-                }}
-            />
-            <canvas ref={trackingLayerRef} style={{ position: 'absolute', width: '100%', height: '100%' }} />
-            <div style={{ position: 'absolute', width: '100%', height: '100%' }}>
-                {mergedComponents.finder && (
-                    <Finder
-                        scanning={isCameraActive}
-                        capabilities={camera.capabilities}
-                        onOff={mergedComponents.onOff}
-                        zoom={
-                            mergedComponents.zoom && camera.settings.zoom
-                                ? {
-                                    value: camera.settings.zoom,
-                                    onChange: async (value) => {
-                                        const newConstraints = {
-                                            ...constraintsCached,
-                                            advanced: [{ zoom: value }]
-                                        };
+			if (videoEl === undefined || videoEl === null) {
+				throw new Error(
+					'shouldScan effect should only be triggered when component is mounted. Thus video element is defined',
+				);
+			}
 
-                                        await camera.updateConstraints(newConstraints);
-                                    }
-                                }
-                                : undefined
-                        }
-                        torch={
-                            mergedComponents.torch
-                                ? {
-                                    status: camera.settings.torch ?? false,
-                                    toggle: async (value) => {
-                                        const newConstraints = {
-                                            ...constraintsCached,
-                                            advanced: [{ torch: value }]
-                                        };
+			startScanning();
+		}
+	}, [shouldScan, startScanning]);
 
-                                        await camera.updateConstraints(newConstraints);
-                                    }
-                                }
-                                : undefined
-                        }
-                        startScanning={async () => await onCameraChange()}
-                        stopScanning={async () => {
-                            await camera.stopCamera();
+	return (
+		<div
+			style={{ ...defaultStyles.container, ...styles?.container }}
+			className={classNames?.container}
+		>
+			<video
+				ref={videoRef}
+				style={{
+					...defaultStyles.video,
+					...styles?.video,
+					visibility: paused ? 'hidden' : 'visible',
+				}}
+				className={classNames?.video}
+				autoPlay
+				muted
+				playsInline
+			/>
+			<canvas
+				ref={pauseFrameRef}
+				style={{
+					display: paused ? 'block' : 'none',
+					position: 'absolute',
+					width: '100%',
+					height: '100%',
+				}}
+			/>
+			<canvas
+				ref={trackingLayerRef}
+				style={{ position: 'absolute', width: '100%', height: '100%' }}
+			/>
+			<div style={{ position: 'absolute', width: '100%', height: '100%' }}>
+				{mergedComponents.finder && (
+					<Finder
+						scanning={isCameraActive}
+						capabilities={camera.capabilities}
+						onOff={mergedComponents.onOff}
+						zoom={
+							mergedComponents.zoom && camera.settings.zoom
+								? {
+										value: camera.settings.zoom,
+										onChange: async (value) => {
+											const newConstraints = {
+												...constraintsCached,
+												advanced: [{ zoom: value }],
+											};
 
-                            clearCanvas(trackingLayerRef.current);
-                            setIsCameraActive(false);
-                        }}
-                    />
-                )}
-                {children}
-            </div>
-        </div>
-    );
+											await camera.updateConstraints(newConstraints);
+										},
+									}
+								: undefined
+						}
+						torch={
+							mergedComponents.torch
+								? {
+										status: camera.settings.torch ?? false,
+										toggle: async (value) => {
+											const newConstraints = {
+												...constraintsCached,
+												advanced: [{ torch: value }],
+											};
+
+											await camera.updateConstraints(newConstraints);
+										},
+									}
+								: undefined
+						}
+						startScanning={async () => await onCameraChange()}
+						stopScanning={async () => {
+							await camera.stopCamera();
+
+							clearCanvas(trackingLayerRef.current);
+							setIsCameraActive(false);
+						}}
+					/>
+				)}
+				{children}
+			</div>
+		</div>
+	);
 }
