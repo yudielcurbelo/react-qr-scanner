@@ -17,9 +17,10 @@ jobs:
           node-version: 22.x
           registry-url: https://registry.npmjs.org/
           scope: '@yudiel'
+          cache: 'npm'
 
       - name: Install Dependencies
-        run: npm install
+        run: npm ci
 
       - name: Build
         run: npm run build

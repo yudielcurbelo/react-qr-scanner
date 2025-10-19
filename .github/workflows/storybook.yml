@@ -8,9 +8,14 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v5
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22.x
+          cache: 'npm'
       - name: Install and Build
         run: |
-          npm install
+          npm ci
           npm run storybook:build
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@v4
