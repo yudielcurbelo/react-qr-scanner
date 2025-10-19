@@ -16,6 +16,7 @@ jobs:
       - name: Install and Build
         run: |
           npm ci
+          npx @swc/core --version || npm rebuild @swc/core
           npm run storybook:build
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@v4
