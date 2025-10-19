@@ -14,6 +14,7 @@ const preview: Preview = {
 				order: ['Scanner', 'Devices'],
 				locales: '',
 			},
+			selectedPanel: 'storybook/actions/panel',
 		},
 	},
 };
