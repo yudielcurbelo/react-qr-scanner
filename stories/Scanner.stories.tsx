@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 
 import { action } from 'storybook/actions';
 
@@ -30,18 +30,31 @@ function Template(args: IScannerProps) {
 
 	const devices = useDevices();
 
-	function getTracker() {
+	const componentsConfig = useMemo(() => {
+		let trackerFunction;
+
 		switch (tracker) {
 			case 'outline':
-				return outline;
+				trackerFunction = outline;
+				break;
 			case 'boundingBox':
-				return boundingBox;
+				trackerFunction = boundingBox;
+				break;
 			case 'centerText':
-				return centerText;
+				trackerFunction = centerText;
+				break;
 			default:
-				return undefined;
+				trackerFunction = undefined;
 		}
-	}
+
+		return {
+			onOff: true,
+			torch: true,
+			zoom: true,
+			finder: true,
+			tracker: trackerFunction,
+		};
+	}, [tracker]);
 
 	return (
 		<div style={styles.container}>
@@ -63,12 +76,13 @@ function Template(args: IScannerProps) {
 				</select>
 				<select
 					style={{ marginLeft: 5 }}
+					value={tracker}
 					onChange={(e) => setTracker(e.target.value)}
 				>
 					<option value="centerText">Center Text</option>
 					<option value="outline">Outline</option>
 					<option value="boundingBox">Bounding Box</option>
-					<option value={undefined}>No Tracker</option>
+					<option value="">No Tracker</option>
 				</select>
 			</div>
 			<ScannerComp
@@ -105,14 +119,8 @@ function Template(args: IScannerProps) {
 				onError={(error) => {
 					console.log(`onError: ${error}'`);
 				}}
-				components={{
-					onOff: true,
-					torch: true,
-					zoom: true,
-					finder: true,
-					tracker: getTracker(),
-				}}
-				// sound={true}
+				components={componentsConfig}
+				sound={true}
 				allowMultiple={true}
 				scanDelay={2000}
 				paused={pause}

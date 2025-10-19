@@ -182,6 +182,7 @@ export function Scanner(props: IScannerProps) {
 
 	const cameraRef = useRef(camera);
 	const onErrorRef = useRef(onError);
+	const trackerRef = useRef(mergedComponents.tracker);
 
 	useEffect(() => {
 		cameraRef.current = camera;
@@ -191,16 +192,26 @@ export function Scanner(props: IScannerProps) {
 		onErrorRef.current = onError;
 	}, [onError]);
 
-	const { startScanning, stopScanning } = useScanner({
-		videoElementRef: videoRef,
-		onScan: onScan,
-		onFound: (detectedCodes) =>
+	useEffect(() => {
+		trackerRef.current = mergedComponents.tracker;
+	}, [mergedComponents.tracker]);
+
+	const onFoundCallback = useCallback(
+		(detectedCodes: IDetectedBarcode[]) => {
 			onFound(
 				detectedCodes,
 				videoRef.current,
 				trackingLayerRef.current,
-				mergedComponents.tracker,
-			),
+				trackerRef.current,
+			);
+		},
+		[],
+	);
+
+	const { startScanning, stopScanning } = useScanner({
+		videoElementRef: videoRef,
+		onScan: onScan,
+		onFound: onFoundCallback,
 		formats: formats,
 		retryDelay: mergedComponents.tracker === undefined ? 500 : 10,
 		scanDelay: scanDelay,
