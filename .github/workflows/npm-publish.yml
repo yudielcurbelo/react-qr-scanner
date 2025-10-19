@@ -19,10 +19,10 @@ jobs:
           scope: '@yudiel'
 
       - name: Install Dependencies
-        run: yarn
+        run: npm install
 
       - name: Build
-        run: yarn build
+        run: npm run build
 
       - name: Publish Pre-release
         if: ${{ github.event.release.prerelease == true }}

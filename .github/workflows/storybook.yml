@@ -10,8 +10,8 @@ jobs:
         uses: actions/checkout@v4
       - name: Install and Build
         run: |
-          yarn install
-          yarn run build-storybook
+          npm install
+          npm run build-storybook
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@v4
         with:

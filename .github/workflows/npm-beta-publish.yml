@@ -20,10 +20,10 @@ jobs:
           scope: '@yudiel'
 
       - name: Install Dependencies
-        run: yarn
+        run: npm install
 
       - name: Build
-        run: yarn build
+        run: npm run build
 
       - name: Publish
         run: npm publish --tag beta --access public

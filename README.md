@@ -9,9 +9,11 @@ Checkout the [Demo](https://yudielcurbelo.github.io/react-qr-scanner/).
 ### Install
 
 ```
+npm install @yudiel/react-qr-scanner
+
 yarn add @yudiel/react-qr-scanner
 
-npm install @yudiel/react-qr-scanner
+pnpm add @yudiel/react-qr-scanner
 ```
 
 ### Usage
@@ -19,9 +21,9 @@ npm install @yudiel/react-qr-scanner
 ```jsx
 import { Scanner } from '@yudiel/react-qr-scanner';
 
-const App = () => {
+function App() {
     return <Scanner onScan={(result) => console.log(result)} />;
-};
+}
 ```
 
 - There is also a hook to get the available devices `useDevices`.

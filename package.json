@@ -63,6 +63,5 @@
 	"dependencies": {
 		"barcode-detector": "3.0.6",
 		"webrtc-adapter": "9.0.3"
-	},
-	"packageManager": "yarn@4.10.3"
+	}
 }
