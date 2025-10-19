@@ -33,7 +33,7 @@
 		"build:esm": "tsc",
 		"build:cjs": "tsc --module CommonJS --outDir dist/cjs",
 		"storybook": "storybook dev -p 6006",
-		"build-storybook": "storybook build",
+		"storybook:build": "storybook build",
 		"biome:lint": "biome lint --write",
 		"biome:check": "biome check --write"
 	},
