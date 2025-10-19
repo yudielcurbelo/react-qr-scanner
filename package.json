@@ -38,12 +38,15 @@
 		"biome:check": "biome check --write"
 	},
 	"devDependencies": {
+		"@babel/preset-env": "^7.26.0",
+		"@babel/preset-react": "^7.26.3",
+		"@babel/preset-typescript": "^7.26.0",
 		"@biomejs/biome": "2.2.6",
 		"@rollup/plugin-commonjs": "^28.0.8",
 		"@rollup/plugin-terser": "^0.4.4",
 		"@rollup/plugin-typescript": "^12.1.4",
 		"@storybook/addon-links": "^9.1.13",
-		"@storybook/addon-webpack5-compiler-swc": "4.0.1",
+		"@storybook/addon-webpack5-compiler-babel": "^3.0.6",
 		"@storybook/react": "^9.1.13",
 		"@storybook/react-webpack5": "^9.1.13",
 		"@types/node": "^24.8.1",
