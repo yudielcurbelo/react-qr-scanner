@@ -1,24 +1,22 @@
-name: storybook
+name: Build and Deploy
 
-on: [ push ]
+on: [push]
+
+permissions:
+  contents: write
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
-      - name: Setup Node.js
-        uses: actions/setup-node@v6
-        with:
-          node-version: 22.x
-          cache: 'npm'
+        uses: actions/checkout@v4
+
       - name: Install and Build
         run: |
           npm ci
-          npm run storybook:build
+          npm run build
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@v4
         with:
-          branch: storybook-static
           folder: storybook-static
