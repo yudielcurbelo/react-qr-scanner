@@ -1,38 +1,90 @@
 ---
-name: Bug report
-about: Create a report to help us improve
-title: ''
-labels: ''
+name: 🐞 Bug report
+about: Report a problem with @yudiel/react-qr-scanner
+title: '[Bug]: '
+labels: 'bug, needs triage'
 assignees: ''
 
 ---
 
-**Describe the bug**
-A clear and concise description of what the bug is.
+## Pre-checks
+<!-- Please check all that apply -->
+- [ ] I used HTTPS or localhost (required for camera)
+- [ ] I allowed camera permissions and no other app/tab is using the camera
+- [ ] I reproduced the issue in the sandbox (or a minimal public repo)
 
-**To Reproduce**
-Steps to reproduce the behavior:
-1. Go to '...'
-2. Click on '....'
-3. Scroll down to '....'
-4. See error
+## Reproduction
+**📦 Sandbox link:** https://codesandbox.io/p/sandbox/yudiel-react-qr-scanner-ts3lgn  
+**🔗 Your reproduction:** <!-- Paste your CodeSandbox/repo link here -->
 
-**Expected behavior**
-A clear and concise description of what you expected to happen.
+## Steps to reproduce
+<!-- Be specific and concise -->
+1. Open sandbox, allow camera
+2. Select device: <!-- e.g., Back Camera -->
+3. Tracker: <!-- e.g., outline --> | Formats: <!-- e.g., qr_code -->
+4. <!-- Describe what happens -->
 
-**Screenshots**
-If applicable, add screenshots to help explain your problem.
+## Expected behavior
+<!-- What should happen? -->
 
-**Desktop (please complete the following information):**
- - OS: [e.g. iOS]
- - Browser [e.g. chrome, safari]
- - Version [e.g. 22]
 
-**Smartphone (please complete the following information):**
- - Device: [e.g. iPhone6]
- - OS: [e.g. iOS8.1]
- - Browser [e.g. stock browser, safari]
- - Version [e.g. 22]
+## Actual behavior
+<!-- What actually happens? -->
 
-**Additional context**
-Add any other context about the problem here.
+
+## Configuration used
+
+**Built-in tracker:**
+<!-- none / centerText / outline / boundingBox -->
+
+**Built-in UI components:**
+- [ ] onOff
+- [ ] torch
+- [ ] zoom
+- [ ] finder
+
+**Formats attempted:**
+- [ ] qr_code
+- [ ] ean_13
+- [ ] code_128
+- [ ] data_matrix
+- [ ] pdf417
+- [ ] other: <!-- specify -->
+
+## Debug Information
+<details>
+<summary>📋 Copy debug info JSON from sandbox (click to expand)</summary>
+
+```json
+<!-- REQUIRED: Paste the JSON from the sandbox "Copy debug info" button here -->
+
+```
+</details>
+
+## Environment
+
+**Library version:** <!-- e.g., 2.3.1 -->  
+**React version:** <!-- e.g., 18.3.x or 19.0.0 -->
+
+**Device/Browser:**
+- **OS:** <!-- e.g., iOS 17.5.1, Windows 11, Android 14 -->
+- **Browser:** <!-- e.g., Safari 17, Chrome 120 -->
+- **Device:** <!-- e.g., iPhone 13 (rear camera), Desktop webcam -->
+- **Type:** <!-- Mobile / Desktop -->
+
+## Console output
+<details>
+<summary>🔴 Errors/Warnings (if any)</summary>
+
+```
+<!-- Paste any console errors or warnings here -->
+
+```
+</details>
+
+## Screenshots / Recordings
+<!-- Drag and drop images or videos here if applicable -->
+
+
+## Additional context
+<!-- Any other information that might help diagnose the issue -->
