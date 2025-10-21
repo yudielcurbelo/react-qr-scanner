@@ -18,6 +18,9 @@ jobs:
           registry-url: https://registry.npmjs.org/
           scope: '@yudiel'
 
+      - name: Remove node_modules and package-lock.json
+        run: rm -rf node_modules package-lock.json
+
       - name: Install Dependencies
         run: npm install
 
