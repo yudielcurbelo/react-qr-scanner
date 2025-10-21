@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: ▶️ Repro Sandbox (CodeSandbox)
+    url: https://codesandbox.io/p/sandbox/yudiel-react-qr-scanner-ts3lgn
+    about: Please reproduce your issue here and paste the debug JSON in the bug report.
+  - name: 📚 Documentation
+    url: https://yudielcurbelo.github.io/react-qr-scanner/
+    about: Read the docs before filing an issue.
