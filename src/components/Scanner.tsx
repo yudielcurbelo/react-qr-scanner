@@ -196,17 +196,14 @@ export function Scanner(props: IScannerProps) {
 		trackerRef.current = mergedComponents.tracker;
 	}, [mergedComponents.tracker]);
 
-	const onFoundCallback = useCallback(
-		(detectedCodes: IDetectedBarcode[]) => {
-			onFound(
-				detectedCodes,
-				videoRef.current,
-				trackingLayerRef.current,
-				trackerRef.current,
-			);
-		},
-		[],
-	);
+	const onFoundCallback = useCallback((detectedCodes: IDetectedBarcode[]) => {
+		onFound(
+			detectedCodes,
+			videoRef.current,
+			trackingLayerRef.current,
+			trackerRef.current,
+		);
+	}, []);
 
 	const { startScanning, stopScanning } = useScanner({
 		videoElementRef: videoRef,

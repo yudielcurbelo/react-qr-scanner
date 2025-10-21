@@ -8,6 +8,7 @@ import {
 	type IScannerProps,
 	outline,
 	Scanner as ScannerComp,
+	type TrackFunction,
 	useDevices,
 } from '../src';
 
@@ -31,7 +32,7 @@ function Template(args: IScannerProps) {
 	const devices = useDevices();
 
 	const componentsConfig = useMemo(() => {
-		let trackerFunction;
+		let trackerFunction: TrackFunction | undefined;
 
 		switch (tracker) {
 			case 'outline':
