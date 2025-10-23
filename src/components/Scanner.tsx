@@ -149,7 +149,7 @@ export function Scanner(props: IScannerProps) {
 	const {
 		onScan,
 		constraints,
-		formats = ['qr_code'],
+		formats = ['any'],
 		paused = false,
 		components,
 		children,
