@@ -4,6 +4,10 @@ on:
   release:
     types: [ published ]
 
+permissions:
+  id-token: write  # Required for OIDC
+  contents: read
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -22,10 +26,13 @@ jobs:
         run: rm -rf node_modules package-lock.json
 
       - name: Install Dependencies
-        run: npm install
+        run: npm install -g npm@latest
 
       - name: Build
         run: npm run build
+
+      - name: NPM CI
+        run: npm ci
 
       - name: Publish Pre-release
         if: ${{ github.event.release.prerelease == true }}
