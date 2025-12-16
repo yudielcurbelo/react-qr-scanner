@@ -115,33 +115,43 @@ export default function useCamera() {
 			videoEl: HTMLVideoElement,
 			{ constraints, restart = false }: IStartCamera,
 		) => {
-			taskQueue.current = taskQueue.current.then((prevTaskResult) => {
-				if (prevTaskResult.type === 'start') {
-					const {
-						data: {
-							videoEl: prevVideoEl,
-							stream: prevStream,
-							constraints: prevConstraints,
-						},
-					} = prevTaskResult;
+			let startError: unknown = null;
 
-					if (
-						!restart &&
-						videoEl === prevVideoEl &&
-						constraints === prevConstraints
-					) {
-						return prevTaskResult;
+			taskQueue.current = taskQueue.current
+				.then((prevTaskResult) => {
+					if (prevTaskResult.type === 'start') {
+						const {
+							data: {
+								videoEl: prevVideoEl,
+								stream: prevStream,
+								constraints: prevConstraints,
+							},
+						} = prevTaskResult;
+
+						if (
+							!restart &&
+							videoEl === prevVideoEl &&
+							constraints === prevConstraints
+						) {
+							return prevTaskResult;
+						}
+
+						return runStopTask(prevVideoEl, prevStream).then(() =>
+							runStartTask(videoEl, constraints),
+						);
 					}
 
-					return runStopTask(prevVideoEl, prevStream).then(() =>
-						runStartTask(videoEl, constraints),
-					);
-				}
+					return runStartTask(videoEl, constraints);
+				})
+				.catch((error): IStopTaskResult => {
+					startError = error;
 
-				return runStartTask(videoEl, constraints);
-			});
+					return { type: 'stop', data: {} };
+				});
 
 			const taskResult = await taskQueue.current;
+
+			if (startError) throw startError;
 
 			if (taskResult.type === 'stop') {
 				throw new Error(
