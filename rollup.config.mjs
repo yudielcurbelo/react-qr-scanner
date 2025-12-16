@@ -26,6 +26,7 @@ export default [
 				compilerOptions: {
 					declaration: true,
 					declarationDir: 'dist',
+					inlineSources: true,
 				},
 				exclude: ['**/stories/**'],
 			}),
