@@ -6,4 +6,5 @@ export interface IScannerComponents {
 	tracker?: TrackFunction;
 	onOff?: boolean;
 	zoom?: boolean;
+	audio?: boolean;
 }
