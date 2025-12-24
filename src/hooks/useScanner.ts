@@ -116,7 +116,6 @@ export default function useScanner(props: IUseScannerProps) {
 			}
 		},
 		[
-			videoElementRef.current,
 			onScan,
 			onFound,
 			retryDelay,
