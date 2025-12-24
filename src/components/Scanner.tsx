@@ -225,13 +225,6 @@ export function Scanner(props: IScannerProps) {
 	}, []);
 
 	useEffect(() => {
-		if (isMounted) {
-			stopScanning();
-			startScanning();
-		}
-	}, [isMounted, startScanning, stopScanning]);
-
-	useEffect(() => {
 		if (!deepEqual(mergedConstraints, constraintsCached)) {
 			const newConstraints = mergedConstraints;
 
@@ -334,7 +327,11 @@ export function Scanner(props: IScannerProps) {
 
 			startScanning();
 		}
-	}, [shouldScan, startScanning]);
+
+		return () => {
+			stopScanning();
+		};
+	}, [shouldScan, startScanning, stopScanning]);
 
 	return (
 		<div
