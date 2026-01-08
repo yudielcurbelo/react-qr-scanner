@@ -31,6 +31,7 @@
 	"scripts": {
 		"build": "rollup -c",
 		"build:esm": "tsc",
+		"prepare": "node -e \"require('fs').existsSync('rollup.config.mjs') ? process.exit(0) : process.exit(1)\" && npm run build || exit 0",
 		"build:cjs": "tsc --module CommonJS --outDir dist/cjs",
 		"storybook": "storybook dev -p 6006",
 		"storybook:build": "storybook build",
