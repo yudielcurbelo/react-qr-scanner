@@ -46,6 +46,7 @@ export default function useScanner(props: IUseScannerProps) {
 		}
 	}, [sound]);
 
+	// biome-ignore lint/correctness/useExhaustiveDependencies: videoElementRef is a stable ref object; we intentionally read .current at execution time
 	const processFrame = useCallback(
 		(state: IUseScannerState) => async (timeNow: number) => {
 			if (
@@ -115,14 +116,7 @@ export default function useScanner(props: IUseScannerProps) {
 				}
 			}
 		},
-		[
-			onScan,
-			onFound,
-			retryDelay,
-			allowMultiple,
-			scanDelay,
-			sound,
-		],
+		[onScan, onFound, retryDelay, allowMultiple, scanDelay, sound],
 	);
 
 	const startScanning = useCallback(() => {
