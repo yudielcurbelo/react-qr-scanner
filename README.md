@@ -241,13 +241,13 @@ function UIComponentsExample() {
     <Scanner
       onScan={(result) => console.log(result)}
       components={{
-        audio: true, // Play beep sound on scan
         onOff: true, // Show camera on/off button
         torch: true, // Show torch/flashlight button (if supported)
         zoom: true, // Show zoom control (if supported)
         finder: true, // Show finder overlay
       }}
-      // Custom sound (base64 encoded audio)
+      // Beep on scan is controlled by the `sound` prop, not `components`.
+      // Pass `false` to disable it, or a URL/data URI for a custom sound.
       sound="data:audio/mp3;base64,YOUR_BASE64_AUDIO_HERE"
     />
   );
